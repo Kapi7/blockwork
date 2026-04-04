@@ -5,48 +5,254 @@
   "phase": "base",
   "startDate": "2026-04-14",
   "endDate": "2026-05-04",
-  "stimulus": "Aerobic foundation + running strength. Hill work for power. Bike for threshold. AM/PM splits with strength on Wednesdays.",
+  "stimulus": "3 runs/week: Tue key + Thu key + Sat long. Bike does the aerobic volume. Hills for power. Strength 2x/week.",
   "goals": [
-    "Run 45-50km/week",
-    "Bike threshold: 4x5min Z4 controlled",
-    "Long run: 18km with negative split",
-    "Strength: Wed PM after track, progressing load",
-    "Hill reps: 6-8x200m uphill with power",
-    "Track: comfortable with 200m accelerations"
+    "3 quality runs/week (no junk miles)",
+    "Hill repeats for power + speed endurance",
+    "Long run to 18km with negative split",
+    "Bike 4-5x/week including Z3 threshold work",
+    "Strength 2x/week progressing load"
   ],
   "successMetrics": [
-    { "metric": "Weekly volume", "target": "50km run + 5hrs bike", "actual": null, "hit": null },
-    { "metric": "Long run", "target": "18km, last 5km at 4:35-4:45", "actual": null, "hit": null },
-    { "metric": "Bike power", "target": "Z4 for 5min without blowing up", "actual": null, "hit": null },
-    { "metric": "Hill power", "target": "200m uphill in 42-45sec (3:30-3:45/km pace) with good form", "actual": null, "hit": null }
+    {
+      "metric": "Long run",
+      "target": "18km, last 5km at 4:35-4:45",
+      "actual": null,
+      "hit": null
+    },
+    {
+      "metric": "Hill power",
+      "target": "200m uphill in 42sec (3:30/km pace) strong form",
+      "actual": null,
+      "hit": null
+    },
+    {
+      "metric": "400m reps",
+      "target": "84sec (3:30/km) controlled",
+      "actual": null,
+      "hit": null
+    },
+    {
+      "metric": "Bike Z4",
+      "target": "4x5min without blowing up",
+      "actual": null,
+      "hit": null
+    }
   ],
   "sessions": [
-    { "date": "2026-04-14", "type": "easy", "planned": { "desc": "Easy run 8km @ 5:10\nSmooth and relaxed — first day of base", "distance": 8, "pace": "5:10/km", "notes": "No strength today. Fresh legs for track tomorrow. Welcome to base." } },
-    { "date": "2026-04-15", "type": "key", "planned": { "desc": "Hill repeats — POWER day\nWU: 2km easy + dynamic drills\nMAIN: 6x200m uphill @ hard effort\n(jog back down recovery — take your time)\nCD: 2km easy + 4x100m flat strides", "distance": 9, "pace": "200m uphill in 42-45sec (3:30-3:45/km pace)", "notes": "Find a steep-ish hill (6-8% grade). Drive the knees, pump the arms. This builds the engine that speed sits on." } },
-    { "date": "2026-04-16", "type": "easy", "planned": { "desc": "AM: Easy run 7km\nPM: Strength 45min\nSquats 3x8, Lunges 3x10\nSingle-leg RDL 3x8, Core circuit", "distance": 7, "pace": "5:15/km", "notes": "Strength AFTER track day. Legs are pre-fatigued — use moderate load, focus on form." } },
-    { "date": "2026-04-17", "type": "bike", "planned": { "desc": "Zwift — Bike threshold\nWU: 15min Z2\nMAIN: 4x5min Z4 (3min Z1 recovery)\nCD: 10min Z1", "distance": 0, "pace": "75min with Z4 intervals", "notes": "Hard effort on the bike. Save the legs for Saturday." } },
-    { "date": "2026-04-18", "type": "easy", "planned": { "desc": "AM: Easy run 7km\nPM: Yoga/mobility 20min", "distance": 7, "pace": "5:15/km", "notes": "Pre-long run. Short. Loose." } },
-    { "date": "2026-04-19", "type": "steady", "planned": { "desc": "Long run 14km\nFirst 10km @ 5:00-5:05\nLast 4km @ 4:40-4:50\nFinish feeling strong, not dead", "distance": 14, "pace": "5:00 → 4:40", "notes": "Negative split. If last 4km feels hard, you went out too fast." } },
-    { "date": "2026-04-20", "type": "bike", "planned": { "desc": "Endurance ride 2.5hrs\nOutdoor or Zwift group ride\nZ2 steady, enjoy the scenery", "distance": 0, "pace": "2.5hrs Z2", "notes": "Active recovery from long run. Easy spin." } },
-
-    { "date": "2026-04-21", "type": "easy", "planned": { "desc": "Easy run 9km + 6x100m strides\nShake out the legs, feel smooth", "distance": 9, "pace": "5:05/km", "notes": "Building. Strides should feel sharp. No strength — fresh for track tomorrow." } },
-    { "date": "2026-04-22", "type": "key", "planned": { "desc": "Track — speed endurance\nWU: 2km easy + drills\nMAIN: 6x400m @ 84-86sec\n(200m jog recovery — keep moving)\nCD: 2km easy", "distance": 10, "pace": "400m @ 84-86sec (3:30-3:35/km pace)", "notes": "Track Tuesday. This is 5K pace territory. Should feel fast but controlled." } },
-    { "date": "2026-04-23", "type": "easy", "planned": { "desc": "AM: Easy run 7km\nPM: Strength 45min\nFront squats 3x6, Bulgarian splits 3x8\nBox jumps 3x5, Plank variations", "distance": 7, "pace": "5:15/km", "notes": "Strength after track day. Moderate load, don't wreck yourself." } },
-    { "date": "2026-04-24", "type": "bike", "planned": { "desc": "Zwift race — B category\nWU: 15min spin\nRACE: 30-45min all-out\nCD: 10min easy spin", "distance": 0, "pace": "Race effort", "notes": "RACE THE BIKE. This replaces a threshold run. Go hard, compete." } },
-    { "date": "2026-04-25", "type": "easy", "planned": { "desc": "AM: Easy run 7km\nPM: Mobility 20min", "distance": 7, "pace": "5:15/km", "notes": "Pre-long run. Recover from Zwift race." } },
-    { "date": "2026-04-26", "type": "steady", "planned": { "desc": "Long run 16km\nFirst 11km @ 5:00\nLast 5km progressive:\nkm12: 4:50, km13: 4:45, km14: 4:40\nkm15: 4:35, km16: 4:30", "distance": 16, "pace": "5:00 → 4:30", "notes": "The last 5km teaches your body to run fast when tired." } },
-    { "date": "2026-04-27", "type": "bike", "planned": { "desc": "Long ride 2.5-3hrs\nOutdoor — include some hills\nOr Zwift — pick a hilly route\nZ2 base, Z3 on the climbs", "distance": 0, "pace": "2.5-3hrs Z2-Z3", "notes": "Build bike power. Hills = free strength work." } },
-
-    { "date": "2026-04-28", "type": "easy", "planned": { "desc": "Easy run 7km\n(absorb week — back off slightly)", "distance": 7, "pace": "5:15/km", "notes": "Easier week. Let the body absorb 2 weeks of work. Fresh for hills tomorrow." } },
-    { "date": "2026-04-29", "type": "key", "planned": { "desc": "Hill sprints + tempo finish\nWU: 2km easy + drills\nMAIN SET 1: 10x10sec hill sprints\n(full recovery walk back — these are MAXIMAL)\nMAIN SET 2: 2km tempo @ 4:20-4:30\nCD: 2km easy", "distance": 10, "pace": "Sprints: max effort / Tempo: 4:20-4:30", "notes": "Hill sprints = neuromuscular power. 10sec all-out, then walk back and wait until you're ready. Tempo at the end to practice running smooth when fatigued." } },
-    { "date": "2026-04-30", "type": "easy", "planned": { "desc": "AM: Easy run 6km\nPM: Strength 40min\nDeadlift 3x5, Hip thrusts 3x10\nCalf raises 3x15, Core 3 rounds\nFocus: posterior chain", "distance": 6, "pace": "5:20/km", "notes": "Strength after hill day. Moderate — absorb week." } },
-    { "date": "2026-05-01", "type": "bike", "planned": { "desc": "Recovery spin\n60min Z1-Z2\nFlat, easy, conversation pace", "distance": 0, "pace": "60min Z1-Z2", "notes": "Absorb week. Easy." } },
-    { "date": "2026-05-02", "type": "easy", "planned": { "desc": "Easy run 6km + 4x strides", "distance": 6, "pace": "5:15/km", "notes": "Pre-long run." } },
-    { "date": "2026-05-03", "type": "steady", "planned": { "desc": "Long run 18km\nFirst 13km @ 5:00\nLast 5km: 4:45 → 4:35 → 4:30 → 4:25 → 4:20\nFinish FAST", "distance": 18, "pace": "5:00 → 4:20", "notes": "Your longest run. The last km should be your fastest. This is the test." } },
-    { "date": "2026-05-04", "type": "bike", "planned": { "desc": "Easy recovery ride\n60-90min Z1\nSpin out the legs", "distance": 0, "pace": "60-90min Z1", "notes": "Base block done. How did it go? Ready for speed." } }
+    {
+      "date": "2026-04-14",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 moderate ride\n\n75min Z2:\n- Flat or rolling route\n- Include 4x30sec high cadence (100+ rpm)\n- Leg opener for tomorrow's track",
+        "distance": 0,
+        "pace": "75min Z2",
+        "notes": "First day of base. Bike starts the week."
+      }
+    },
+    {
+      "date": "2026-04-15",
+      "type": "key",
+      "planned": {
+        "desc": "Hill repeats \u2014 POWER\n\nWU: 2km easy + dynamic drills (leg swings, high knees, A-skips)\n\nMAIN: 6x200m uphill @ hard effort (42-45sec / 3:30-3:45/km pace)\n- Find a 6-8% grade hill\n- Drive knees, pump arms, stay tall\n- Jog back down recovery (take your time \u2014 90sec+)\n\nCD: 2km easy + 4x100m flat strides",
+        "distance": 9,
+        "pace": "200m @ 42-45sec (3:30-3:45/km)",
+        "notes": "Hills build the power that speed sits on."
+      }
+    },
+    {
+      "date": "2026-04-16",
+      "type": "bike",
+      "planned": {
+        "desc": "AM: Easy spin 45min Z1\nPM: Strength 45min\n\nStrength:\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side",
+        "distance": 0,
+        "pace": "45min Z1 + 45min strength",
+        "notes": "Easy bike AM flushes legs from hills. Strength PM."
+      }
+    },
+    {
+      "date": "2026-04-17",
+      "type": "key",
+      "planned": {
+        "desc": "Fartlek \u2014 find the gears\n\nWU: 2km easy\n\nMAIN: 8x (90sec hard / 90sec easy)\n- Hard = 4:00-4:10/km effort (feel, not watch)\n- Easy = 5:15+ recovery jog\n- Total: ~24min of work\n\nCD: 2km easy",
+        "distance": 10,
+        "pace": "Hard: 4:00-4:10/km / Easy: 5:15+",
+        "notes": "Run by feel. Hard should be 8/10 effort. Don't look at the watch on the hard bits."
+      }
+    },
+    {
+      "date": "2026-04-18",
+      "type": "yoga",
+      "planned": {
+        "desc": "Yoga \u2014 active recovery\n\n35min:\n- Sun salutation flow 8min\n- Pigeon pose 3min/side\n- Low lunge + twist 2min/side\n- Hamstring sequence 8min\n- Foam roll 10min (quads, calves, glutes)",
+        "distance": 0,
+        "pace": "35min",
+        "notes": "Recovery between Thu key and Sat long run."
+      }
+    },
+    {
+      "date": "2026-04-19",
+      "type": "steady",
+      "planned": {
+        "desc": "Long run \u2014 build endurance\n\nSegment 1: 10km @ 5:00-5:05/km (easy, relaxed)\nSegment 2: 2km @ 4:45-4:50/km (pick it up slightly)\nSegment 3: 2km @ 4:35-4:40/km (controlled push)\n\nTotal: 14km\nFinish feeling strong, not dead",
+        "distance": 14,
+        "pace": "5:00 \u2192 4:35/km",
+        "notes": "Negative split. If Segment 3 feels hard, Segment 1 was too fast."
+      }
+    },
+    {
+      "date": "2026-04-20",
+      "type": "bike",
+      "planned": {
+        "desc": "Long ride \u2014 aerobic builder\n\n2.5hrs Z2:\n- Outdoor route with some hills\n- Or Zwift \u2014 pick a hilly world\n- Steady Z2, natural Z3 on climbs\n- Hydrate properly",
+        "distance": 0,
+        "pace": "2.5hrs Z2",
+        "notes": "Bike does the aerobic volume. No impact on the legs."
+      }
+    },
+    {
+      "date": "2026-04-21",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 threshold intervals\n\nWU: 15min Z2\nMAIN: 4x5min Z4 (3min Z1 recovery between)\nCD: 10min Z1\n\nTotal: ~65min\nZ4 should be hard but sustainable for 5min",
+        "distance": 0,
+        "pace": "65min with Z4 intervals",
+        "notes": "Hard bike session. Builds aerobic power without running impact."
+      }
+    },
+    {
+      "date": "2026-04-22",
+      "type": "key",
+      "planned": {
+        "desc": "Track \u2014 speed endurance\n\nWU: 2km easy + drills (A-skips, B-skips, butt kicks) + 3x80m accelerations\n\nMAIN: 6x400m @ 84-86sec (3:30-3:35/km pace)\n- 200m jog recovery (keep moving, ~90sec)\n- Smooth and controlled \u2014 don't tighten up\n- Focus: relaxed shoulders, quick feet\n\nCD: 2km easy",
+        "distance": 10,
+        "pace": "400m @ 84-86sec (3:30-3:35/km)",
+        "notes": "First track session. 5K pace territory. Should feel fast but NOT desperate."
+      }
+    },
+    {
+      "date": "2026-04-23",
+      "type": "strength",
+      "planned": {
+        "desc": "AM: Easy bike spin 40min Z1\nPM: Strength 45min\n\nStrength:\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)",
+        "distance": 0,
+        "pace": "40min Z1 + 45min strength",
+        "notes": "Strength after track day. Moderate load."
+      }
+    },
+    {
+      "date": "2026-04-24",
+      "type": "key",
+      "planned": {
+        "desc": "Tempo cruise \u2014 lock in the pace\n\nWU: 2km easy + 4x100m strides\n\nMAIN: 3x1.5km @ 4:15-4:25/km\n- 90sec jog recovery between reps\n- Smooth, metronomic pace\n- Breathing should be controlled, not gasping\n\nCD: 2km easy",
+        "distance": 11,
+        "pace": "4:15-4:25/km",
+        "notes": "First real tempo. Should feel smooth. If you're straining, slow down 5sec/km."
+      }
+    },
+    {
+      "date": "2026-04-25",
+      "type": "bike",
+      "planned": {
+        "desc": "Easy recovery ride\n\n60min Z1:\n- Flat route\n- Low power, high cadence\n- Recovery before long run tomorrow",
+        "distance": 0,
+        "pace": "60min Z1",
+        "notes": "Pre-long run. Easy legs."
+      }
+    },
+    {
+      "date": "2026-04-26",
+      "type": "steady",
+      "planned": {
+        "desc": "Long run \u2014 progressive\n\nSegment 1: 11km @ 5:00/km (patience \u2014 hold back)\nSegment 2: 3km @ 4:45/km (shift gears)\nSegment 3: 2km @ 4:30-4:35/km (controlled surge)\n\nTotal: 16km\nLast km should be your fastest",
+        "distance": 16,
+        "pace": "5:00 \u2192 4:30/km",
+        "notes": "The last 5km teaches your body to run fast when tired."
+      }
+    },
+    {
+      "date": "2026-04-27",
+      "type": "bike",
+      "planned": {
+        "desc": "Long ride \u2014 endurance + hills\n\n2.5-3hrs:\n- Outdoor: pick a route with 3-4 climbs\n- Or Zwift: hilly route (Innsbruck, Watopia hilly)\n- Z2 base, push Z3 on every climb\n- Stand on climbs for 30sec intervals",
+        "distance": 0,
+        "pace": "2.5-3hrs Z2-Z3",
+        "notes": "Hills on the bike = free strength work."
+      }
+    },
+    {
+      "date": "2026-04-28",
+      "type": "bike",
+      "planned": {
+        "desc": "Easy recovery ride\n\n60min Z1-Z2:\n- Flat, easy, conversation pace\n- Absorb week \u2014 back off",
+        "distance": 0,
+        "pace": "60min Z1-Z2",
+        "notes": "Recovery week. Let the body absorb 2 weeks of work."
+      }
+    },
+    {
+      "date": "2026-04-29",
+      "type": "key",
+      "planned": {
+        "desc": "Hill sprints + tempo finish\n\nWU: 2km easy + drills\n\nMAIN SET 1: 10x10sec hill sprints\n- ALL-OUT effort, maximal power\n- Walk back to start (full recovery \u2014 60-90sec)\n- These are neuromuscular, not cardio\n\nMAIN SET 2: 2km tempo @ 4:20-4:30/km\n- Smooth transition from hills to flat\n\nCD: 2km easy",
+        "distance": 10,
+        "pace": "Sprints: MAX / Tempo: 4:20-4:30/km",
+        "notes": "Hill sprints = power. 10sec is SHORT \u2014 don't pace them, just explode."
+      }
+    },
+    {
+      "date": "2026-04-30",
+      "type": "bike",
+      "planned": {
+        "desc": "AM: Easy spin 40min Z1\nPM: Strength 40min (lighter)\n\nStrength:\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n- Absorb week \u2014 moderate load, don't crush yourself",
+        "distance": 0,
+        "pace": "40min Z1 + 40min strength",
+        "notes": "Lighter strength. Absorb week."
+      }
+    },
+    {
+      "date": "2026-05-01",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 Zwift race (recovery week intensity)\n\nPick a short B/C category race (20-30min)\n- This replaces a run key session\n- Get the intensity on the bike\n- Save running legs for Saturday",
+        "distance": 0,
+        "pace": "Race effort",
+        "notes": "Recovery week = hard bike, easy running. Intensity stays, impact drops."
+      }
+    },
+    {
+      "date": "2026-05-02",
+      "type": "yoga",
+      "planned": {
+        "desc": "Yoga \u2014 deep stretch\n\n40min:\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- IT band foam roll\n- Hip 90/90 rotations",
+        "distance": 0,
+        "pace": "40min",
+        "notes": "Pre-long run mobility."
+      }
+    },
+    {
+      "date": "2026-05-03",
+      "type": "steady",
+      "planned": {
+        "desc": "Long run \u2014 THE TEST\n\nSegment 1: 13km @ 5:00/km (PATIENCE)\nSegment 2: 2km @ 4:40/km (shift)\nSegment 3: 2km @ 4:25/km (push)\nSegment 4: 1km @ 4:15/km (FAST)\n\nTotal: 18km\nLast km = fastest km. This proves you're ready for speed block.",
+        "distance": 18,
+        "pace": "5:00 \u2192 4:15/km",
+        "notes": "Your longest and most important run. Finish FAST."
+      }
+    },
+    {
+      "date": "2026-05-04",
+      "type": "bike",
+      "planned": {
+        "desc": "Easy recovery ride\n\n60-90min Z1:\n- Spin out the long run\n- Easy, flat, no effort\n\nBase block done. Rate it 1-10.",
+        "distance": 0,
+        "pace": "60-90min Z1",
+        "notes": "How did the 18km feel? Ready for speed."
+      }
+    }
   ],
   "status": "upcoming",
   "summary": null,
-  "runVolume": "45-55km/week",
-  "bikeVolume": "5-7hrs/week"
+  "runVolume": "30-40km/week (3 runs)",
+  "bikeVolume": "6-8hrs/week"
 }

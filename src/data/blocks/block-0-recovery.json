@@ -5,44 +5,257 @@
   "phase": "recovery",
   "startDate": "2026-03-23",
   "endDate": "2026-04-13",
-  "stimulus": "Post-marathon recovery. Rebuild movement quality. Return to running pain-free with desire to train.",
+  "stimulus": "Post-marathon recovery. 2-3 easy runs/week max. Bike and yoga do the work. Return to running fresh and hungry.",
   "goals": [
-    "Run under 25km/week — all easy",
-    "Cycling for aerobic maintenance + enjoyment",
-    "Introduce strides by week 2",
-    "1x strength session/week by end"
+    "Max 3 easy runs/week, under 25km total",
+    "Bike 3-4x/week for aerobic maintenance",
+    "Yoga/mobility 2x/week",
+    "Pain-free, motivated by end of block"
   ],
   "successMetrics": [
-    { "metric": "Pain-free running", "target": "No niggles by Apr 13", "actual": null, "hit": null },
-    { "metric": "Easy HR", "target": "< 140bpm at easy pace", "actual": null, "hit": null },
-    { "metric": "Motivation", "target": "Excited to start base", "actual": null, "hit": null }
+    {
+      "metric": "Pain-free running",
+      "target": "Zero niggles",
+      "actual": null,
+      "hit": null
+    },
+    {
+      "metric": "Easy run HR",
+      "target": "< 140bpm at 5:15+",
+      "actual": null,
+      "hit": null
+    },
+    {
+      "metric": "Motivation",
+      "target": "Excited to start base",
+      "actual": null,
+      "hit": null
+    }
   ],
   "sessions": [
-    { "date": "2026-03-23", "type": "rest", "planned": { "desc": "OFF", "distance": 0, "pace": "", "notes": "Marathon was yesterday. Sleep." } },
-    { "date": "2026-03-24", "type": "rest", "planned": { "desc": "OFF — walk only", "distance": 0, "pace": "", "notes": "" } },
-    { "date": "2026-03-25", "type": "yoga", "planned": { "desc": "Yoga 30min\nRecovery flow — hips & hamstrings", "distance": 0, "pace": "30min", "notes": "" } },
-    { "date": "2026-03-26", "type": "bike", "planned": { "desc": "Zwift — social ride\n45min Z1, pick any flat route", "distance": 0, "pace": "45min Z1", "notes": "Just spin. Chat pace." } },
-    { "date": "2026-03-27", "type": "easy", "planned": { "desc": "First run back\n4km jog @ whatever feels good", "distance": 4, "pace": "5:40+/km", "notes": "HR < 135. Walk breaks fine." } },
-    { "date": "2026-03-28", "type": "rest", "planned": { "desc": "OFF", "distance": 0, "pace": "", "notes": "Recovery ride if you're itchy." } },
-    { "date": "2026-03-29", "type": "bike", "planned": { "desc": "Long easy ride\n2-2.5hrs — explore a new route", "distance": 0, "pace": "2-2.5hrs Z1-Z2", "notes": "Enjoy the bike. No agenda." } },
-    { "date": "2026-03-30", "type": "easy", "planned": { "desc": "Easy run\n5km @ 5:30/km", "distance": 5, "pace": "5:30/km", "notes": "" } },
-    { "date": "2026-03-31", "type": "rest", "planned": { "desc": "OFF — rest before strides tomorrow", "distance": 0, "pace": "", "notes": "No strength today. Quality run coming." } },
-    { "date": "2026-04-01", "type": "bike", "planned": { "desc": "Zwift — easy group ride\n60-90min with a group", "distance": 0, "pace": "60-90min Z2", "notes": "Find a C-pace group ride. Social." } },
-    { "date": "2026-04-02", "type": "easy", "planned": { "desc": "Easy run\n6km @ 5:20/km", "distance": 6, "pace": "5:20/km", "notes": "" } },
-    { "date": "2026-04-03", "type": "strength", "planned": { "desc": "Intro strength\n30min bodyweight\n3x10 squats, 3x10 lunges\n3x30sec plank, 3x10 hip bridges", "distance": 0, "pace": "30min", "notes": "Light. Learn the movements. No run tomorrow — rest day." } },
-    { "date": "2026-04-04", "type": "easy", "planned": { "desc": "Easy run + strides\n6km easy + 4x100m strides", "distance": 6, "pace": "5:15/km", "notes": "Strides = fast & relaxed, not sprinting." } },
-    { "date": "2026-04-05", "type": "bike", "planned": { "desc": "Weekend ride\n2.5-3hrs — outdoor if weather is good\nOr Zwift group ride", "distance": 0, "pace": "2.5-3hrs Z2", "notes": "" } },
-    { "date": "2026-04-06", "type": "easy", "planned": { "desc": "Easy run\n7km @ 5:15/km", "distance": 7, "pace": "5:15/km", "notes": "" } },
-    { "date": "2026-04-07", "type": "easy", "planned": { "desc": "AM: Easy run 6km\nPM: Yoga 20min", "distance": 6, "pace": "5:15/km", "notes": "First AM/PM split. Easy." } },
-    { "date": "2026-04-08", "type": "bike", "planned": { "desc": "Zwift — easy spin\n60min, flat route", "distance": 0, "pace": "60min Z2", "notes": "" } },
-    { "date": "2026-04-09", "type": "easy", "planned": { "desc": "Easy run + strides\n7km + 6x100m", "distance": 7, "pace": "5:10/km", "notes": "Strides feel faster now? Good sign." } },
-    { "date": "2026-04-10", "type": "easy", "planned": { "desc": "Easy run 6km\nShakeout day", "distance": 6, "pace": "5:15/km", "notes": "Keep it easy. Strength tomorrow." } },
-    { "date": "2026-04-11", "type": "strength", "planned": { "desc": "Strength\n40min\nSquats 3x8, Step-ups 3x10\nSingle-leg RDL 3x8, Core circuit", "distance": 0, "pace": "40min", "notes": "Start adding load. Focus on form. No quality run tomorrow — easy day before base block." } },
-    { "date": "2026-04-12", "type": "bike", "planned": { "desc": "Long ride\n3hrs — outdoor or Zwift\nSteady Z2, last 20min push Z3", "distance": 0, "pace": "3hrs Z2-Z3", "notes": "Finish strong. You're ready." } },
-    { "date": "2026-04-13", "type": "rest", "planned": { "desc": "Block review\nRate recovery 1-10\nAny pain? How's motivation?", "distance": 0, "pace": "", "notes": "Answer honestly. Base block starts tomorrow." } }
+    {
+      "date": "2026-03-23",
+      "type": "rest",
+      "planned": {
+        "desc": "OFF",
+        "distance": 0,
+        "pace": "",
+        "notes": "Marathon was yesterday. Sleep."
+      }
+    },
+    {
+      "date": "2026-03-24",
+      "type": "rest",
+      "planned": {
+        "desc": "OFF \u2014 walk only",
+        "distance": 0,
+        "pace": "",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-03-25",
+      "type": "yoga",
+      "planned": {
+        "desc": "Yoga \u2014 recovery flow\n\n30min gentle:\n- Hip openers 5min\n- Hamstring stretches 5min\n- Pigeon pose 3min/side\n- Supine twist 3min/side\n- Savasana 5min",
+        "distance": 0,
+        "pace": "30min",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-03-26",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 flat social ride\n\n45min Z1:\n- Pick any flat route\n- Stay in Z1, conversation pace\n- Just move the legs",
+        "distance": 0,
+        "pace": "45min Z1",
+        "notes": "Just spin. No effort."
+      }
+    },
+    {
+      "date": "2026-03-27",
+      "type": "easy",
+      "planned": {
+        "desc": "First run back\n\n4km continuous:\n- Pace: whatever feels good (5:40+)\n- HR cap: 135bpm\n- Walk breaks are fine\n- Just test the legs",
+        "distance": 4,
+        "pace": "5:40+/km",
+        "notes": "If anything hurts, stop."
+      }
+    },
+    {
+      "date": "2026-03-28",
+      "type": "rest",
+      "planned": {
+        "desc": "OFF\n\nRecovery ride if you're itchy (30min Z1 max)",
+        "distance": 0,
+        "pace": "",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-03-29",
+      "type": "bike",
+      "planned": {
+        "desc": "Weekend ride \u2014 explore\n\n2-2.5hrs Z1-Z2:\n- Outdoor if weather is good\n- Or Zwift \u2014 pick a scenic route\n- No power targets, just ride",
+        "distance": 0,
+        "pace": "2-2.5hrs Z1-Z2",
+        "notes": "Enjoy the bike. No agenda."
+      }
+    },
+    {
+      "date": "2026-03-30",
+      "type": "yoga",
+      "planned": {
+        "desc": "Yoga + mobility\n\n35min:\n- Sun salutations 5min\n- Runner's lunge sequence 8min\n- Hip 90/90 stretches 5min\n- Calf/ankle mobility 5min\n- Foam roll quads + IT band 10min",
+        "distance": 0,
+        "pace": "35min",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-03-31",
+      "type": "easy",
+      "planned": {
+        "desc": "Easy run\n\n5km @ 5:30/km:\n- Flat route\n- HR < 138\n- Should feel effortless",
+        "distance": 5,
+        "pace": "5:30/km",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-01",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 easy group ride\n\n60-90min Z2:\n- Find a C-pace group\n- Social pace\n- Stay in Z2, don't chase",
+        "distance": 0,
+        "pace": "60-90min Z2",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-02",
+      "type": "strength",
+      "planned": {
+        "desc": "Intro strength\n\n30min bodyweight:\n- Squats 3x10\n- Reverse lunges 3x8/leg\n- Glute bridges 3x12\n- Plank 3x30sec\n- Bird-dog 3x8/side\n- Calf raises 3x15",
+        "distance": 0,
+        "pace": "30min",
+        "notes": "Light. Learn the movements. No DOMS."
+      }
+    },
+    {
+      "date": "2026-04-03",
+      "type": "bike",
+      "planned": {
+        "desc": "Easy spin\n\n60min Z1-Z2:\n- Flat, easy\n- Cadence focus: 85-90rpm\n- Active recovery",
+        "distance": 0,
+        "pace": "60min Z1-Z2",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-04",
+      "type": "easy",
+      "planned": {
+        "desc": "Easy run + strides\n\nRun: 6km @ 5:15/km\nStrides: 4x100m\n- Build to 90% over 60m\n- Hold 20m\n- Decelerate 20m\n- Walk back recovery\n\nShould feel fast and relaxed, NOT sprinting",
+        "distance": 6,
+        "pace": "5:15/km",
+        "notes": "First strides post-marathon."
+      }
+    },
+    {
+      "date": "2026-04-05",
+      "type": "bike",
+      "planned": {
+        "desc": "Weekend ride\n\n2.5-3hrs Z2:\n- Outdoor: pick a route with some gentle hills\n- Or Zwift group ride\n- Steady effort throughout",
+        "distance": 0,
+        "pace": "2.5-3hrs Z2",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-06",
+      "type": "yoga",
+      "planned": {
+        "desc": "Yoga \u2014 strength flow\n\n40min:\n- Warrior sequences 10min\n- Chair pose holds 5min\n- Core work (boat pose, plank variations) 10min\n- Hip openers 10min\n- Cool down 5min",
+        "distance": 0,
+        "pace": "40min",
+        "notes": "Building toward strength work in base block."
+      }
+    },
+    {
+      "date": "2026-04-07",
+      "type": "bike",
+      "planned": {
+        "desc": "Zwift \u2014 easy spin\n\n60min Z2:\n- Flat route\n- Consistent effort\n- Optional: cadence drills (30sec high cadence every 10min)",
+        "distance": 0,
+        "pace": "60min Z2",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-08",
+      "type": "easy",
+      "planned": {
+        "desc": "Easy run + strides\n\nRun: 7km @ 5:10/km\nStrides: 6x100m\n- Build to 90% over 60m\n- Hold 30m\n- Walk back\n\nStrides should feel faster than last week",
+        "distance": 7,
+        "pace": "5:10/km",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-09",
+      "type": "strength",
+      "planned": {
+        "desc": "Strength \u2014 progression\n\n40min:\n- Goblet squats 3x8 (add weight)\n- Step-ups 3x10/leg\n- Single-leg RDL 3x8/leg\n- Side plank 3x30sec/side\n- Dead bugs 3x10\n- Calf raises 3x15 (weighted)",
+        "distance": 0,
+        "pace": "40min",
+        "notes": "Start adding load. Focus on form."
+      }
+    },
+    {
+      "date": "2026-04-10",
+      "type": "bike",
+      "planned": {
+        "desc": "Easy ride\n\n60-75min Z2:\n- Keep it simple\n- Aerobic maintenance",
+        "distance": 0,
+        "pace": "60-75min Z2",
+        "notes": ""
+      }
+    },
+    {
+      "date": "2026-04-11",
+      "type": "easy",
+      "planned": {
+        "desc": "Easy run + strides\n\nRun: 7km @ 5:05/km\nStrides: 6x100m (faster than last week)\n\nShould feel smooth and controlled",
+        "distance": 7,
+        "pace": "5:05/km",
+        "notes": "Last run of recovery block."
+      }
+    },
+    {
+      "date": "2026-04-12",
+      "type": "bike",
+      "planned": {
+        "desc": "Long ride \u2014 finish with effort\n\n3hrs:\n- First 2.5hrs Z2 steady\n- Last 30min push to Z3\n- Finish strong\n\nThis is the bridge to base block",
+        "distance": 0,
+        "pace": "3hrs Z2-Z3",
+        "notes": "You're ready."
+      }
+    },
+    {
+      "date": "2026-04-13",
+      "type": "rest",
+      "planned": {
+        "desc": "Block review\n\nRate 1-10:\n- Energy level?\n- Any pain?\n- Motivation to train hard?\n\nBase block starts tomorrow.",
+        "distance": 0,
+        "pace": "",
+        "notes": "Answer honestly."
+      }
+    }
   ],
   "status": "active",
   "summary": null,
-  "runVolume": "20-25km/week",
-  "bikeVolume": "4-6hrs/week"
+  "runVolume": "15-20km/week (3 runs)",
+  "bikeVolume": "5-7hrs/week"
 }
