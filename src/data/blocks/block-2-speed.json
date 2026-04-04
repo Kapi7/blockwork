@@ -1,40 +1,40 @@
 {
-  "id": "block-generated-2026-04-06",
+  "id": "block-2-speed",
   "name": "Speed Development",
   "number": 2,
   "phase": "speed",
   "startDate": "2026-04-06",
   "endDate": "2026-04-26",
-  "stimulus": "Speed block targeting sub 17:30 5K. Note: feel like I need to work on my strenth",
+  "stimulus": "5K speed block targeting sub 17:30. Key workouts Tue+Thu. Long run Sat. Athlete note: feel like I need to work on my strenth",
   "goals": [
-    "Target: sub 17:30 (5K)",
-    "Long-term: sub 36 (10K)",
-    "2 key workouts/week (Tue + Thu)",
-    "Long run Sat, Long ride Fri",
-    "12hrs running + 5hrs cycling per week"
+    "5K target: sub 17:30",
+    "10K target: sub 36",
+    "Build long run to 22km",
+    "Week pattern: Build → Build+ → Absorb",
+    "Strength focus per athlete request"
   ],
   "successMetrics": [
     {
       "metric": "5K pace reps",
-      "target": "1km @ 3:28-3:32 with HR < 178",
+      "target": "1km @ 3:28-3:35 controlled",
       "actual": null,
       "hit": null
     },
     {
-      "metric": "Weekly volume",
-      "target": "120+ km",
+      "metric": "Long run",
+      "target": "Build to 22km",
       "actual": null,
       "hit": null
     },
     {
-      "metric": "Long run build",
-      "target": "Up to 22km",
+      "metric": "Tempo",
+      "target": "4:15-4:25/km feels smooth",
       "actual": null,
       "hit": null
     },
     {
-      "metric": "Tempo comfort",
-      "target": "4:15-4:25/km feels controlled",
+      "metric": "Recovery",
+      "target": "Week 3 absorb feels restorative",
       "actual": null,
       "hit": null
     }
@@ -54,10 +54,10 @@
       "date": "2026-04-07",
       "type": "key",
       "planned": {
-        "desc": "Hill sprints",
+        "desc": "Hill repeats",
         "distance": 10,
         "pace": "Easy + 8x10sec hills",
-        "notes": "2km WU + 8x10sec steep hill sprints (walk back) + CD"
+        "notes": "2km WU + 8x10sec steep uphill sprints (walk back recovery) + 4km CD. Builds power."
       }
     },
     {
@@ -67,27 +67,27 @@
         "desc": "Easy run",
         "distance": 6,
         "pace": "5:10-5:20/km",
-        "notes": ""
+        "notes": "Recovery from key session."
       }
     },
     {
       "date": "2026-04-09",
       "type": "key",
       "planned": {
-        "desc": "Hill sprints",
-        "distance": 10,
-        "pace": "Easy + 8x10sec hills",
-        "notes": "2km WU + 8x10sec steep hill sprints (walk back) + CD"
+        "desc": "Tempo cruise",
+        "distance": 12,
+        "pace": "4:15-4:25 work",
+        "notes": "2km WU + 3x1.5km @ 4:15-4:25 (90sec jog) + 2km CD. Find the rhythm."
       }
     },
     {
       "date": "2026-04-10",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Pre-run easy spin",
         "distance": 0,
-        "pace": "2hrs Z2",
-        "notes": "Steady. Enjoy it."
+        "pace": "45-60min Z1-Z2",
+        "notes": "Easy legs. Save energy for tomorrow's long run."
       }
     },
     {
@@ -96,68 +96,68 @@
       "planned": {
         "desc": "Long run",
         "distance": 14,
-        "pace": "4:50-5:05/km",
-        "notes": "Keep it relaxed. Negative split."
+        "pace": "4:50-5:00/km",
+        "notes": "First long run of block. Relaxed and steady."
       }
     },
     {
       "date": "2026-04-12",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Endurance ride",
         "distance": 0,
         "pace": "2hrs Z2",
-        "notes": "Steady. Enjoy it."
+        "notes": "Steady aerobic. Keep HR in Z2. Build bike fitness."
       }
     },
     {
       "date": "2026-04-13",
       "type": "easy",
       "planned": {
-        "desc": "Easy run",
+        "desc": "Easy run + strides",
         "distance": 7,
         "pace": "5:10-5:20/km",
-        "notes": ""
+        "notes": "+ 4-6x100m strides. Relaxed speed."
       }
     },
     {
       "date": "2026-04-14",
       "type": "key",
       "planned": {
-        "desc": "Tempo intervals",
-        "distance": 12,
-        "pace": "4:15-4:25 work",
-        "notes": "2km WU + 3x1km @ 4:15-4:25 (2min jog) + 3km CD"
+        "desc": "5K pace reps",
+        "distance": 10,
+        "pace": "3:28-3:35 work",
+        "notes": "2km WU + 5x1km @ 3:28-3:35 (2min jog) + 2km CD. Target race pace."
       }
     },
     {
       "date": "2026-04-15",
       "type": "easy",
       "planned": {
-        "desc": "Easy run",
+        "desc": "Easy run + strides",
         "distance": 7,
         "pace": "5:10-5:20/km",
-        "notes": ""
+        "notes": "+ 4-6x100m strides. Relaxed speed."
       }
     },
     {
       "date": "2026-04-16",
       "type": "key",
       "planned": {
-        "desc": "Tempo intervals",
+        "desc": "Progression run",
         "distance": 12,
-        "pace": "4:15-4:25 work",
-        "notes": "2km WU + 3x1km @ 4:15-4:25 (2min jog) + 3km CD"
+        "pace": "5:00 → 4:00",
+        "notes": "Start at 5:00/km, drop 15sec/km every 2km. Finish hard."
       }
     },
     {
       "date": "2026-04-17",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Pre-run easy spin",
         "distance": 0,
-        "pace": "2.25hrs Z2",
-        "notes": "Steady. Enjoy it."
+        "pace": "45-60min Z1-Z2",
+        "notes": "Easy legs. Save energy for tomorrow's long run."
       }
     },
     {
@@ -166,93 +166,93 @@
       "planned": {
         "desc": "Long run",
         "distance": 16,
-        "pace": "4:50-5:05/km",
-        "notes": "Keep it relaxed. Negative split."
+        "pace": "4:50-5:00/km",
+        "notes": "Last 3km push to 4:40. Build endurance."
       }
     },
     {
       "date": "2026-04-19",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Endurance ride + efforts",
         "distance": 0,
-        "pace": "2.25hrs Z2",
-        "notes": "Steady. Enjoy it."
+        "pace": "2.25hrs Z2 with Z3 surges",
+        "notes": "1.75hrs Z2, last 30min include 4x3min Z3 efforts."
       }
     },
     {
       "date": "2026-04-20",
       "type": "easy",
       "planned": {
-        "desc": "Easy run + strides",
-        "distance": 8,
+        "desc": "Easy run",
+        "distance": 5,
         "pace": "5:10-5:20/km",
-        "notes": "+ 4-6x100m strides"
+        "notes": ""
       }
     },
     {
       "date": "2026-04-21",
-      "type": "key",
+      "type": "steady",
       "planned": {
-        "desc": "Fartlek",
-        "distance": 10,
-        "pace": "Mixed",
-        "notes": "2km WU + 8x(90sec hard/90sec easy) + 2km CD"
+        "desc": "Moderate run",
+        "distance": 8,
+        "pace": "4:40-4:50/km",
+        "notes": "Recovery week — reduced from Threshold blocks. Keep it comfortable."
       }
     },
     {
       "date": "2026-04-22",
       "type": "easy",
       "planned": {
-        "desc": "Easy run + strides",
-        "distance": 8,
+        "desc": "Easy run",
+        "distance": 5,
         "pace": "5:10-5:20/km",
-        "notes": "+ 4-6x100m strides"
+        "notes": "Recovery from key session."
       }
     },
     {
       "date": "2026-04-23",
-      "type": "key",
+      "type": "steady",
       "planned": {
-        "desc": "Fartlek",
-        "distance": 10,
-        "pace": "Mixed",
-        "notes": "2km WU + 8x(90sec hard/90sec easy) + 2km CD"
+        "desc": "Moderate run",
+        "distance": 7,
+        "pace": "4:40-4:50/km",
+        "notes": "Recovery week — reduced from Speed endurance. Keep it comfortable."
       }
     },
     {
       "date": "2026-04-24",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Easy recovery ride",
         "distance": 0,
-        "pace": "2.5hrs Z2",
-        "notes": "Can push Z3 last 30min"
+        "pace": "60min Z1-Z2",
+        "notes": "Recovery week. Spin the legs. No pushing."
       }
     },
     {
       "date": "2026-04-25",
       "type": "steady",
       "planned": {
-        "desc": "Long run",
-        "distance": 18,
-        "pace": "4:50-5:05/km",
-        "notes": "Last 3km push to 4:40"
+        "desc": "Easy long run",
+        "distance": 12,
+        "pace": "5:00-5:10/km",
+        "notes": "Recovery week. Keep it truly easy."
       }
     },
     {
       "date": "2026-04-26",
       "type": "bike",
       "planned": {
-        "desc": "Long ride",
+        "desc": "Easy recovery ride",
         "distance": 0,
-        "pace": "2.5hrs Z2",
-        "notes": "Can push Z3 last 30min"
+        "pace": "60min Z1-Z2",
+        "notes": "Recovery week. Spin the legs. No pushing."
       }
     }
   ],
   "status": "upcoming",
   "summary": null,
-  "runVolume": "~120km/week",
+  "runVolume": "~108km/week",
   "bikeVolume": "5hrs/week"
 }
