@@ -1,0 +1,67 @@
+name: Strava Sync
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Restore raw data
+        uses: actions/cache@v4
+        with:
+          path: data/raw
+          key: strava-raw-${{ github.sha }}
+          restore-keys: strava-raw-
+
+      - name: Ensure raw data directory
+        run: mkdir -p data/raw
+
+      - name: Bootstrap raw data if missing
+        run: |
+          if [ ! -f data/raw/all_runs.json ]; then
+            echo "[]" > data/raw/all_runs.json
+          fi
+          if [ ! -f data/raw/detailed_long_runs.json ] && [ -f src/data/detailed-runs.json ]; then
+            cp src/data/detailed-runs.json data/raw/detailed_long_runs.json
+          fi
+          if [ ! -f data/raw/race_details.json ] && [ -f src/data/race-details.json ]; then
+            cp src/data/race-details.json data/raw/race_details.json
+          fi
+
+      - name: Sync from Strava
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: npx tsx scripts/strava-sync.ts
+
+      - name: Process data
+        run: npx tsx scripts/prepare-data.ts
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "Strava Sync Bot"
+          git config user.email "actions@github.com"
+          git add src/data/
+          if git diff --staged --quiet; then
+            echo "No data changes to commit"
+          else
+            SYNC_DATE="$(date +%Y-%m-%d)"
+            git commit -m "chore: sync Strava data ${SYNC_DATE}"
+            git push
+          fi
