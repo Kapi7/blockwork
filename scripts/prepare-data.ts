@@ -67,7 +67,7 @@ function slimRuns(raw: RawRun[]): SlimRun[] {
         sport: sportCategory(sport),
       };
     })
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0));
 }
 
 function detectRaces(runs: SlimRun[]) {
@@ -317,6 +317,8 @@ const fitness = computeFitness(runs);
 const trainingLoad = computeTrainingLoad(runs);
 const coachContext = generateCoachContext(runs, races, fitness, trainingLoad);
 
+// Ensure descending sort (most recent first)
+runs.sort((a, b) => (a.date > b.date ? -1 : a.date < b.date ? 1 : 0));
 fs.writeFileSync(path.join(OUT_DIR, 'runs.json'), JSON.stringify(runs));
 fs.writeFileSync(path.join(OUT_DIR, 'races.json'), JSON.stringify(races));
 fs.writeFileSync(path.join(OUT_DIR, 'weekly-volumes.json'), JSON.stringify(weeklyVolumes));
