@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Badge from '../components/ui/Badge.astro';
 import StatCard from '../components/ui/StatCard.astro';
 import { getRaces, getPBs } from '../lib/data';
-import { formatPace, formatTime, formatDate, formatDistance } from '../lib/format';
+import { formatPace, formatTime, formatDateFull, formatDistance } from '../lib/format';
 
 const races = getRaces();
 const pbs = getPBs();
@@ -43,7 +43,7 @@ const categoryLabels: Record<string, string> = {
             <>
               <p class="text-xl font-bold font-mono" style={`color: ${color};`}>{formatTime(pb.time)}</p>
               <p class="text-xs text-text-secondary mt-1">
-                {formatPace(pb.pace)} · {formatDate(pb.date)}
+                {formatPace(pb.pace)} · {formatDateFull(pb.date)}
               </p>
             </>
           ) : (
@@ -76,7 +76,7 @@ const categoryLabels: Record<string, string> = {
             const isPB = pbs[r.category]?.date === r.date && pbs[r.category]?.time === r.time;
             return (
               <tr class:list={['border-t border-border-subtle', isPB && 'bg-accent/5']}>
-                <td class="py-2.5 pr-4 text-text-secondary">{formatDate(r.date)}</td>
+                <td class="py-2.5 pr-4 text-text-secondary">{formatDateFull(r.date)}</td>
                 <td class="py-2.5 pr-4 max-w-[200px] truncate">
                   {r.name}
                   {isPB && <span class="ml-1 text-accent text-xs font-bold">PB</span>}

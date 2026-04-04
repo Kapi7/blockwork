@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getMeta, getCurrentBlock, getFitness, getRecentRuns, getCalendarDays, getTrainingLoad } from '../lib/data';
-import { formatPace, formatDate, formatDistance, formatTime } from '../lib/format';
+import { formatPace, formatSpeed, formatEffort, formatDate, formatDistance, formatTime } from '../lib/format';
 import { PHASE_COLORS, TYPE_COLORS } from '../lib/types';
 
 const meta = getMeta();
@@ -182,8 +182,10 @@ const SPORT_ICONS: Record<string, string> = { run: '\u{1F3C3}', bike: '\u{1F6B4}
               </div>
               <div class="text-right">
                 <div class="text-[12px] mono font-semibold">{r.dist > 0 ? `${formatDistance(r.dist)}km` : formatTime(r.time)}</div>
-                {r.sport === 'run' && r.pace > 0 && r.pace < 600 && (
-                  <div class="text-[10px] mono" style={`color: ${r.pace < 250 ? '#f53b57' : r.pace < 300 ? '#ffb142' : '#0be881'};`}>{formatPace(r.pace)}</div>
+                {r.pace > 0 && r.pace < 600 && (
+                  <div class="text-[10px] mono" style={`color: ${r.sport === 'bike' ? '#3498ff' : r.pace < 250 ? '#f53b57' : r.pace < 300 ? '#ffb142' : '#0be881'};`}>
+                    {r.sport === 'bike' ? formatSpeed(r.pace) : formatPace(r.pace)}
+                  </div>
                 )}
               </div>
               {r.hr > 0 && (

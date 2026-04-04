@@ -5,6 +5,21 @@ export function formatPace(secondsPerKm: number): string {
   return `${m}:${s.toString().padStart(2, '0')}/km`;
 }
 
+/** Format bike speed as km/h from seconds-per-km */
+export function formatSpeed(secondsPerKm: number): string {
+  if (!secondsPerKm || secondsPerKm <= 0) return '-';
+  const kmh = 3600 / secondsPerKm;
+  return `${kmh.toFixed(1)} km/h`;
+}
+
+/** Smart format: pace for runs, speed for bikes */
+export function formatEffort(secondsPerKm: number, sport: string): string {
+  if (!secondsPerKm || secondsPerKm <= 0) return '-';
+  if (sport === 'bike') return formatSpeed(secondsPerKm);
+  if (sport === 'run') return formatPace(secondsPerKm);
+  return formatTime(secondsPerKm); // fallback for yoga/strength: duration
+}
+
 export function formatTime(seconds: number): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);
@@ -14,17 +29,22 @@ export function formatTime(seconds: number): string {
 }
 
 export function formatDistance(km: number): string {
-  return km >= 10 ? km.toFixed(1) : km.toFixed(1);
+  return km.toFixed(1);
 }
 
 export function formatDate(dateStr: string): string {
-  const d = new Date(dateStr);
+  const d = new Date(dateStr + 'T00:00:00');
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
 export function formatDateFull(dateStr: string): string {
-  const d = new Date(dateStr);
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+export function formatDateLong(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 export function daysUntil(dateStr: string): number {
@@ -40,9 +60,9 @@ export function daysSince(dateStr: string): number {
 }
 
 export function paceColor(secondsPerKm: number): string {
-  if (secondsPerKm < 230) return '#ff4757'; // race pace
-  if (secondsPerKm < 250) return '#ff6348'; // threshold
-  if (secondsPerKm < 290) return '#ffa502'; // steady
-  if (secondsPerKm < 320) return '#2ed573'; // easy
-  return '#70a1ff'; // recovery
+  if (secondsPerKm < 230) return '#f53b57';
+  if (secondsPerKm < 250) return '#ff6b81';
+  if (secondsPerKm < 290) return '#ffb142';
+  if (secondsPerKm < 320) return '#0be881';
+  return '#34e7e4';
 }

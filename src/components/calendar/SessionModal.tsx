@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import type { MatchedDay, SlimRun } from '../../lib/types';
 
 const TYPE_COLORS: Record<string, string> = {
-  key: '#ff4757', threshold: '#ff6b6b', steady: '#ffa502', easy: '#26de81',
-  recovery: '#4ecdc4', race: '#ffd32a', rest: '#636e72', bike: '#45aaf2',
-  yoga: '#a55eea', strength: '#fd9644',
+  key: '#f53b57', threshold: '#ff6b81', steady: '#ffb142', easy: '#0be881',
+  recovery: '#34e7e4', race: '#ffd32a', rest: '#485460', bike: '#3498ff',
+  yoga: '#a55eea', strength: '#ff9f43',
 };
 
 const SPORT_ICONS: Record<string, string> = {
@@ -104,15 +104,15 @@ export function SessionModal({ day, detailed, onClose, onPrev, onNext }: Props) 
   const feelColors: Record<string, string> = { great: '#26de81', good: '#7bed9f', ok: '#ffa502', tired: '#fd9644', bad: '#ff4757' };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-end" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/75 backdrop-blur-md" />
       <div
-        className="relative w-full max-w-xl h-full bg-[#0a0a12] border-l border-[rgba(255,255,255,0.05)] overflow-y-auto"
-        style={{ animation: 'slideIn 0.2s ease-out' }}
+        className="relative w-full max-w-2xl max-h-[90vh] bg-[#08080f] border border-[rgba(255,255,255,0.06)] rounded-3xl overflow-y-auto shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
+        style={{ animation: 'modalIn 0.25s cubic-bezier(0.22,1,0.36,1)' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-[#0a0a12]/95 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)] px-6 py-4">
+        <div className="sticky top-0 z-10 bg-[#08080f]/95 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)] px-6 py-4 rounded-t-3xl">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1">
               <button onClick={onPrev} className="w-8 h-8 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-[#8892a4] transition-colors">{'\u2190'}</button>
@@ -166,7 +166,7 @@ export function SessionModal({ day, detailed, onClose, onPrev, onNext }: Props) 
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <BigStat label="Distance" value={`${act.dist.toFixed(1)}`} unit="km" color="#00d4aa" />
                 <BigStat label="Time" value={fmtTime(act.time)} />
-                <BigStat label="Pace" value={act.sport === 'run' ? `${fmt(act.pace)}` : '-'} unit={act.sport === 'run' ? '/km' : ''} />
+                <BigStat label={act.sport === 'bike' ? 'Speed' : 'Pace'} value={act.sport === 'run' ? `${fmt(act.pace)}` : act.sport === 'bike' && act.pace > 0 ? `${(3600/act.pace).toFixed(1)}` : '-'} unit={act.sport === 'run' ? '/km' : act.sport === 'bike' ? 'km/h' : ''} />
               </div>
               <div className="grid grid-cols-3 gap-4">
                 {act.hr > 0 && <BigStat label="Avg HR" value={`${Math.round(act.hr)}`} unit="bpm" color="#ff6b6b" />}
@@ -309,9 +309,9 @@ export function SessionModal({ day, detailed, onClose, onPrev, onNext }: Props) 
       </div>
 
       <style>{`
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
+        @keyframes modalIn {
+          from { transform: scale(0.95) translateY(10px); opacity: 0; }
+          to { transform: scale(1) translateY(0); opacity: 1; }
         }
       `}</style>
     </div>

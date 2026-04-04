@@ -80,16 +80,18 @@ function detectRaces(runs: SlimRun[]) {
       // Exclude Zwift/treadmill/virtual
       if (name.includes('zwift') || name.includes('technogym') || name.includes('virtual')) return false;
 
-      const isRace =
-        ['race', 'marathon', '10k', '5k', 'parkrun', 'half', 'strovolos', 'ayia napa', 'paphos', 'larnaca', 'nicosia', 'limassol', 'berlin', 'vienna', 'paris', 'tel aviv'].some((kw) =>
+      // Only detect as race if name contains race keywords — NOT by pace/distance alone
+      // "Morning Run" at 10km pace is a training run, not a race
+      const isGenericName = name.includes('morning run') || name.includes('evening run') || name.includes('afternoon run') || name.includes('lunch run');
+      if (isGenericName) return false;
+
+      const hasRaceKeyword =
+        ['race', 'marathon', '10k', '5k', 'parkrun', 'half', 'strovolos', 'ayia napa', 'paphos', 'larnaca', 'nicosia', 'limassol', 'berlin', 'vienna', 'paris', 'tel aviv', 'test'].some((kw) =>
           name.includes(kw)
-        ) || /[\u{0080}-\u{FFFF}]/u.test(r.name);
-      if (isRace && r.pace < 360) return true;
-      // Fast pace at standard distances (outdoor runs only)
-      if (r.dist >= 4.5 && r.dist <= 5.5 && r.pace < 240) return true;
-      if (r.dist >= 9.5 && r.dist <= 10.5 && r.pace < 250) return true;
-      if (r.dist >= 20 && r.dist <= 22 && r.pace < 270) return true;
-      if (r.dist >= 41 && r.dist <= 43 && r.pace < 300) return true;
+        );
+      const hasEmoji = /[\u{0080}-\u{FFFF}]/u.test(r.name);
+
+      if ((hasRaceKeyword || hasEmoji) && r.pace < 360) return true;
       return false;
     })
     .map((r) => {

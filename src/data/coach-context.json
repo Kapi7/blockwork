@@ -92,14 +92,6 @@
       "category": "10k"
     },
     {
-      "date": "2026-03-03",
-      "name": "Morning Run",
-      "dist": 5.4,
-      "time": 1287,
-      "pace": 239.7,
-      "category": "5k"
-    },
-    {
       "date": "2026-02-15",
       "name": "Strovolos half marathon",
       "dist": 21.3,
@@ -114,6 +106,14 @@
       "time": 4906,
       "pace": 232,
       "category": "half"
+    },
+    {
+      "date": "2025-12-07",
+      "name": "10k Paphos ⛈️",
+      "dist": 10,
+      "time": 2295,
+      "pace": 230.3,
+      "category": "10k"
     }
   ]
 }
