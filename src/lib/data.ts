@@ -1,4 +1,4 @@
-import type { SlimRun, Block, Meta, WeeklyVolume, FitnessSummary, Race } from './types';
+import type { SlimRun, Block, Meta, WeeklyVolume, FitnessSummary, Race, MatchedDay, Session } from './types';
 
 import runsData from '../data/runs.json';
 import racesData from '../data/races.json';
@@ -62,6 +62,107 @@ export function getRunsByDate(): Record<string, SlimRun> {
     }
   }
   return byDate;
+}
+
+/** Get ALL activities for a given date (multiple runs/rides per day) */
+export function getActivitiesByDate(): Record<string, SlimRun[]> {
+  const runs = getRuns();
+  const byDate: Record<string, SlimRun[]> = {};
+  for (const r of runs) {
+    if (!byDate[r.date]) byDate[r.date] = [];
+    byDate[r.date].push(r);
+  }
+  return byDate;
+}
+
+/** Match a planned session to the best activity from a list */
+function matchActivity(session: Session, activities: SlimRun[]): SlimRun | null {
+  if (!activities || activities.length === 0) return null;
+
+  const isBikeSession = session.type === 'bike';
+
+  // Filter by activity type
+  const candidates = activities.filter((a) => {
+    if (isBikeSession) return a.type === 'Ride' || a.type === 'VirtualRide';
+    return a.type === 'Run' || a.type === 'VirtualRun';
+  });
+
+  if (candidates.length === 0) return null;
+  if (candidates.length === 1) return candidates[0];
+
+  // If planned has distance, pick closest match
+  if (session.planned.distance > 0) {
+    candidates.sort((a, b) => {
+      const diffA = Math.abs(a.dist - session.planned.distance);
+      const diffB = Math.abs(b.dist - session.planned.distance);
+      return diffA - diffB;
+    });
+    return candidates[0];
+  }
+
+  // No planned distance (rest/bike) — take longest
+  return candidates.reduce((best, r) => (r.dist > best.dist ? r : best), candidates[0]);
+}
+
+/** Build a calendar of matched days across all blocks */
+export function getCalendarDays(weeksBack: number = 8): MatchedDay[] {
+  const blocks = getBlocks();
+  const activitiesByDate = getActivitiesByDate();
+
+  // Build session map from all blocks
+  const sessionMap: Record<string, { session: Session; blockId: string; blockName: string; phase: string }> = {};
+  for (const block of blocks) {
+    for (const s of block.sessions) {
+      sessionMap[s.date] = { session: s, blockId: block.id, blockName: block.name, phase: block.phase };
+    }
+  }
+
+  // Determine date range
+  const today = new Date();
+  const start = new Date(today);
+  start.setDate(start.getDate() - (weeksBack * 7) - start.getDay() + 1); // Start on Monday
+  const end = new Date(today);
+  end.setDate(end.getDate() + (4 * 7)); // 4 weeks ahead
+
+  const days: MatchedDay[] = [];
+  const current = new Date(start);
+
+  while (current <= end) {
+    const dateStr = current.toISOString().slice(0, 10);
+    const mapped = sessionMap[dateStr];
+    const dayActivities = activitiesByDate[dateStr] || [];
+
+    const day: MatchedDay = {
+      date: dateStr,
+      session: mapped ? { ...mapped.session } : null,
+      activities: dayActivities,
+      blockId: mapped?.blockId || null,
+      blockName: mapped?.blockName || null,
+      phase: mapped?.phase || null,
+    };
+
+    // Smart match: attach best activity to session
+    if (day.session && dayActivities.length > 0) {
+      day.session.actual = matchActivity(day.session, dayActivities);
+    }
+
+    days.push(day);
+    current.setDate(current.getDate() + 1);
+  }
+
+  return days;
+}
+
+/** Group calendar days into weeks (Mon-Sun) */
+export function getCalendarWeeks(weeksBack: number = 8): MatchedDay[][] {
+  const days = getCalendarDays(weeksBack);
+  const weeks: MatchedDay[][] = [];
+
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
+
+  return weeks;
 }
 
 export function getPBs(): Record<string, Race> {

@@ -33,8 +33,9 @@ interface SlimRun {
 }
 
 function slimRuns(raw: RawRun[]): SlimRun[] {
+  const validTypes = ['Run', 'VirtualRun', 'Ride', 'VirtualRide'];
   return raw
-    .filter((r) => r.type === 'Run' || r.sport_type === 'Run')
+    .filter((r) => validTypes.includes(r.type) || validTypes.includes(r.sport_type))
     .map((r) => {
       const distKm = r.distance / 1000;
       const pace = distKm > 0 ? r.moving_time / distKm : 0;

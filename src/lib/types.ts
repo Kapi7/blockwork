@@ -23,7 +23,16 @@ export interface SlimRun {
   hr: number;
   maxHr: number;
   elev: number;
-  type: string;
+  type: string; // 'Run' | 'Ride' | 'VirtualRide'
+}
+
+export interface MatchedDay {
+  date: string;
+  session: Session | null;
+  activities: SlimRun[];
+  blockId: string | null;
+  blockName: string | null;
+  phase: string | null;
 }
 
 export interface WeeklyVolume {
