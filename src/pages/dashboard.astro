@@ -198,10 +198,71 @@ const SPORT_ICONS: Record<string, string> = { run: '\u{1F3C3}', bike: '\u{1F6B4}
     </div>
   </div>
 
+  <!-- Strava Connect Banner (shown if not connected) -->
+  <div id="stravaConnect" class="card p-4 mt-6 flex items-center justify-between" style="display:none;">
+    <div>
+      <div class="text-sm font-semibold">Connect Strava</div>
+      <div class="text-[11px] text-text-secondary">Sync your activities automatically</div>
+    </div>
+    <a id="stravaBtn" href="#" class="px-4 py-2 rounded-xl bg-[#FC4C02] text-white text-[12px] font-semibold hover:bg-[#e04400] transition-colors">
+      Connect Strava
+    </a>
+  </div>
+
+  <div id="stravaConnected" class="card-sm p-3 mt-6 flex items-center gap-2" style="display:none;">
+    <span class="text-[#0be881] text-sm">{'\u2713'}</span>
+    <span class="text-[11px] text-text-secondary">Strava connected</span>
+    <button id="syncBtn" class="ml-auto px-3 py-1 rounded-lg border border-border text-[10px] text-text-secondary hover:text-accent hover:border-accent transition-colors">
+      Sync now
+    </button>
+  </div>
+
   <script is:inline>
     try {
       var u = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
-      if (!u.email || u.exp < Date.now()) window.location.href = '/';
+      if (!u.email || u.exp < Date.now()) {
+        window.location.href = '/';
+      } else {
+        // Save user to D1 on load
+        fetch('/api/user', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            googleId: u.googleId || u.email.split('@')[0],
+            email: u.email,
+            name: u.name,
+            picture: u.picture,
+          }),
+        }).then(function(r) { return r.json(); }).then(function(data) {
+          // Update local storage with server data
+          u.role = data.role;
+          u.athleteId = data.athleteId;
+          u.stravaConnected = data.stravaConnected;
+          localStorage.setItem('blockwork_user', JSON.stringify(u));
+
+          // Show Strava connect or connected
+          if (data.stravaConnected) {
+            document.getElementById('stravaConnected').style.display = 'flex';
+          } else {
+            document.getElementById('stravaConnect').style.display = 'flex';
+            document.getElementById('stravaBtn').href = '/api/strava-connect?email=' + encodeURIComponent(u.email);
+          }
+        }).catch(function() {});
+
+        // Sync button handler
+        document.getElementById('syncBtn')?.addEventListener('click', function() {
+          var btn = document.getElementById('syncBtn');
+          btn.textContent = 'Syncing...';
+          fetch('/api/strava-sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: u.email }),
+          }).then(function(r) { return r.json(); }).then(function(data) {
+            btn.textContent = data.synced + ' new activities';
+            setTimeout(function() { btn.textContent = 'Sync now'; }, 3000);
+          }).catch(function() { btn.textContent = 'Error'; });
+        });
+      }
     } catch(e) { window.location.href = '/'; }
   </script>
 </BaseLayout>

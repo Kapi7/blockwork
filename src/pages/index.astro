@@ -150,6 +150,7 @@ const GOOGLE_CLIENT_ID = '129231084858-u9lh367qrq8fr5dd68aqenffiutnb4k5.apps.goo
         var parts = response.credential.split('.');
         var payload = JSON.parse(atob(parts[1]));
         localStorage.setItem('blockwork_user', JSON.stringify({
+          googleId: payload.sub,
           email: payload.email, name: payload.name, picture: payload.picture,
           role: payload.email === 'kapoosha@gmail.com' ? 'coach' : 'athlete',
           exp: Date.now() + 30 * 24 * 60 * 60 * 1000,
