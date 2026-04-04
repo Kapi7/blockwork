@@ -9,11 +9,11 @@ interface Props {
 const { title, active = '' } = Astro.props;
 
 const nav = [
-  { href: '/dashboard', label: 'Dashboard', id: 'dashboard', icon: '\u2302' },
-  { href: '/calendar', label: 'Calendar', id: 'calendar', icon: '\u{1F4C5}' },
-  { href: '/blocks', label: 'Blocks', id: 'blocks', icon: '\u{1F9F1}' },
-  { href: '/analytics', label: 'Analytics', id: 'analytics', icon: '\u{1F4CA}' },
-  { href: '/races', label: 'Races', id: 'races', icon: '\u{1F3C6}' },
+  { href: '/dashboard', label: 'Dashboard', id: 'dashboard' },
+  { href: '/calendar', label: 'Calendar', id: 'calendar' },
+  { href: '/blocks', label: 'Blocks', id: 'blocks' },
+  { href: '/analytics', label: 'Analytics', id: 'analytics' },
+  { href: '/races', label: 'Races', id: 'races' },
 ];
 ---
 
@@ -25,31 +25,32 @@ const nav = [
     <title>{title} | Blockwork</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
-  <body class="min-h-screen bg-bg-main">
-    <!-- Top nav -->
-    <nav class="fixed top-0 inset-x-0 z-50 border-b border-border-subtle bg-bg-main/80 backdrop-blur-xl">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6">
-        <div class="flex h-14 items-center justify-between">
-          <a href="/" class="flex items-center gap-2.5">
-            <div class="w-7 h-7 rounded-lg bg-accent/20 flex items-center justify-center">
-              <div class="w-3 h-3 rounded-sm bg-accent"></div>
-            </div>
-            <span class="text-base font-bold tracking-tight">
-              <span class="text-accent">BLOCK</span><span class="text-text-primary">WORK</span>
-            </span>
+  <body class="min-h-screen noise">
+    <!-- Nav -->
+    <nav class="fixed top-0 inset-x-0 z-50 bg-bg-deep/70 backdrop-blur-2xl border-b border-border">
+      <div class="mx-auto max-w-[1400px] px-5">
+        <div class="flex h-[52px] items-center justify-between">
+          <a href="/" class="flex items-center gap-2">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="2" width="8" height="8" rx="2" fill="#00e5b0" opacity="0.9"/>
+              <rect x="14" y="2" width="8" height="8" rx="2" fill="#00e5b0" opacity="0.4"/>
+              <rect x="2" y="14" width="8" height="8" rx="2" fill="#00e5b0" opacity="0.4"/>
+              <rect x="14" y="14" width="8" height="8" rx="2" fill="#00e5b0" opacity="0.15"/>
+            </svg>
+            <span class="text-[15px] font-bold tracking-tight text-text-primary">blockwork</span>
           </a>
 
-          <div class="hidden sm:flex items-center gap-0.5">
+          <div class="hidden sm:flex items-center gap-0.5 bg-bg-card/60 rounded-xl px-1 py-1">
             {nav.map((item) => (
               <a
                 href={item.href}
                 class:list={[
-                  'px-3.5 py-1.5 rounded-lg text-[13px] font-medium transition-all',
+                  'px-3.5 py-1.5 rounded-lg text-[12px] font-medium transition-all',
                   active === item.id
-                    ? 'bg-accent/12 text-accent'
-                    : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.03]',
+                    ? 'bg-accent/10 text-accent shadow-sm'
+                    : 'text-text-secondary hover:text-text-primary',
                 ]}
               >
                 {item.label}
@@ -57,33 +58,49 @@ const nav = [
             ))}
           </div>
 
-          <div class="flex items-center gap-3" id="userArea">
-            <a href="/" class="text-xs text-text-muted hover:text-text-secondary transition-colors">Logout</a>
+          <div class="flex items-center gap-3" id="navUser">
+            <div class="w-7 h-7 rounded-full bg-bg-raised border border-border" id="navAvatar"></div>
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Mobile bottom nav -->
-    <nav class="sm:hidden fixed bottom-0 inset-x-0 z-50 border-t border-border-subtle bg-bg-main/90 backdrop-blur-xl">
-      <div class="flex items-center justify-around py-2">
-        {nav.map((item) => (
+    <!-- Mobile nav -->
+    <nav class="sm:hidden fixed bottom-0 inset-x-0 z-50 bg-bg-deep/80 backdrop-blur-2xl border-t border-border safe-b">
+      <div class="flex items-center justify-around py-2 px-2">
+        {nav.slice(0, 5).map((item) => (
           <a
             href={item.href}
             class:list={[
-              'flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors',
+              'flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl transition-colors',
               active === item.id ? 'text-accent' : 'text-text-muted',
             ]}
           >
-            <span class="text-lg">{item.icon}</span>
-            <span class="text-[10px] font-medium">{item.label}</span>
+            <span class="text-[11px] font-medium">{item.label}</span>
           </a>
         ))}
       </div>
     </nav>
 
-    <main class="mx-auto max-w-7xl px-4 pt-20 pb-24 sm:pb-8 sm:px-6">
+    <main class="mx-auto max-w-[1400px] px-5 pt-[68px] pb-28 sm:pb-8">
       <slot />
     </main>
+
+    <script is:inline>
+      // Load user avatar in nav
+      try {
+        var u = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
+        if (u.picture) {
+          var av = document.getElementById('navAvatar');
+          if (av) {
+            var img = document.createElement('img');
+            img.src = u.picture;
+            img.className = 'w-7 h-7 rounded-full';
+            img.referrerPolicy = 'no-referrer';
+            av.replaceWith(img);
+          }
+        }
+      } catch(e) {}
+    </script>
   </body>
 </html>

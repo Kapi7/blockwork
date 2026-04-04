@@ -1,111 +1,141 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-main: #0a0a12;
-  --color-bg-card: #12121e;
-  --color-bg-card-hover: #1a1a2e;
-  --color-bg-surface: #16162a;
-  --color-accent: #00d4aa;
-  --color-accent-dim: #00b894;
-  --color-accent-glow: rgba(0, 212, 170, 0.12);
+  --color-bg-deep: #050508;
+  --color-bg-main: #08080f;
+  --color-bg-card: #0e0e1a;
+  --color-bg-raised: #141422;
+  --color-bg-hover: #1a1a2e;
+  --color-accent: #00e5b0;
+  --color-accent-dim: #00c49a;
+  --color-accent-muted: rgba(0, 229, 176, 0.08);
 
-  --color-type-key: #ff4757;
-  --color-type-threshold: #ff6b6b;
-  --color-type-steady: #ffa502;
-  --color-type-easy: #26de81;
-  --color-type-recovery: #4ecdc4;
+  --color-type-key: #f53b57;
+  --color-type-threshold: #ff6b81;
+  --color-type-steady: #ffb142;
+  --color-type-easy: #0be881;
+  --color-type-recovery: #34e7e4;
   --color-type-race: #ffd32a;
-  --color-type-rest: #636e72;
-  --color-type-bike: #45aaf2;
+  --color-type-rest: #485460;
+  --color-type-bike: #3498ff;
   --color-type-yoga: #a55eea;
-  --color-type-strength: #fd9644;
+  --color-type-strength: #ff9f43;
 
-  --color-phase-recovery: #4ecdc4;
-  --color-phase-base: #26de81;
-  --color-phase-speed: #ff4757;
-  --color-phase-taper: #ffa502;
+  --color-phase-recovery: #34e7e4;
+  --color-phase-base: #0be881;
+  --color-phase-speed: #f53b57;
+  --color-phase-taper: #ffb142;
   --color-phase-race: #ffd32a;
 
-  --color-text-primary: #f0f0f8;
-  --color-text-secondary: #8892a4;
-  --color-text-muted: #4a5568;
-  --color-border-subtle: rgba(255, 255, 255, 0.06);
-  --color-border-accent: rgba(0, 212, 170, 0.2);
+  --color-text-primary: #eef0f6;
+  --color-text-secondary: #7c8495;
+  --color-text-muted: #3d4350;
+  --color-border: rgba(255, 255, 255, 0.04);
+  --color-border-light: rgba(255, 255, 255, 0.08);
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 }
 
 body {
-  background-color: var(--color-bg-main);
+  background: var(--color-bg-deep);
   color: var(--color-text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Outfit', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
 }
 
-.font-mono {
-  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+.mono {
+  font-family: 'DM Mono', 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
 }
 
-::-webkit-scrollbar { width: 5px; height: 5px; }
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2a2a40; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #3a3a50; }
+::-webkit-scrollbar-thumb { background: #1a1a2e; border-radius: 4px; }
 
-/* Glass card */
-.glass {
-  background: linear-gradient(135deg, rgba(18, 18, 30, 0.8), rgba(18, 18, 30, 0.4));
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Card system */
+.card {
+  background: linear-gradient(145deg, rgba(14,14,26,0.9), rgba(14,14,26,0.5));
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
 }
 
-.glass-hover {
-  transition: all 0.2s ease;
-}
-.glass-hover:hover {
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.5));
-  border-color: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+.card-sm {
+  background: rgba(14,14,26,0.6);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
 }
 
-/* Glow effects */
-.glow-accent {
-  box-shadow: 0 0 20px rgba(0, 212, 170, 0.15), 0 0 60px rgba(0, 212, 170, 0.05);
+.card-interactive {
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+.card-interactive:hover {
+  border-color: var(--color-border-light);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
 }
 
-.glow-soft {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+/* Glow */
+.glow {
+  box-shadow: 0 0 30px rgba(0, 229, 176, 0.08), 0 0 80px rgba(0, 229, 176, 0.03);
+}
+
+.glow-sm {
+  box-shadow: 0 0 16px rgba(0, 229, 176, 0.06);
 }
 
 /* Gradient text */
-.text-gradient {
-  background: linear-gradient(135deg, #00d4aa, #45aaf2);
+.text-shine {
+  background: linear-gradient(135deg, #00e5b0 0%, #3498ff 50%, #a55eea 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Phase badge */
-.phase-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 14px;
-  border-radius: 9999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+/* Status pulse */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse { animation: pulse-glow 2s ease-in-out infinite; }
+
+/* Stat display */
+.stat-value {
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
-/* Stat card gradient borders */
-.stat-card {
-  position: relative;
-  border-radius: 16px;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+/* Section label */
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
 }
-.stat-card-inner {
-  background: var(--color-bg-card);
-  border-radius: 15px;
-  padding: 1.25rem;
-  height: 100%;
+
+/* Subtle noise texture overlay */
+.noise::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Sport indicator line */
+.sport-line {
+  width: 3px;
+  border-radius: 3px;
+  min-height: 100%;
 }
