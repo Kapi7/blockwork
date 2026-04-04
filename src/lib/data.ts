@@ -5,6 +5,7 @@ import racesData from '../data/races.json';
 import weeklyData from '../data/weekly-volumes.json';
 import fitnessData from '../data/fitness-summary.json';
 import metaData from '../data/meta.json';
+import detailedData from '../data/detailed-runs.json';
 
 // Import blocks statically (no fs in Cloudflare Workers)
 import block0 from '../data/blocks/block-0-recovery.json';
@@ -170,6 +171,18 @@ export function getCalendarWeeks(weeksBack: number = 8): MatchedDay[][] {
   }
 
   return weeks;
+}
+
+export function getDetailedRuns(): any[] {
+  return detailedData as any[];
+}
+
+export function getDetailedByDate(): Record<string, any> {
+  const byDate: Record<string, any> = {};
+  for (const r of getDetailedRuns()) {
+    byDate[r.date] = r;
+  }
+  return byDate;
 }
 
 export function getPBs(): Record<string, Race> {

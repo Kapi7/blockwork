@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import type { MatchedDay, SlimRun } from '../../lib/types';
 
 const TYPE_COLORS: Record<string, string> = {
-  key: '#ff4757', threshold: '#ff6348', steady: '#ffa502', easy: '#2ed573',
-  recovery: '#70a1ff', race: '#eccc68', rest: '#747d8c', bike: '#45aaf2',
-  yoga: '#a55eea', strength: '#ff6348',
+  key: '#ff4757', threshold: '#ff6b6b', steady: '#ffa502', easy: '#26de81',
+  recovery: '#4ecdc4', race: '#ffd32a', rest: '#636e72', bike: '#45aaf2',
+  yoga: '#a55eea', strength: '#fd9644',
 };
 
 const SPORT_ICONS: Record<string, string> = {
@@ -33,12 +33,12 @@ function fmtDate(dateStr: string): string {
   });
 }
 
+function speedToPace(speed: number): number {
+  return speed > 0 ? 1000 / speed : 0;
+}
+
 interface FeedbackData {
-  date: string;
-  rpe: number;
-  feeling: string;
-  notes: string;
-  timestamp: string;
+  date: string; rpe: number; feeling: string; notes: string; timestamp: string;
 }
 
 function loadFeedback(date: string): FeedbackData | null {
@@ -48,7 +48,7 @@ function loadFeedback(date: string): FeedbackData | null {
   } catch { return null; }
 }
 
-function saveFeedbackToStorage(fb: FeedbackData) {
+function saveFB(fb: FeedbackData) {
   try {
     const all = JSON.parse(localStorage.getItem('blockwork_feedback') || '[]');
     const idx = all.findIndex((f: FeedbackData) => f.date === fb.date);
@@ -60,19 +60,18 @@ function saveFeedbackToStorage(fb: FeedbackData) {
 
 interface Props {
   day: MatchedDay;
+  detailed: any | null;
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
 }
 
-export function SessionModal({ day, onClose, onPrev, onNext }: Props) {
+export function SessionModal({ day, detailed, onClose, onPrev, onNext }: Props) {
   const session = day.session;
-  const typeColor = session ? TYPE_COLORS[session.type] || '#747d8c' : '#747d8c';
-  const matched = session?.actual;
+  const typeColor = session ? TYPE_COLORS[session.type] || '#636e72' : '#636e72';
   const allActivities = day.activities;
+  const splits = detailed?.splits || [];
 
-  // Feedback state
-  const [feedback, setFeedback] = useState<FeedbackData | null>(null);
   const [rpe, setRpe] = useState(5);
   const [feeling, setFeeling] = useState('ok');
   const [notes, setNotes] = useState('');
@@ -80,21 +79,11 @@ export function SessionModal({ day, onClose, onPrev, onNext }: Props) {
 
   useEffect(() => {
     const fb = loadFeedback(day.date);
-    if (fb) {
-      setFeedback(fb);
-      setRpe(fb.rpe);
-      setFeeling(fb.feeling);
-      setNotes(fb.notes);
-    } else {
-      setFeedback(null);
-      setRpe(5);
-      setFeeling('ok');
-      setNotes('');
-    }
+    if (fb) { setRpe(fb.rpe); setFeeling(fb.feeling); setNotes(fb.notes); }
+    else { setRpe(5); setFeeling('ok'); setNotes(''); }
     setSaved(false);
   }, [day.date]);
 
-  // Close on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -105,152 +94,216 @@ export function SessionModal({ day, onClose, onPrev, onNext }: Props) {
     return () => window.removeEventListener('keydown', handler);
   }, [onClose, onPrev, onNext]);
 
-  const handleSaveFeedback = () => {
-    const fb: FeedbackData = { date: day.date, rpe, feeling, notes, timestamp: new Date().toISOString() };
-    saveFeedbackToStorage(fb);
-    setFeedback(fb);
+  const handleSave = () => {
+    saveFB({ date: day.date, rpe, feeling, notes, timestamp: new Date().toISOString() });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
 
-  const rpeColor = (v: number) => v <= 3 ? '#2ed573' : v <= 5 ? '#7bed9f' : v <= 7 ? '#ffa502' : v <= 8 ? '#ff6348' : '#ff4757';
-  const feelColors: Record<string, string> = { great: '#2ed573', good: '#7bed9f', ok: '#ffa502', tired: '#ff6348', bad: '#ff4757' };
+  const rpeColor = (v: number) => v <= 3 ? '#26de81' : v <= 5 ? '#7bed9f' : v <= 7 ? '#ffa502' : v <= 8 ? '#fd9644' : '#ff4757';
+  const feelColors: Record<string, string> = { great: '#26de81', good: '#7bed9f', ok: '#ffa502', tired: '#fd9644', bad: '#ff4757' };
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-end" onClick={onClose}>
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-
-      {/* Panel */}
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
       <div
-        className="relative w-full max-w-lg h-full bg-[#0f0f17] border-l border-[rgba(255,255,255,0.06)] overflow-y-auto animate-[slideIn_0.2s_ease-out]"
+        className="relative w-full max-w-xl h-full bg-[#0a0a12] border-l border-[rgba(255,255,255,0.05)] overflow-y-auto"
+        style={{ animation: 'slideIn 0.2s ease-out' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 bg-[#0f0f17]/95 backdrop-blur-sm border-b border-[rgba(255,255,255,0.06)] p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <button onClick={onPrev} className="p-1 text-[#8899aa] hover:text-[#e8e8f0] transition-colors">{'\u2190'}</button>
-              <button onClick={onNext} className="p-1 text-[#8899aa] hover:text-[#e8e8f0] transition-colors">{'\u2192'}</button>
+        <div className="sticky top-0 z-10 bg-[#0a0a12]/95 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)] px-6 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-1">
+              <button onClick={onPrev} className="w-8 h-8 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-[#8892a4] transition-colors">{'\u2190'}</button>
+              <button onClick={onNext} className="w-8 h-8 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-[#8892a4] transition-colors">{'\u2192'}</button>
             </div>
-            <button onClick={onClose} className="p-1 text-[#8899aa] hover:text-[#e8e8f0] transition-colors text-lg">{'\u2715'}</button>
+            <button onClick={onClose} className="w-8 h-8 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] flex items-center justify-center text-[#8892a4] transition-colors">{'\u2715'}</button>
           </div>
-          <h2 className="text-lg font-bold mt-2">{fmtDate(day.date)}</h2>
+          <h2 className="text-lg font-bold">{fmtDate(day.date)}</h2>
           {session && (
-            <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center gap-2 mt-1.5">
               <span className="w-2 h-2 rounded-full" style={{ background: typeColor }} />
-              <span className="text-sm font-medium" style={{ color: typeColor }}>{session.type}</span>
-              {day.blockName && <span className="text-xs text-[#556677]">{'\u00B7'} {day.blockName}</span>}
+              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: typeColor }}>{session.type}</span>
+              {day.blockName && <span className="text-[10px] text-[#4a5568]">{'\u00B7'} {day.blockName}</span>}
             </div>
           )}
         </div>
 
-        <div className="p-4 space-y-4">
-          {/* PLANNED SECTION */}
+        <div className="px-6 py-5 space-y-5">
+          {/* PLANNED */}
           {session && (
-            <div className="rounded-xl bg-[#1a1a2e] border border-[rgba(255,255,255,0.06)] p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#556677] mb-3">Planned</h3>
-              <div className="text-lg font-semibold" style={{ color: typeColor }}>{session.planned.desc}</div>
+            <Section title="Planned">
+              <div className="text-base font-semibold" style={{ color: typeColor }}>{session.planned.desc}</div>
               <div className="grid grid-cols-2 gap-3 mt-3">
-                {session.planned.distance > 0 && (
-                  <div>
-                    <div className="text-xs text-[#556677]">Distance</div>
-                    <div className="text-sm font-mono">{session.planned.distance}km</div>
-                  </div>
-                )}
-                {session.planned.pace && (
-                  <div>
-                    <div className="text-xs text-[#556677]">Pace</div>
-                    <div className="text-sm font-mono">{session.planned.pace}</div>
-                  </div>
-                )}
+                {session.planned.distance > 0 && <Stat label="Distance" value={`${session.planned.distance}km`} />}
+                {session.planned.pace && <Stat label="Pace" value={session.planned.pace} />}
               </div>
               {session.planned.notes && (
-                <div className="mt-3 p-2 rounded-lg bg-[#0f0f17]/50 text-sm text-[#8899aa]">
+                <div className="mt-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] text-sm text-[#8892a4]">
                   {session.planned.notes}
                 </div>
               )}
-            </div>
+            </Section>
           )}
 
-          {/* ACTUAL ACTIVITIES SECTION */}
-          {allActivities.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#556677]">
-                {session ? 'Actual' : 'Activities'}
-              </h3>
-
-              {allActivities.map((act) => (
-                <ActivityCard key={act.id} activity={act} planned={session?.planned} />
-              ))}
-            </div>
-          )}
-
-          {/* No activity */}
-          {allActivities.length === 0 && day.date < new Date().toISOString().slice(0, 10) && session && session.type !== 'rest' && (
-            <div className="rounded-xl bg-[#ff4757]/5 border border-[#ff4757]/20 p-4 text-center">
-              <div className="text-sm text-[#ff4757]/80">No activity recorded</div>
-              <div className="text-xs text-[#556677] mt-1">This session was missed or not synced</div>
-            </div>
-          )}
-
-          {/* FEEDBACK SECTION */}
-          {(session || allActivities.length > 0) && (
-            <div className="rounded-xl bg-[#1a1a2e] border border-[rgba(255,255,255,0.06)] p-4">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-[#556677] mb-3">
-                Session Feedback
-                {feedback && <span className="text-[#2ed573] ml-2">{'\u2713'} logged</span>}
-              </h3>
-
-              {/* RPE */}
-              <div className="mb-3">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs text-[#8899aa]">RPE</span>
-                  <span className="font-mono text-sm font-bold" style={{ color: rpeColor(rpe) }}>{rpe}</span>
+          {/* ACTIVITIES */}
+          {allActivities.map((act) => (
+            <Section key={act.id} title={session ? 'Actual' : 'Activity'}>
+              {/* Header */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">{SPORT_ICONS[act.sport] || '\u2B50'}</span>
+                <div className="flex-1">
+                  <div className="font-semibold">{act.name}</div>
+                  <div className="text-xs text-[#4a5568] capitalize">{act.type}</div>
                 </div>
-                <input
-                  type="range" min="1" max="10" value={rpe}
-                  onChange={(e) => setRpe(parseInt(e.target.value))}
-                  className="w-full accent-[#00d4aa]"
-                />
+                {session?.planned.distance && session.planned.distance > 0 && (
+                  <DeltaBadge actual={act.dist} planned={session.planned.distance} unit="km" />
+                )}
               </div>
 
-              {/* Feeling */}
-              <div className="mb-3">
-                <span className="text-xs text-[#8899aa] block mb-1.5">How did you feel?</span>
+              {/* Stats grid */}
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <BigStat label="Distance" value={`${act.dist.toFixed(1)}`} unit="km" color="#00d4aa" />
+                <BigStat label="Time" value={fmtTime(act.time)} />
+                <BigStat label="Pace" value={act.sport === 'run' ? `${fmt(act.pace)}` : '-'} unit={act.sport === 'run' ? '/km' : ''} />
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                {act.hr > 0 && <BigStat label="Avg HR" value={`${Math.round(act.hr)}`} unit="bpm" color="#ff6b6b" />}
+                {act.maxHr > 0 && <BigStat label="Max HR" value={`${Math.round(act.maxHr)}`} unit="bpm" />}
+                {act.elev > 0 && <BigStat label="Elevation" value={`${Math.round(act.elev)}`} unit="m" />}
+              </div>
+
+              {/* Splits */}
+              {splits.length > 1 && (
+                <div className="mt-5">
+                  <h4 className="text-[10px] font-semibold uppercase tracking-wider text-[#4a5568] mb-3">Splits</h4>
+
+                  {/* Visual pace bars */}
+                  <div className="space-y-1 mb-4">
+                    {splits.map((s: any, i: number) => {
+                      const pace = speedToPace(s.average_speed);
+                      const minPace = Math.min(...splits.map((sp: any) => speedToPace(sp.average_speed)).filter((p: number) => p > 0));
+                      const maxPace = Math.max(...splits.map((sp: any) => speedToPace(sp.average_speed)));
+                      const range = maxPace - minPace || 1;
+                      const pct = 100 - ((pace - minPace) / range) * 60; // Faster = wider bar
+                      const paceColor = pace < 250 ? '#ff4757' : pace < 300 ? '#ffa502' : '#26de81';
+                      return (
+                        <div key={i} className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono text-[#4a5568] w-5 text-right">{i + 1}</span>
+                          <div className="flex-1 h-5 bg-white/[0.02] rounded-md overflow-hidden relative">
+                            <div
+                              className="h-full rounded-md flex items-center px-2"
+                              style={{ width: `${Math.max(pct, 20)}%`, background: `${paceColor}20` }}
+                            >
+                              <span className="text-[10px] font-mono font-semibold" style={{ color: paceColor }}>{fmt(pace)}</span>
+                            </div>
+                          </div>
+                          {s.average_heartrate > 0 && (
+                            <span className="text-[10px] font-mono text-[#8892a4] w-8 text-right">{Math.round(s.average_heartrate)}</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Splits table */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-[11px]">
+                      <thead>
+                        <tr className="text-[#4a5568] uppercase tracking-wider">
+                          <th className="text-left pb-2 font-semibold">Km</th>
+                          <th className="text-right pb-2 font-semibold">Pace</th>
+                          <th className="text-right pb-2 font-semibold">HR</th>
+                          <th className="text-right pb-2 font-semibold">Elev</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {splits.map((s: any, i: number) => {
+                          const pace = speedToPace(s.average_speed);
+                          const paceColor = pace < 250 ? '#ff4757' : pace < 300 ? '#ffa502' : '#26de81';
+                          return (
+                            <tr key={i} className="border-t border-white/[0.03]">
+                              <td className="py-1.5 font-mono text-[#8892a4]">{i + 1}</td>
+                              <td className="py-1.5 text-right font-mono font-semibold" style={{ color: paceColor }}>{fmt(pace)}</td>
+                              <td className="py-1.5 text-right font-mono text-[#8892a4]">{s.average_heartrate ? Math.round(s.average_heartrate) : '-'}</td>
+                              <td className="py-1.5 text-right font-mono text-[#8892a4]">{s.elevation_difference ? `${s.elevation_difference > 0 ? '+' : ''}${Math.round(s.elevation_difference)}m` : '-'}</td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              {/* Planned comparison */}
+              {session && session.planned.distance > 0 && act.sport === 'run' && (
+                <div className="mt-4 pt-4 border-t border-white/[0.04]">
+                  <h4 className="text-[10px] font-semibold uppercase tracking-wider text-[#4a5568] mb-2">vs Planned</h4>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="p-2.5 rounded-xl bg-white/[0.02]">
+                      <span className="text-[#4a5568]">Plan: </span>
+                      <span className="font-mono text-[#8892a4]">{session.planned.distance}km {session.planned.pace}</span>
+                    </div>
+                    <div className="p-2.5 rounded-xl bg-white/[0.02]">
+                      <span className="text-[#4a5568]">Actual: </span>
+                      <span className="font-mono text-[#f0f0f8]">{act.dist.toFixed(1)}km {fmt(act.pace)}/km</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </Section>
+          ))}
+
+          {/* No activity warning */}
+          {allActivities.length === 0 && day.date < new Date().toISOString().slice(0, 10) && session && session.type !== 'rest' && (
+            <div className="rounded-2xl bg-[#ff4757]/5 border border-[#ff4757]/15 p-5 text-center">
+              <div className="text-sm text-[#ff4757]/80">No activity recorded</div>
+              <div className="text-xs text-[#4a5568] mt-1">This session was missed or not synced</div>
+            </div>
+          )}
+
+          {/* FEEDBACK */}
+          {(session || allActivities.length > 0) && (
+            <Section title="Session Feedback">
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs text-[#8892a4]">RPE</span>
+                  <span className="font-mono text-base font-bold" style={{ color: rpeColor(rpe) }}>{rpe}</span>
+                </div>
+                <input type="range" min="1" max="10" value={rpe} onChange={(e) => setRpe(parseInt(e.target.value))}
+                  className="w-full accent-[#00d4aa] h-1.5" />
+                <div className="flex justify-between text-[9px] text-[#4a5568] mt-0.5">
+                  <span>Easy</span><span>Moderate</span><span>Max effort</span>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <span className="text-xs text-[#8892a4] block mb-2">How did you feel?</span>
                 <div className="flex gap-1.5">
-                  {['great', 'good', 'ok', 'tired', 'bad'].map((f) => (
-                    <button
-                      key={f}
-                      onClick={() => setFeeling(f)}
-                      className={`flex-1 py-1.5 rounded-lg border text-xs transition-colors ${
+                  {(['great', 'good', 'ok', 'tired', 'bad'] as const).map((f) => (
+                    <button key={f} onClick={() => setFeeling(f)}
+                      className={`flex-1 py-2 rounded-xl border text-[11px] font-medium transition-all ${
                         feeling === f
-                          ? 'border-[#00d4aa] bg-[#00d4aa]/10 text-[#00d4aa]'
-                          : 'border-[rgba(255,255,255,0.06)] text-[#8899aa] hover:bg-[#22223a]'
-                      }`}
-                    >
+                          ? 'border-[#00d4aa]/40 bg-[#00d4aa]/8 text-[#00d4aa]'
+                          : 'border-white/[0.04] text-[#8892a4] hover:bg-white/[0.03]'
+                      }`}>
                       {f.charAt(0).toUpperCase() + f.slice(1)}
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Notes */}
-              <textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Session notes..."
-                rows={2}
-                className="w-full bg-[#0f0f17] border border-[rgba(255,255,255,0.06)] rounded-lg px-3 py-2 text-sm text-[#e8e8f0] focus:border-[#00d4aa] focus:outline-none resize-none mb-2"
-              />
+              <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+                placeholder="Session notes..." rows={2}
+                className="w-full bg-white/[0.02] border border-white/[0.04] rounded-xl px-4 py-3 text-sm text-[#f0f0f8] placeholder-[#4a5568] focus:border-[#00d4aa]/40 focus:outline-none resize-none mb-3" />
 
-              <button
-                onClick={handleSaveFeedback}
-                className="w-full py-2 rounded-lg bg-[#00d4aa] text-[#0f0f17] font-semibold text-sm hover:bg-[#00b894] transition-colors"
-              >
-                {saved ? '\u2713 Saved!' : feedback ? 'Update Feedback' : 'Save Feedback'}
+              <button onClick={handleSave}
+                className="w-full py-2.5 rounded-xl bg-[#00d4aa] text-[#0a0a12] font-semibold text-sm hover:shadow-[0_0_20px_rgba(0,212,170,0.3)] transition-all">
+                {saved ? '\u2713 Saved!' : 'Save Feedback'}
               </button>
-            </div>
+            </Section>
           )}
         </div>
       </div>
@@ -265,72 +318,42 @@ export function SessionModal({ day, onClose, onPrev, onNext }: Props) {
   );
 }
 
-// Activity detail card - Strava-like analysis
-function ActivityCard({ activity, planned }: { activity: SlimRun; planned?: { desc: string; distance: number; pace: string; notes: string } | undefined }) {
-  const icon = SPORT_ICONS[activity.sport] || '\u2B50';
-
-  // Compare with planned
-  const distDelta = planned?.distance ? activity.dist - planned.distance : null;
-
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl bg-[#1a1a2e] border border-[rgba(255,255,255,0.06)] p-4">
-      {/* Activity header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <span className="text-lg">{icon}</span>
-          <div>
-            <div className="text-sm font-medium text-[#e8e8f0]">{activity.name}</div>
-            <div className="text-xs text-[#556677] capitalize">{activity.type}</div>
-          </div>
-        </div>
-        {distDelta !== null && (
-          <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
-            Math.abs(distDelta) < 0.5 ? 'text-[#2ed573] bg-[#2ed573]/10' :
-            distDelta > 0 ? 'text-[#ffa502] bg-[#ffa502]/10' : 'text-[#ff4757] bg-[#ff4757]/10'
-          }`}>
-            {distDelta > 0 ? '+' : ''}{distDelta.toFixed(1)}km
-          </span>
-        )}
-      </div>
-
-      {/* Stats grid */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatBlock label="Distance" value={`${activity.dist.toFixed(1)}km`} />
-        <StatBlock label="Time" value={fmtTime(activity.time)} />
-        <StatBlock label="Pace" value={activity.sport === 'run' ? `${fmt(activity.pace)}/km` : '-'} />
-        {activity.hr > 0 && <StatBlock label="Avg HR" value={`${Math.round(activity.hr)}`} unit="bpm" color="#ff6348" />}
-        {activity.maxHr > 0 && <StatBlock label="Max HR" value={`${Math.round(activity.maxHr)}`} unit="bpm" />}
-        {activity.elev > 0 && <StatBlock label="Elevation" value={`${Math.round(activity.elev)}`} unit="m" />}
-      </div>
-
-      {/* Pace comparison */}
-      {planned && planned.distance > 0 && activity.sport === 'run' && (
-        <div className="mt-3 pt-3 border-t border-[rgba(255,255,255,0.06)]">
-          <div className="text-xs text-[#556677] mb-1">vs Planned</div>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div>
-              <span className="text-[#556677]">Plan: </span>
-              <span className="font-mono text-[#8899aa]">{planned.distance}km {planned.pace}</span>
-            </div>
-            <div>
-              <span className="text-[#556677]">Actual: </span>
-              <span className="font-mono text-[#e8e8f0]">{activity.dist.toFixed(1)}km {fmt(activity.pace)}/km</span>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className="rounded-2xl bg-[#12121e] border border-white/[0.04] p-5">
+      <h3 className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#4a5568] mb-4">{title}</h3>
+      {children}
     </div>
   );
 }
 
-function StatBlock({ label, value, unit, color }: { label: string; value: string; unit?: string; color?: string }) {
+function BigStat({ label, value, unit, color }: { label: string; value: string; unit?: string; color?: string }) {
   return (
     <div>
-      <div className="text-[10px] text-[#556677] uppercase tracking-wider">{label}</div>
-      <div className="text-sm font-mono font-medium" style={color ? { color } : {}}>
+      <div className="text-[9px] font-semibold uppercase tracking-wider text-[#4a5568]">{label}</div>
+      <div className="text-lg font-mono font-bold mt-0.5" style={color ? { color } : {}}>
         {value}
-        {unit && <span className="text-[10px] text-[#556677] ml-0.5">{unit}</span>}
+        {unit && <span className="text-[10px] text-[#4a5568] font-normal ml-0.5">{unit}</span>}
       </div>
     </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-[9px] text-[#4a5568] uppercase tracking-wider">{label}</div>
+      <div className="text-sm font-mono">{value}</div>
+    </div>
+  );
+}
+
+function DeltaBadge({ actual, planned, unit }: { actual: number; planned: number; unit: string }) {
+  const delta = actual - planned;
+  const color = Math.abs(delta) < 0.5 ? '#26de81' : delta > 0 ? '#ffa502' : '#ff4757';
+  return (
+    <span className="text-[10px] font-mono px-2.5 py-1 rounded-full font-semibold" style={{ background: `${color}12`, color }}>
+      {delta > 0 ? '+' : ''}{delta.toFixed(1)}{unit}
+    </span>
   );
 }

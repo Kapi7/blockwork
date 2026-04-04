@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCalendarWeeks } from '../lib/data';
+import { getCalendarWeeks, getDetailedByDate } from '../lib/data';
 import { Calendar } from '../components/calendar/Calendar';
 import { TYPE_COLORS } from '../lib/types';
 
 // Load 20 weeks back (full training history visible)
 const weeks = getCalendarWeeks(20);
 const today = new Date().toISOString().slice(0, 10);
+const detailedByDate = getDetailedByDate();
 ---
 
 <BaseLayout title="Calendar" active="calendar">
@@ -25,7 +26,7 @@ const today = new Date().toISOString().slice(0, 10);
     </div>
   </div>
 
-  <Calendar client:load weeks={weeks} today={today} />
+  <Calendar client:load weeks={weeks} today={today} detailedByDate={detailedByDate} />
 
   <script is:inline>
     try {
