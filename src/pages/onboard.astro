@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const user = (Astro.locals as any).user;
+if (user?.role !== 'coach') return Astro.redirect('/');
+---
+
+<BaseLayout title="Onboard Athlete" active="onboard">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-1">Onboard New Athlete</h1>
+    <p class="text-text-secondary text-sm mb-6">Fill in athlete details and generate their first training block.</p>
+
+    <form id="onboardForm" class="space-y-5">
+      <div class="rounded-xl bg-bg-card border border-border-subtle p-5 space-y-4">
+        <h2 class="font-semibold text-lg">Athlete Profile</h2>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">Name</label>
+            <input name="name" required class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none" />
+          </div>
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">Email</label>
+            <input name="email" type="email" required class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Sport Focus</label>
+          <select name="sport" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none">
+            <option value="run">Running</option>
+            <option value="bike">Cycling</option>
+            <option value="triathlon">Triathlon (Run + Bike + Swim)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Experience (years)</label>
+          <input name="experience" type="number" min="0" max="30" value="1" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none" />
+        </div>
+      </div>
+
+      <div class="rounded-xl bg-bg-card border border-border-subtle p-5 space-y-4">
+        <h2 class="font-semibold text-lg">Personal Bests</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">5K</label>
+            <input name="pb_5k" placeholder="e.g. 22:30" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none font-mono" />
+          </div>
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">10K</label>
+            <input name="pb_10k" placeholder="e.g. 47:00" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none font-mono" />
+          </div>
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">Half Marathon</label>
+            <input name="pb_hm" placeholder="e.g. 1:45:00" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none font-mono" />
+          </div>
+          <div>
+            <label class="block text-sm text-text-secondary mb-1">Marathon</label>
+            <input name="pb_marathon" placeholder="e.g. 3:45:00" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none font-mono" />
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-xl bg-bg-card border border-border-subtle p-5 space-y-4">
+        <h2 class="font-semibold text-lg">Goals</h2>
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Primary Goal</label>
+          <input name="goal" placeholder="e.g. Sub-20 min 5K by August" required class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Current weekly volume (km)</label>
+          <input name="volume" type="number" min="0" max="200" placeholder="e.g. 30" class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Notes (injuries, preferences, schedule)</label>
+          <textarea name="notes" rows="3" placeholder="e.g. Can train 5 days/week, has a bike, recovering from shin splints..." class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none resize-none"></textarea>
+        </div>
+      </div>
+
+      <div class="flex gap-3">
+        <button type="submit" id="saveBtn" class="flex-1 py-3 rounded-xl bg-accent text-bg-main font-semibold text-sm hover:bg-accent-dim transition-colors">
+          Save Athlete
+        </button>
+        <button type="button" id="generateBtn" disabled class="flex-1 py-3 rounded-xl bg-type-key/20 text-type-key font-semibold text-sm hover:bg-type-key/30 transition-colors disabled:opacity-40">
+          Generate Plan with AI
+        </button>
+      </div>
+
+      <div id="status" class="text-sm text-center"></div>
+    </form>
+  </div>
+
+  <script is:inline>
+    var form = document.getElementById('onboardForm');
+    var saveBtn = document.getElementById('saveBtn');
+    var genBtn = document.getElementById('generateBtn');
+    var status = document.getElementById('status');
+    var savedAthleteId = null;
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var fd = new FormData(form);
+      var data = Object.fromEntries(fd.entries());
+
+      saveBtn.textContent = 'Saving...';
+      try {
+        var res = await fetch('/api/athletes/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        var result = await res.json();
+        if (res.ok) {
+          savedAthleteId = result.id;
+          saveBtn.textContent = 'Saved!';
+          saveBtn.style.background = '#2ed573';
+          genBtn.disabled = false;
+          status.textContent = 'Athlete saved. Click "Generate Plan" to create their first training block.';
+          status.style.color = '#2ed573';
+        } else {
+          throw new Error(result.error || 'Failed');
+        }
+      } catch(err) {
+        saveBtn.textContent = 'Save Athlete';
+        status.textContent = 'Error: ' + err.message;
+        status.style.color = '#ff4757';
+      }
+    });
+
+    genBtn.addEventListener('click', async function() {
+      if (!savedAthleteId) return;
+      genBtn.textContent = 'Generating...';
+      status.textContent = 'AI is generating a training plan...';
+      status.style.color = '#ffa502';
+      try {
+        var res = await fetch('/api/plan/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ athleteId: savedAthleteId }),
+        });
+        var result = await res.json();
+        if (res.ok) {
+          genBtn.textContent = 'Plan Generated!';
+          genBtn.style.background = 'rgba(46,213,115,0.2)';
+          genBtn.style.color = '#2ed573';
+          status.textContent = 'Training plan generated! Review it in the Blocks page.';
+          status.style.color = '#2ed573';
+        } else {
+          throw new Error(result.error || 'Generation failed');
+        }
+      } catch(err) {
+        genBtn.textContent = 'Generate Plan with AI';
+        status.textContent = 'Error: ' + err.message;
+        status.style.color = '#ff4757';
+      }
+    });
+  </script>
+</BaseLayout>

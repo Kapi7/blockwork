@@ -7,6 +7,8 @@ interface Props {
 }
 
 const { title, active = '' } = Astro.props;
+const user = (Astro.locals as any).user;
+const isCoach = user?.role === 'coach';
 
 const nav = [
   { href: '/', label: 'Dashboard', id: 'dashboard' },
@@ -14,7 +16,7 @@ const nav = [
   { href: '/blocks', label: 'Blocks', id: 'blocks' },
   { href: '/analytics', label: 'Analytics', id: 'analytics' },
   { href: '/races', label: 'Races', id: 'races' },
-  { href: '/feedback', label: 'Feedback', id: 'feedback' },
+  ...(isCoach ? [{ href: '/onboard', label: '+ Athlete', id: 'onboard' }] : []),
 ];
 ---
 
@@ -49,6 +51,15 @@ const nav = [
                 {item.label}
               </a>
             ))}
+            {user && (
+              <div class="flex items-center gap-2 ml-3 pl-3 border-l border-border-subtle">
+                {user.picture && (
+                  <img src={user.picture} alt="" class="w-6 h-6 rounded-full" referrerpolicy="no-referrer" />
+                )}
+                <span class="text-xs text-text-muted hidden sm:inline">{user.name?.split(' ')[0]}</span>
+                <a href="/api/auth/logout" class="text-xs text-text-muted hover:text-type-key transition-colors">Logout</a>
+              </div>
+            )}
           </div>
         </div>
       </div>

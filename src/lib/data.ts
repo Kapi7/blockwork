@@ -6,8 +6,11 @@ import weeklyData from '../data/weekly-volumes.json';
 import fitnessData from '../data/fitness-summary.json';
 import metaData from '../data/meta.json';
 
-import fs from 'node:fs';
-import path from 'node:path';
+// Import blocks statically (no fs in Cloudflare Workers)
+import block0 from '../data/blocks/block-0-recovery.json';
+import block1 from '../data/blocks/block-1-base-strength.json';
+
+const ALL_BLOCKS = [block0, block1];
 
 export function getRuns(): SlimRun[] {
   return runsData as SlimRun[];
@@ -34,13 +37,7 @@ export function getMeta(): Meta {
 }
 
 export function getBlocks(): Block[] {
-  const blocksDir = path.join(process.cwd(), 'src', 'data', 'blocks');
-  const files = fs.readdirSync(blocksDir).filter((f: string) => f.endsWith('.json'));
-  const blocks: Block[] = files.map((f: string) => {
-    const raw = fs.readFileSync(path.join(blocksDir, f), 'utf-8');
-    return JSON.parse(raw);
-  });
-  return blocks.sort((a, b) => b.number - a.number);
+  return (ALL_BLOCKS as Block[]).sort((a, b) => b.number - a.number);
 }
 
 export function getBlock(id: string): Block | null {
