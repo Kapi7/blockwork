@@ -1,0 +1,119 @@
+{
+  "generatedAt": "2026-04-04",
+  "fitness": {
+    "volume7d": 29.6,
+    "volume28d": 169.4,
+    "runs7d": 4,
+    "runs28d": 21,
+    "avgPace28d": 306,
+    "avgHr28d": 133,
+    "lastRun": "2026-04-04",
+    "lastUpdated": "2026-04-04",
+    "trainingStatus": "balanced",
+    "atl": 37,
+    "ctl": 43,
+    "tsb": 6
+  },
+  "last14Days": {
+    "runCount": 7,
+    "runKm": 79.1,
+    "avgRunPace": 322.3,
+    "avgRunHr": 123,
+    "bikeCount": 5,
+    "bikeKm": 204.4,
+    "longestRun": 42.3,
+    "sessions": [
+      {
+        "date": "2026-03-22",
+        "dist": 42.3,
+        "pace": 259.1,
+        "hr": 160.4,
+        "name": "Marathon Limassol 🏡💀"
+      },
+      {
+        "date": "2026-03-22",
+        "dist": 1.5,
+        "pace": 370.9,
+        "hr": 115.2,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-03-26",
+        "dist": 5.7,
+        "pace": 325.4,
+        "hr": 132.7,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-03-28",
+        "dist": 7.8,
+        "pace": 315.3,
+        "hr": 136.1,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-03-31",
+        "dist": 5.9,
+        "pace": 305.7,
+        "hr": 138.8,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-04-02",
+        "dist": 7.1,
+        "pace": 339.7,
+        "hr": 59.8,
+        "name": "Technogym Run Artis: Quick Start"
+      },
+      {
+        "date": "2026-04-04",
+        "dist": 8.8,
+        "pace": 339.9,
+        "hr": 118.5,
+        "name": "Technogym Run Artis: Quick Start"
+      }
+    ]
+  },
+  "recentRaces": [
+    {
+      "date": "2026-03-22",
+      "name": "Marathon Limassol 🏡💀",
+      "dist": 42.3,
+      "time": 10968,
+      "pace": 259.1,
+      "category": "marathon"
+    },
+    {
+      "date": "2026-03-08",
+      "name": "10k Paphos",
+      "dist": 10,
+      "time": 2304,
+      "pace": 229.4,
+      "category": "10k"
+    },
+    {
+      "date": "2026-03-03",
+      "name": "Morning Run",
+      "dist": 5.4,
+      "time": 1287,
+      "pace": 239.7,
+      "category": "5k"
+    },
+    {
+      "date": "2026-02-15",
+      "name": "Strovolos half marathon",
+      "dist": 21.3,
+      "time": 5175,
+      "pace": 243.4,
+      "category": "half"
+    },
+    {
+      "date": "2026-01-18",
+      "name": "Half Marathon Nicosia 🇨🇾",
+      "dist": 21.2,
+      "time": 4906,
+      "pace": 232,
+      "category": "half"
+    }
+  ]
+}

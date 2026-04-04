@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getMeta, getCurrentBlock, getFitness, getRecentRuns, getCalendarDays } from '../lib/data';
+import { getMeta, getCurrentBlock, getFitness, getRecentRuns, getCalendarDays, getTrainingLoad } from '../lib/data';
 import { formatPace, formatDate, formatDistance, formatTime } from '../lib/format';
 import { PHASE_COLORS, TYPE_COLORS } from '../lib/types';
 
@@ -9,6 +9,7 @@ const block = getCurrentBlock();
 const fitness = getFitness();
 const recentRuns = getRecentRuns(8);
 const phaseColor = PHASE_COLORS[meta.currentPhase] || '#636e72';
+const tl = getTrainingLoad();
 
 const today = new Date().toISOString().slice(0, 10);
 const upcomingSessions = block?.sessions.filter((s) => s.date >= today).slice(0, 4) || [];
@@ -43,6 +44,33 @@ const currentWeek = calDays.slice(Math.max(0, weekStart), Math.max(0, weekStart)
           <div class="text-sm font-mono font-semibold text-accent">{g.target}</div>
         </div>
       ))}
+    </div>
+  </div>
+
+  <!-- Training Status -->
+  <div class="glass rounded-2xl p-5 mb-6 flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl" style={`background: ${tl.current.statusColor}15;`}>
+        {tl.current.status === 'fresh' ? '\u{1F7E2}' : tl.current.status === 'balanced' ? '\u{1F7E1}' : tl.current.status === 'tired' ? '\u{1F7E0}' : '\u{1F534}'}
+      </div>
+      <div>
+        <div class="text-xs text-text-muted uppercase tracking-wider font-semibold">Training Status</div>
+        <div class="text-lg font-bold capitalize" style={`color: ${tl.current.statusColor}`}>{tl.current.status}</div>
+      </div>
+    </div>
+    <div class="flex gap-6 sm:ml-auto">
+      <div class="text-center">
+        <div class="text-[10px] text-text-muted uppercase">Fatigue (ATL)</div>
+        <div class="text-lg font-mono font-bold">{tl.current.atl}</div>
+      </div>
+      <div class="text-center">
+        <div class="text-[10px] text-text-muted uppercase">Fitness (CTL)</div>
+        <div class="text-lg font-mono font-bold">{tl.current.ctl}</div>
+      </div>
+      <div class="text-center">
+        <div class="text-[10px] text-text-muted uppercase">Form (TSB)</div>
+        <div class="text-lg font-mono font-bold" style={`color: ${tl.current.statusColor}`}>{tl.current.tsb > 0 ? '+' : ''}{tl.current.tsb}</div>
+      </div>
     </div>
   </div>
 

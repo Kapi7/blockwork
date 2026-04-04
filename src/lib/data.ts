@@ -6,6 +6,8 @@ import weeklyData from '../data/weekly-volumes.json';
 import fitnessData from '../data/fitness-summary.json';
 import metaData from '../data/meta.json';
 import detailedData from '../data/detailed-runs.json';
+import trainingLoadData from '../data/training-load.json';
+import coachContextData from '../data/coach-context.json';
 
 // Import blocks statically (no fs in Cloudflare Workers)
 import block0 from '../data/blocks/block-0-recovery.json';
@@ -171,6 +173,14 @@ export function getCalendarWeeks(weeksBack: number = 8): MatchedDay[][] {
   }
 
   return weeks;
+}
+
+export function getTrainingLoad(): any {
+  return trainingLoadData;
+}
+
+export function getCoachContext(): any {
+  return coachContextData;
 }
 
 export function getDetailedRuns(): any[] {
