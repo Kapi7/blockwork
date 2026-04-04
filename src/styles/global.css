@@ -1,31 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-main: #0f0f17;
-  --color-bg-card: #1a1a2e;
-  --color-bg-card-hover: #22223a;
+  --color-bg-main: #0a0a12;
+  --color-bg-card: #12121e;
+  --color-bg-card-hover: #1a1a2e;
+  --color-bg-surface: #16162a;
   --color-accent: #00d4aa;
   --color-accent-dim: #00b894;
+  --color-accent-glow: rgba(0, 212, 170, 0.12);
 
   --color-type-key: #ff4757;
-  --color-type-threshold: #ff6348;
+  --color-type-threshold: #ff6b6b;
   --color-type-steady: #ffa502;
-  --color-type-easy: #2ed573;
-  --color-type-recovery: #70a1ff;
-  --color-type-race: #eccc68;
-  --color-type-rest: #747d8c;
+  --color-type-easy: #26de81;
+  --color-type-recovery: #4ecdc4;
+  --color-type-race: #ffd32a;
+  --color-type-rest: #636e72;
   --color-type-bike: #45aaf2;
+  --color-type-yoga: #a55eea;
+  --color-type-strength: #fd9644;
 
-  --color-phase-recovery: #70a1ff;
-  --color-phase-base: #2ed573;
+  --color-phase-recovery: #4ecdc4;
+  --color-phase-base: #26de81;
   --color-phase-speed: #ff4757;
   --color-phase-taper: #ffa502;
-  --color-phase-race: #eccc68;
+  --color-phase-race: #ffd32a;
 
-  --color-text-primary: #e8e8f0;
-  --color-text-secondary: #8899aa;
-  --color-text-muted: #556677;
+  --color-text-primary: #f0f0f8;
+  --color-text-secondary: #8892a4;
+  --color-text-muted: #4a5568;
   --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-accent: rgba(0, 212, 170, 0.2);
 }
 
 body {
@@ -39,26 +44,68 @@ body {
   font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-bg-main); }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2a40; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a50; }
 
-.card-hover {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+/* Glass card */
+.glass {
+  background: linear-gradient(135deg, rgba(18, 18, 30, 0.8), rgba(18, 18, 30, 0.4));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.glass-hover {
+  transition: all 0.2s ease;
+}
+.glass-hover:hover {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.5));
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Glow effects */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.15), 0 0 60px rgba(0, 212, 170, 0.05);
+}
+
+.glow-soft {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #00d4aa, #45aaf2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Phase badge */
 .phase-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 12px;
+  padding: 4px 14px;
   border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+}
+
+/* Stat card gradient borders */
+.stat-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+}
+.stat-card-inner {
+  background: var(--color-bg-card);
+  border-radius: 15px;
+  padding: 1.25rem;
+  height: 100%;
 }

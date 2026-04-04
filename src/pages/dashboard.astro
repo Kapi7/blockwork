@@ -1,22 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import StatCard from '../components/ui/StatCard.astro';
-import Badge from '../components/ui/Badge.astro';
-import { getMeta, getCurrentBlock, getFitness, getWeeklyVolumes, getRecentRuns, getCalendarDays } from '../lib/data';
-import { formatPace, formatDate, formatDistance } from '../lib/format';
+import { getMeta, getCurrentBlock, getFitness, getRecentRuns, getCalendarDays } from '../lib/data';
+import { formatPace, formatDate, formatDistance, formatTime } from '../lib/format';
 import { PHASE_COLORS, TYPE_COLORS } from '../lib/types';
 
 const meta = getMeta();
 const block = getCurrentBlock();
 const fitness = getFitness();
-const recentRuns = getRecentRuns(10);
-
-const phaseColor = PHASE_COLORS[meta.currentPhase] || '#747d8c';
+const recentRuns = getRecentRuns(8);
+const phaseColor = PHASE_COLORS[meta.currentPhase] || '#636e72';
 
 const today = new Date().toISOString().slice(0, 10);
-const upcomingSessions = block?.sessions.filter((s) => s.date >= today).slice(0, 5) || [];
+const upcomingSessions = block?.sessions.filter((s) => s.date >= today).slice(0, 4) || [];
 
-// Current week for week strip (Mon-Sun containing today)
+// Current week
 const calDays = getCalendarDays(1);
 const todayIdx = calDays.findIndex((d) => d.date === today);
 const weekStart = todayIdx >= 0 ? todayIdx - ((new Date(today).getDay() + 6) % 7) : 0;
@@ -24,91 +21,84 @@ const currentWeek = calDays.slice(Math.max(0, weekStart), Math.max(0, weekStart)
 ---
 
 <BaseLayout title="Dashboard" active="dashboard">
-  <!-- Current State Banner -->
-  <div class="mb-6 rounded-xl bg-bg-card border border-border-subtle p-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <span class="phase-badge" style={`background: ${phaseColor}20; color: ${phaseColor}; border: 1px solid ${phaseColor}40;`}>
-            <span class="w-2 h-2 rounded-full" style={`background: ${phaseColor};`}></span>
-            {meta.currentPhase}
-          </span>
-          {block && (
-            <span class="text-sm text-text-secondary">
-              Block {block.number}: {block.name}
-            </span>
-          )}
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <span class="phase-badge" style={`background: ${phaseColor}15; color: ${phaseColor}; border: 1px solid ${phaseColor}30;`}>
+          <span class="w-1.5 h-1.5 rounded-full" style={`background: ${phaseColor};`}></span>
+          {meta.currentPhase}
+        </span>
+        {block && <span class="text-xs text-text-muted">Block {block.number}</span>}
+      </div>
+      <h1 class="text-3xl font-bold tracking-tight">{meta.athleteName}</h1>
+      {block && (
+        <p class="text-sm text-text-secondary mt-1">{block.name} &middot; {formatDate(block.startDate)} &mdash; {formatDate(block.endDate)}</p>
+      )}
+    </div>
+    <div class="flex gap-2">
+      {meta.goals.slice(0, 2).map((g) => (
+        <div class="glass rounded-xl px-4 py-2">
+          <div class="text-[10px] text-text-muted uppercase tracking-wider">{g.goal}</div>
+          <div class="text-sm font-mono font-semibold text-accent">{g.target}</div>
         </div>
-        <h1 class="text-2xl font-bold mb-1">{meta.athleteName}</h1>
-        <p class="text-text-secondary text-sm">
-          {block ? `${formatDate(block.startDate)} — ${formatDate(block.endDate)}` : ''}
-          {block?.stimulus && ` · ${block.stimulus}`}
-        </p>
-      </div>
-      <div class="flex flex-col items-end gap-1">
-        {meta.goals.slice(0, 2).map((g) => (
-          <div class="text-sm">
-            <span class="text-text-muted">#{g.priority}</span>
-            <span class="text-text-secondary ml-1">{g.goal}:</span>
-            <span class="font-mono text-accent ml-1">{g.target}</span>
-          </div>
-        ))}
-      </div>
+      ))}
     </div>
   </div>
 
-  <!-- Fitness Indicators -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-    <StatCard label="7-Day Volume" value={`${fitness.volume7d}km`} color="#00d4aa" />
-    <StatCard label="28-Day Volume" value={`${fitness.volume28d}km`} sub={`${fitness.runs28d} runs`} />
-    <StatCard label="Avg Pace (28d)" value={formatPace(fitness.avgPace28d)} />
-    <StatCard label="Avg HR (28d)" value={fitness.avgHr28d ? `${fitness.avgHr28d}` : '-'} sub="bpm" />
-    <StatCard label="Runs (7d)" value={fitness.runs7d} />
-    <StatCard label="Last Run" value={fitness.lastRun ? formatDate(fitness.lastRun) : '-'} />
+  <!-- Stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+    {[
+      { label: '7d Volume', value: `${fitness.volume7d}km`, color: '#00d4aa' },
+      { label: '28d Volume', value: `${fitness.volume28d}km`, sub: `${fitness.runs28d} runs` },
+      { label: 'Avg Pace', value: formatPace(fitness.avgPace28d) },
+      { label: 'Avg HR', value: fitness.avgHr28d ? `${fitness.avgHr28d}` : '-', sub: 'bpm' },
+      { label: 'This Week', value: `${fitness.runs7d}`, sub: 'runs' },
+      { label: 'Last Run', value: fitness.lastRun ? formatDate(fitness.lastRun) : '-' },
+    ].map((s) => (
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <p class="text-[10px] font-semibold uppercase tracking-wider text-text-muted mb-1.5">{s.label}</p>
+          <p class="text-xl font-bold font-mono" style={s.color ? `color: ${s.color}` : ''}>{s.value}</p>
+          {s.sub && <p class="text-[10px] text-text-muted mt-0.5">{s.sub}</p>}
+        </div>
+      </div>
+    ))}
   </div>
 
-  <!-- This Week Strip -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-4 mb-6">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-semibold">This Week</h2>
-      <a href="/calendar" class="text-xs text-accent hover:text-accent-dim transition-colors">Full calendar &rarr;</a>
+  <!-- This Week -->
+  <div class="glass rounded-2xl p-5 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-sm font-semibold tracking-wide">This Week</h2>
+      <a href="/calendar" class="text-xs text-accent hover:underline">Full calendar &rarr;</a>
     </div>
-    <div class="grid grid-cols-7 gap-1.5">
+    <div class="grid grid-cols-7 gap-2">
       {currentWeek.map((day) => {
         const isToday = day.date === today;
-        const typeColor = day.session ? (TYPE_COLORS[day.session.type] || '#747d8c') : 'transparent';
-        const dayName = new Date(day.date).toLocaleDateString('en-GB', { weekday: 'short' });
-        const dayNum = new Date(day.date).getDate();
+        const typeColor = day.session ? (TYPE_COLORS[day.session.type] || '#636e72') : 'transparent';
+        const dayName = new Date(day.date + 'T00:00:00').toLocaleDateString('en-GB', { weekday: 'short' });
+        const dayNum = new Date(day.date + 'T00:00:00').getDate();
         const matched = day.session?.actual;
         const isPast = day.date < today;
         const missed = day.session && isPast && !matched && day.session.type !== 'rest';
 
         return (
           <div class:list={[
-            'rounded-lg p-2 text-center border',
-            isToday ? 'border-accent/40 bg-accent/5' : 'border-border-subtle bg-bg-main/30',
+            'rounded-xl p-2.5 text-center border transition-all',
+            isToday ? 'border-accent/30 bg-accent/[0.06] glow-accent' : 'border-border-subtle bg-bg-card/40',
           ]}>
-            <div class="text-xs text-text-muted">{dayName}</div>
-            <div class:list={['text-sm font-mono', isToday ? 'text-accent font-bold' : 'text-text-secondary']}>{dayNum}</div>
+            <div class="text-[10px] text-text-muted font-medium">{dayName}</div>
+            <div class:list={['text-base font-mono font-semibold mt-0.5', isToday ? 'text-accent' : 'text-text-secondary']}>{dayNum}</div>
             {day.session && (
-              <div class="mt-1">
-                <div class="w-full h-1 rounded-full" style={`background: ${typeColor};`}></div>
-                <div class="text-xs mt-0.5 truncate" style={`color: ${typeColor};`}>{day.session.planned.desc}</div>
-                {day.session.planned.distance > 0 && (
-                  <div class="text-xs font-mono text-text-muted">{day.session.planned.distance}km</div>
-                )}
+              <div class="mt-1.5">
+                <div class="w-full h-0.5 rounded-full" style={`background: ${typeColor};`}></div>
+                <div class="text-[10px] mt-1 truncate font-medium" style={`color: ${typeColor};`}>{day.session.planned.desc}</div>
               </div>
             )}
-            {matched && (
-              <div class="text-xs text-type-easy font-mono mt-0.5">&#10003; {formatDistance(matched.dist)}km</div>
-            )}
-            {missed && (
-              <div class="text-xs text-type-key/60 mt-0.5">missed</div>
-            )}
+            {matched && <div class="text-[10px] text-type-easy font-mono mt-0.5">{formatDistance(matched.dist)}km</div>}
+            {missed && <div class="text-[10px] text-type-key/50 mt-0.5">missed</div>}
             {!day.session && day.activities.length > 0 && (
-              <div class="text-xs font-mono text-text-secondary mt-1">
-                {formatDistance(day.activities.reduce((s, a) => s + a.dist, 0))}km
-              </div>
+              <div class="text-[10px] font-mono text-text-secondary mt-1.5">{formatDistance(day.activities.reduce((s, a) => s + a.dist, 0))}km</div>
             )}
           </div>
         );
@@ -116,133 +106,108 @@ const currentWeek = calDays.slice(Math.max(0, weekStart), Math.max(0, weekStart)
     </div>
   </div>
 
-  <div class="grid lg:grid-cols-3 gap-6 mb-6">
-    <!-- Upcoming Sessions -->
-    <div class="lg:col-span-2 rounded-xl bg-bg-card border border-border-subtle p-5">
-      <h2 class="text-lg font-semibold mb-4">Upcoming Sessions</h2>
+  <div class="grid lg:grid-cols-5 gap-6 mb-6">
+    <!-- Upcoming -->
+    <div class="lg:col-span-3 glass rounded-2xl p-5">
+      <h2 class="text-sm font-semibold tracking-wide mb-4">Upcoming</h2>
       {upcomingSessions.length > 0 ? (
         <div class="space-y-2">
           {upcomingSessions.map((s) => {
-            const typeColor = TYPE_COLORS[s.type] || '#747d8c';
+            const tc = TYPE_COLORS[s.type] || '#636e72';
             return (
-              <div class="flex items-center gap-3 p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
-                <div class="w-1 h-10 rounded-full" style={`background: ${typeColor};`}></div>
+              <div class="flex items-center gap-3 p-3 rounded-xl bg-bg-main/40 border border-border-subtle hover:border-white/[0.06] transition-colors">
+                <div class="w-0.5 h-10 rounded-full" style={`background: ${tc};`}></div>
                 <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium">{s.planned.desc}</span>
-                    <Badge color={typeColor} text={s.type} />
-                  </div>
-                  <div class="text-xs text-text-secondary mt-0.5">
+                  <div class="text-sm font-medium">{s.planned.desc}</div>
+                  <div class="text-[11px] text-text-muted mt-0.5">
                     {formatDate(s.date)}
-                    {s.planned.distance > 0 && ` · ${s.planned.distance}km`}
-                    {s.planned.pace && ` · ${s.planned.pace}`}
+                    {s.planned.distance > 0 && ` \u00B7 ${s.planned.distance}km`}
+                    {s.planned.pace && ` \u00B7 ${s.planned.pace}`}
                   </div>
                 </div>
-                {s.planned.notes && (
-                  <p class="text-xs text-text-muted max-w-[200px] truncate hidden sm:block">{s.planned.notes}</p>
-                )}
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider" style={`background: ${tc}12; color: ${tc};`}>{s.type}</span>
               </div>
             );
           })}
         </div>
       ) : (
-        <p class="text-text-secondary text-sm">No upcoming sessions in this block.</p>
-      )}
-      {block && (
-        <a href={`/blocks/${block.id}`} class="inline-block mt-3 text-sm text-accent hover:text-accent-dim transition-colors">
-          View full block &rarr;
-        </a>
+        <p class="text-sm text-text-muted">No upcoming sessions.</p>
       )}
     </div>
 
-    <!-- Goals & Targets -->
-    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
-      <h2 class="text-lg font-semibold mb-4">Goals</h2>
+    <!-- Goals -->
+    <div class="lg:col-span-2 glass rounded-2xl p-5">
+      <h2 class="text-sm font-semibold tracking-wide mb-4">Goals</h2>
       <div class="space-y-3">
         {meta.goals.map((g) => (
-          <div class="p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
+          <div class="p-3 rounded-xl bg-bg-main/40 border border-border-subtle">
             <div class="flex items-center justify-between mb-1">
               <span class="text-sm font-medium">{g.goal}</span>
-              <span class="text-xs text-text-muted">#{g.priority}</span>
+              <span class="text-[10px] text-text-muted">#{g.priority}</span>
             </div>
             <div class="flex items-center justify-between">
-              <span class="font-mono text-sm text-accent">{g.target}</span>
-              <span class="text-xs text-text-secondary">{g.timeline}</span>
+              <span class="font-mono text-sm text-accent font-semibold">{g.target}</span>
+              <span class="text-[10px] text-text-muted">{g.timeline}</span>
             </div>
           </div>
         ))}
       </div>
-
-      {meta.targetRaces.length > 0 && (
-        <>
-          <h3 class="text-sm font-semibold mt-5 mb-3 text-text-secondary">Target Races</h3>
-          {meta.targetRaces.map((r) => (
-            <div class="flex items-center justify-between p-2 text-sm">
-              <span>{r.race}</span>
-              <span class="font-mono text-type-race">{r.goal}</span>
-            </div>
-          ))}
-        </>
-      )}
     </div>
   </div>
 
-  <!-- Block Timeline -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
-    <h2 class="text-lg font-semibold mb-4">Training Timeline</h2>
-    <div class="flex gap-2 overflow-x-auto pb-2">
+  <!-- Training Timeline -->
+  <div class="glass rounded-2xl p-5 mb-6">
+    <h2 class="text-sm font-semibold tracking-wide mb-4">Training Timeline</h2>
+    <div class="flex gap-2 overflow-x-auto pb-1">
       {[
-        { id: 'recovery', label: 'Recovery', dates: 'Mar-Apr', active: meta.currentPhase === 'recovery' },
-        { id: 'base', label: 'Base/Strength', dates: 'Mid Apr-May', active: meta.currentPhase === 'base' },
-        { id: 'speed', label: 'Speed Block 1', dates: 'May-Jul', active: meta.currentPhase === 'speed' },
-        { id: 'speed', label: 'Speed Block 2', dates: 'Jul-Sep', active: false },
-        { id: 'taper', label: 'TBD', dates: 'Autumn', active: false },
-      ].map((phase) => {
-        const color = PHASE_COLORS[phase.id] || '#747d8c';
+        { id: 'recovery', label: 'Recovery', dates: 'Mar-Apr' },
+        { id: 'base', label: 'Base & Strength', dates: 'Apr-May' },
+        { id: 'speed', label: 'Speed Block 1', dates: 'May-Jul' },
+        { id: 'speed', label: 'Speed Block 2', dates: 'Jul-Sep' },
+        { id: 'taper', label: 'TBD', dates: 'Autumn' },
+      ].map((phase, i) => {
+        const color = PHASE_COLORS[phase.id] || '#636e72';
+        const isActive = i === 0 && meta.currentPhase === 'recovery' || i === 1 && meta.currentPhase === 'base';
         return (
-          <div
-            class:list={[
-              'flex-1 min-w-[120px] rounded-lg p-3 border transition-all',
-              phase.active ? 'border-2' : 'border-border-subtle opacity-50',
-            ]}
-            style={phase.active ? `border-color: ${color}; background: ${color}10;` : ''}
+          <div class:list={[
+            'flex-1 min-w-[110px] rounded-xl p-3 border transition-all',
+            isActive ? 'glow-accent' : 'opacity-40',
+          ]}
+            style={isActive ? `border-color: ${color}40; background: ${color}08;` : 'border-color: rgba(255,255,255,0.04);'}
           >
-            <div class="text-xs font-semibold uppercase tracking-wider" style={`color: ${color};`}>{phase.label}</div>
-            <div class="text-xs text-text-muted mt-1">{phase.dates}</div>
+            <div class="text-[10px] font-bold uppercase tracking-wider" style={`color: ${color};`}>{phase.label}</div>
+            <div class="text-[10px] text-text-muted mt-1">{phase.dates}</div>
           </div>
         );
       })}
     </div>
   </div>
 
-  <!-- Recent Runs -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
-    <h2 class="text-lg font-semibold mb-4">Recent Runs</h2>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="text-left text-text-muted text-xs uppercase tracking-wider">
-            <th class="pb-2 pr-4">Date</th>
-            <th class="pb-2 pr-4">Name</th>
-            <th class="pb-2 pr-4 text-right">Distance</th>
-            <th class="pb-2 pr-4 text-right">Pace</th>
-            <th class="pb-2 text-right">HR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recentRuns.map((r) => (
-            <tr class="border-t border-border-subtle">
-              <td class="py-2 pr-4 text-text-secondary">{formatDate(r.date)}</td>
-              <td class="py-2 pr-4 truncate max-w-[200px]">{r.name}</td>
-              <td class="py-2 pr-4 text-right font-mono">{formatDistance(r.dist)}km</td>
-              <td class="py-2 pr-4 text-right font-mono" style={`color: ${r.pace < 250 ? '#ff4757' : r.pace < 300 ? '#ffa502' : '#2ed573'};`}>
-                {formatPace(r.pace)}
-              </td>
-              <td class="py-2 text-right font-mono text-text-secondary">{r.hr > 0 ? Math.round(r.hr) : '-'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  <!-- Recent Activity -->
+  <div class="glass rounded-2xl p-5">
+    <h2 class="text-sm font-semibold tracking-wide mb-4">Recent Activity</h2>
+    <div class="space-y-1">
+      {recentRuns.map((r) => (
+        <div class="flex items-center gap-3 py-2.5 px-3 rounded-lg hover:bg-white/[0.02] transition-colors">
+          <div class="text-xs text-text-muted w-14">{formatDate(r.date)}</div>
+          <div class="flex-1 text-sm truncate">{r.name}</div>
+          <div class="text-sm font-mono font-medium w-16 text-right">{formatDistance(r.dist)}km</div>
+          <div class="text-sm font-mono w-20 text-right" style={`color: ${r.pace < 250 ? '#ff4757' : r.pace < 300 ? '#ffa502' : '#26de81'};`}>
+            {r.sport === 'run' ? formatPace(r.pace) : formatTime(r.time)}
+          </div>
+          <div class="text-xs font-mono text-text-muted w-12 text-right">{r.hr > 0 ? `${Math.round(r.hr)}` : '-'}</div>
+        </div>
+      ))}
     </div>
   </div>
+
+  <script is:inline>
+    // Check auth
+    try {
+      var u = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
+      if (!u.email || u.exp < Date.now()) {
+        window.location.href = '/';
+      }
+    } catch(e) { window.location.href = '/'; }
+  </script>
 </BaseLayout>

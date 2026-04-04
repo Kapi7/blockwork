@@ -4,20 +4,21 @@ import { getCalendarWeeks } from '../lib/data';
 import { Calendar } from '../components/calendar/Calendar';
 import { TYPE_COLORS } from '../lib/types';
 
-const weeks = getCalendarWeeks(8);
+// Load 20 weeks back (full training history visible)
+const weeks = getCalendarWeeks(20);
 const today = new Date().toISOString().slice(0, 10);
 ---
 
 <BaseLayout title="Calendar" active="calendar">
   <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div>
-      <h1 class="text-2xl font-bold mb-1">Training Calendar</h1>
-      <p class="text-text-secondary text-sm">Click any day for details. Planned vs actual.</p>
+      <h1 class="text-2xl font-bold tracking-tight mb-1">Training Calendar</h1>
+      <p class="text-text-secondary text-sm">Click any day for full details + feedback</p>
     </div>
-    <div class="flex items-center gap-3 text-xs flex-wrap">
+    <div class="flex items-center gap-2 text-[10px] flex-wrap">
       {Object.entries(TYPE_COLORS).map(([type, color]) => (
-        <span class="flex items-center gap-1">
-          <span class="w-2.5 h-2.5 rounded-sm" style={`background: ${color};`}></span>
+        <span class="flex items-center gap-1 px-2 py-0.5 rounded-full" style={`background: ${color}10;`}>
+          <span class="w-1.5 h-1.5 rounded-full" style={`background: ${color};`}></span>
           <span class="text-text-muted capitalize">{type}</span>
         </span>
       ))}
@@ -26,10 +27,10 @@ const today = new Date().toISOString().slice(0, 10);
 
   <Calendar client:load weeks={weeks} today={today} />
 
-  <div class="mt-4 flex items-center gap-4 text-xs text-text-muted">
-    <span class="flex items-center gap-1"><span class="text-type-easy">{'\u2713'}</span> Completed</span>
-    <span class="flex items-center gap-1"><span class="text-type-key/60">missed</span> Missed</span>
-    <span>Click a day for full details + feedback</span>
-    <span>Arrow keys to navigate in modal</span>
-  </div>
+  <script is:inline>
+    try {
+      var u = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
+      if (!u.email || u.exp < Date.now()) window.location.href = '/';
+    } catch(e) { window.location.href = '/'; }
+  </script>
 </BaseLayout>

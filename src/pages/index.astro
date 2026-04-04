@@ -1,9 +1,6 @@
 ---
 import '../styles/global.css';
-
-const user = (Astro.locals as any).user;
-// If logged in, redirect to dashboard
-if (user) return Astro.redirect('/dashboard');
+const GOOGLE_CLIENT_ID = '129231084858-u9lh367qrq8fr5dd68aqenffiutnb4k5.apps.googleusercontent.com';
 ---
 
 <!doctype html>
@@ -11,93 +8,161 @@ if (user) return Astro.redirect('/dashboard');
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Blockwork — Training Platform</title>
+    <title>Blockwork — AI Training Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>
-  <body class="min-h-screen bg-bg-main text-text-primary">
+  <body class="min-h-screen bg-bg-main text-text-primary overflow-x-hidden">
+
     <!-- Nav -->
-    <nav class="fixed top-0 inset-x-0 z-50 border-b border-border-subtle bg-bg-main/80 backdrop-blur-xl">
+    <nav class="fixed top-0 inset-x-0 z-50 bg-bg-main/60 backdrop-blur-2xl border-b border-border-subtle">
       <div class="mx-auto max-w-6xl px-6 flex h-16 items-center justify-between">
-        <span class="text-xl font-extrabold text-accent tracking-tight">BLOCKWORK</span>
-        <a
-          href="/api/auth/login"
-          class="px-5 py-2 rounded-full bg-accent text-bg-main text-sm font-semibold hover:bg-accent-dim transition-colors"
-        >
-          Sign in with Google
-        </a>
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-accent/20 flex items-center justify-center">
+            <div class="w-3.5 h-3.5 rounded-sm bg-accent"></div>
+          </div>
+          <span class="text-lg font-bold tracking-tight">
+            <span class="text-accent">BLOCK</span><span>WORK</span>
+          </span>
+        </div>
+        <div id="loginBtn">
+          <div id="g_id_onload"
+            data-client_id={GOOGLE_CLIENT_ID}
+            data-callback="handleGoogleLogin"
+            data-auto_prompt="false">
+          </div>
+          <div class="g_id_signin"
+            data-type="standard"
+            data-shape="pill"
+            data-theme="filled_black"
+            data-text="signin_with"
+            data-size="medium"
+            data-logo_alignment="left">
+          </div>
+        </div>
       </div>
     </nav>
 
     <!-- Hero -->
-    <section class="pt-32 pb-20 px-6">
-      <div class="mx-auto max-w-3xl text-center">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
-          <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-          Block-based periodization
+    <section class="relative pt-36 pb-24 px-6">
+      <!-- Background glow -->
+      <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-accent/[0.04] rounded-full blur-[120px]"></div>
+
+      <div class="relative mx-auto max-w-3xl text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/8 border border-accent/15 text-accent text-xs font-semibold tracking-wider uppercase mb-8">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+          AI-powered coaching
         </div>
-        <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight mb-6">
-          Train smarter.<br/>
-          <span class="text-accent">Race faster.</span>
+
+        <h1 class="text-5xl sm:text-7xl font-black leading-[1.05] tracking-tight mb-6">
+          Train with<br/>
+          <span class="text-gradient">structure.</span>
         </h1>
-        <p class="text-lg text-text-secondary max-w-xl mx-auto mb-10">
-          AI-powered coaching platform for runners and cyclists.
-          Structured training blocks, Strava sync, real-time analytics,
-          and a coach that adapts to your progress.
+
+        <p class="text-base sm:text-lg text-text-secondary max-w-lg mx-auto mb-12 leading-relaxed">
+          Block periodization for runners and cyclists. AI generates your plan,
+          Strava syncs your data, you focus on the work.
         </p>
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+        <div class="flex flex-col items-center gap-4">
           <a
-            href="/api/auth/login"
-            class="flex items-center gap-3 px-8 py-3.5 rounded-xl bg-white text-gray-800 font-semibold text-sm hover:bg-gray-100 transition-colors shadow-lg shadow-white/10"
+            href="/dashboard"
+            class="group inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-accent text-bg-main font-semibold text-sm hover:shadow-[0_0_30px_rgba(0,212,170,0.3)] transition-all"
+            id="ctaBtn"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            Continue with Google
+            Open Dashboard
+            <span class="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
           </a>
+          <span class="text-xs text-text-muted">Sign in with Google to get started</span>
         </div>
       </div>
     </section>
 
     <!-- Features -->
-    <section class="py-16 px-6 border-t border-border-subtle">
+    <section class="py-20 px-6">
       <div class="mx-auto max-w-5xl">
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
-            <div class="w-10 h-10 rounded-xl bg-type-easy/15 flex items-center justify-center text-lg mb-4">&#x1F3C3;</div>
-            <h3 class="font-semibold text-lg mb-2">Block Periodization</h3>
-            <p class="text-sm text-text-secondary">
-              2-3 week training blocks with clear stimulus, goals, and success metrics.
-              80/20 polarized approach adapted to your fitness.
+        <div class="grid md:grid-cols-3 gap-5">
+          <div class="glass glass-hover rounded-2xl p-6">
+            <div class="w-11 h-11 rounded-xl bg-type-easy/12 flex items-center justify-center text-xl mb-5">&#x1F3C3;</div>
+            <h3 class="font-semibold text-base mb-2">Block Periodization</h3>
+            <p class="text-sm text-text-secondary leading-relaxed">
+              2-3 week training blocks with clear goals and exit criteria.
+              80/20 polarized. Adapt every block based on your response.
             </p>
           </div>
-          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
-            <div class="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center text-lg mb-4">&#x1F4CA;</div>
-            <h3 class="font-semibold text-lg mb-2">Strava Sync</h3>
-            <p class="text-sm text-text-secondary">
-              Automatic daily sync from Strava. All activity types — runs, rides,
-              swims, yoga, strength. Planned vs actual comparison.
+          <div class="glass glass-hover rounded-2xl p-6">
+            <div class="w-11 h-11 rounded-xl bg-accent/12 flex items-center justify-center text-xl mb-5">&#x26A1;</div>
+            <h3 class="font-semibold text-base mb-2">Auto Strava Sync</h3>
+            <p class="text-sm text-text-secondary leading-relaxed">
+              Daily sync from Strava. Runs, rides, swims, yoga, strength.
+              Planned vs actual with instant feedback.
             </p>
           </div>
-          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
-            <div class="w-10 h-10 rounded-xl bg-type-key/15 flex items-center justify-center text-lg mb-4">&#x1F916;</div>
-            <h3 class="font-semibold text-lg mb-2">AI Coach</h3>
-            <p class="text-sm text-text-secondary">
-              Claude-powered plan generation based on your goals, PBs, and
-              current fitness. Your coach reviews and approves every block.
+          <div class="glass glass-hover rounded-2xl p-6">
+            <div class="w-11 h-11 rounded-xl bg-type-key/12 flex items-center justify-center text-xl mb-5">&#x1F9E0;</div>
+            <h3 class="font-semibold text-base mb-2">AI Coach</h3>
+            <p class="text-sm text-text-secondary leading-relaxed">
+              Claude generates training blocks based on your profile.
+              Your coach reviews every plan before it goes live.
             </p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Stats bar -->
+    <section class="py-12 px-6 border-t border-b border-border-subtle">
+      <div class="mx-auto max-w-4xl flex items-center justify-around text-center">
+        <div>
+          <div class="text-2xl font-bold font-mono text-accent">1,350+</div>
+          <div class="text-xs text-text-muted mt-1">Activities synced</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold font-mono">6</div>
+          <div class="text-xs text-text-muted mt-1">Activity types</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold font-mono">80/20</div>
+          <div class="text-xs text-text-muted mt-1">Polarized training</div>
+        </div>
+        <div>
+          <div class="text-2xl font-bold font-mono text-type-easy">24/7</div>
+          <div class="text-xs text-text-muted mt-1">Auto sync</div>
+        </div>
+      </div>
+    </section>
+
     <!-- Footer -->
-    <footer class="py-8 px-6 border-t border-border-subtle text-center text-xs text-text-muted">
-      <p>Blockwork — Built for athletes who want structure without rigidity.</p>
+    <footer class="py-10 px-6 text-center">
+      <p class="text-xs text-text-muted">Blockwork &mdash; Built for athletes who want structure without rigidity.</p>
     </footer>
+
+    <script is:inline define:vars={{ GOOGLE_CLIENT_ID }}>
+      function handleGoogleLogin(response) {
+        // Decode JWT
+        var parts = response.credential.split('.');
+        var payload = JSON.parse(atob(parts[1]));
+        var user = {
+          email: payload.email,
+          name: payload.name,
+          picture: payload.picture,
+          role: payload.email === 'kapoosha@gmail.com' ? 'coach' : 'athlete',
+          exp: Date.now() + 30 * 24 * 60 * 60 * 1000,
+        };
+        localStorage.setItem('blockwork_user', JSON.stringify(user));
+        window.location.href = '/dashboard';
+      }
+      window.handleGoogleLogin = handleGoogleLogin;
+
+      // Check if already logged in
+      try {
+        var u = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
+        if (u.email && u.exp > Date.now()) {
+          window.location.href = '/dashboard';
+        }
+      } catch(e) {}
+    </script>
   </body>
 </html>
