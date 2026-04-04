@@ -80,7 +80,7 @@ export const GET: APIRoute = async ({ request, redirect }) => {
   return new Response(null, {
     status: 302,
     headers: {
-      Location: '/',
+      Location: '/dashboard',
       'Set-Cookie': sessionCookie(token),
     },
   });

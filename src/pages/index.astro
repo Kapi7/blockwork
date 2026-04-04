@@ -1,248 +1,103 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import StatCard from '../components/ui/StatCard.astro';
-import Badge from '../components/ui/Badge.astro';
-import { getMeta, getCurrentBlock, getFitness, getWeeklyVolumes, getRecentRuns, getCalendarDays } from '../lib/data';
-import { formatPace, formatDate, formatDistance } from '../lib/format';
-import { PHASE_COLORS, TYPE_COLORS } from '../lib/types';
+import '../styles/global.css';
 
-const meta = getMeta();
-const block = getCurrentBlock();
-const fitness = getFitness();
-const recentRuns = getRecentRuns(10);
-
-const phaseColor = PHASE_COLORS[meta.currentPhase] || '#747d8c';
-
-const today = new Date().toISOString().slice(0, 10);
-const upcomingSessions = block?.sessions.filter((s) => s.date >= today).slice(0, 5) || [];
-
-// Current week for week strip (Mon-Sun containing today)
-const calDays = getCalendarDays(1);
-const todayIdx = calDays.findIndex((d) => d.date === today);
-const weekStart = todayIdx >= 0 ? todayIdx - ((new Date(today).getDay() + 6) % 7) : 0;
-const currentWeek = calDays.slice(Math.max(0, weekStart), Math.max(0, weekStart) + 7);
+const user = (Astro.locals as any).user;
+// If logged in, redirect to dashboard
+if (user) return Astro.redirect('/dashboard');
 ---
 
-<BaseLayout title="Dashboard" active="dashboard">
-  <!-- Current State Banner -->
-  <div class="mb-6 rounded-xl bg-bg-card border border-border-subtle p-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <span class="phase-badge" style={`background: ${phaseColor}20; color: ${phaseColor}; border: 1px solid ${phaseColor}40;`}>
-            <span class="w-2 h-2 rounded-full" style={`background: ${phaseColor};`}></span>
-            {meta.currentPhase}
-          </span>
-          {block && (
-            <span class="text-sm text-text-secondary">
-              Block {block.number}: {block.name}
-            </span>
-          )}
-        </div>
-        <h1 class="text-2xl font-bold mb-1">{meta.athleteName}</h1>
-        <p class="text-text-secondary text-sm">
-          {block ? `${formatDate(block.startDate)} — ${formatDate(block.endDate)}` : ''}
-          {block?.stimulus && ` · ${block.stimulus}`}
-        </p>
-      </div>
-      <div class="flex flex-col items-end gap-1">
-        {meta.goals.slice(0, 2).map((g) => (
-          <div class="text-sm">
-            <span class="text-text-muted">#{g.priority}</span>
-            <span class="text-text-secondary ml-1">{g.goal}:</span>
-            <span class="font-mono text-accent ml-1">{g.target}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-
-  <!-- Fitness Indicators -->
-  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-    <StatCard label="7-Day Volume" value={`${fitness.volume7d}km`} color="#00d4aa" />
-    <StatCard label="28-Day Volume" value={`${fitness.volume28d}km`} sub={`${fitness.runs28d} runs`} />
-    <StatCard label="Avg Pace (28d)" value={formatPace(fitness.avgPace28d)} />
-    <StatCard label="Avg HR (28d)" value={fitness.avgHr28d ? `${fitness.avgHr28d}` : '-'} sub="bpm" />
-    <StatCard label="Runs (7d)" value={fitness.runs7d} />
-    <StatCard label="Last Run" value={fitness.lastRun ? formatDate(fitness.lastRun) : '-'} />
-  </div>
-
-  <!-- This Week Strip -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-4 mb-6">
-    <div class="flex items-center justify-between mb-3">
-      <h2 class="text-sm font-semibold">This Week</h2>
-      <a href="/calendar" class="text-xs text-accent hover:text-accent-dim transition-colors">Full calendar &rarr;</a>
-    </div>
-    <div class="grid grid-cols-7 gap-1.5">
-      {currentWeek.map((day) => {
-        const isToday = day.date === today;
-        const typeColor = day.session ? (TYPE_COLORS[day.session.type] || '#747d8c') : 'transparent';
-        const dayName = new Date(day.date).toLocaleDateString('en-GB', { weekday: 'short' });
-        const dayNum = new Date(day.date).getDate();
-        const matched = day.session?.actual;
-        const isPast = day.date < today;
-        const missed = day.session && isPast && !matched && day.session.type !== 'rest';
-
-        return (
-          <div class:list={[
-            'rounded-lg p-2 text-center border',
-            isToday ? 'border-accent/40 bg-accent/5' : 'border-border-subtle bg-bg-main/30',
-          ]}>
-            <div class="text-xs text-text-muted">{dayName}</div>
-            <div class:list={['text-sm font-mono', isToday ? 'text-accent font-bold' : 'text-text-secondary']}>{dayNum}</div>
-            {day.session && (
-              <div class="mt-1">
-                <div class="w-full h-1 rounded-full" style={`background: ${typeColor};`}></div>
-                <div class="text-xs mt-0.5 truncate" style={`color: ${typeColor};`}>{day.session.planned.desc}</div>
-                {day.session.planned.distance > 0 && (
-                  <div class="text-xs font-mono text-text-muted">{day.session.planned.distance}km</div>
-                )}
-              </div>
-            )}
-            {matched && (
-              <div class="text-xs text-type-easy font-mono mt-0.5">&#10003; {formatDistance(matched.dist)}km</div>
-            )}
-            {missed && (
-              <div class="text-xs text-type-key/60 mt-0.5">missed</div>
-            )}
-            {!day.session && day.activities.length > 0 && (
-              <div class="text-xs font-mono text-text-secondary mt-1">
-                {formatDistance(day.activities.reduce((s, a) => s + a.dist, 0))}km
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  </div>
-
-  <div class="grid lg:grid-cols-3 gap-6 mb-6">
-    <!-- Upcoming Sessions -->
-    <div class="lg:col-span-2 rounded-xl bg-bg-card border border-border-subtle p-5">
-      <h2 class="text-lg font-semibold mb-4">Upcoming Sessions</h2>
-      {upcomingSessions.length > 0 ? (
-        <div class="space-y-2">
-          {upcomingSessions.map((s) => {
-            const typeColor = TYPE_COLORS[s.type] || '#747d8c';
-            return (
-              <div class="flex items-center gap-3 p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
-                <div class="w-1 h-10 rounded-full" style={`background: ${typeColor};`}></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-medium">{s.planned.desc}</span>
-                    <Badge color={typeColor} text={s.type} />
-                  </div>
-                  <div class="text-xs text-text-secondary mt-0.5">
-                    {formatDate(s.date)}
-                    {s.planned.distance > 0 && ` · ${s.planned.distance}km`}
-                    {s.planned.pace && ` · ${s.planned.pace}`}
-                  </div>
-                </div>
-                {s.planned.notes && (
-                  <p class="text-xs text-text-muted max-w-[200px] truncate hidden sm:block">{s.planned.notes}</p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p class="text-text-secondary text-sm">No upcoming sessions in this block.</p>
-      )}
-      {block && (
-        <a href={`/blocks/${block.id}`} class="inline-block mt-3 text-sm text-accent hover:text-accent-dim transition-colors">
-          View full block &rarr;
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blockwork — Training Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-bg-main text-text-primary">
+    <!-- Nav -->
+    <nav class="fixed top-0 inset-x-0 z-50 border-b border-border-subtle bg-bg-main/80 backdrop-blur-xl">
+      <div class="mx-auto max-w-6xl px-6 flex h-16 items-center justify-between">
+        <span class="text-xl font-extrabold text-accent tracking-tight">BLOCKWORK</span>
+        <a
+          href="/api/auth/login"
+          class="px-5 py-2 rounded-full bg-accent text-bg-main text-sm font-semibold hover:bg-accent-dim transition-colors"
+        >
+          Sign in with Google
         </a>
-      )}
-    </div>
-
-    <!-- Goals & Targets -->
-    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
-      <h2 class="text-lg font-semibold mb-4">Goals</h2>
-      <div class="space-y-3">
-        {meta.goals.map((g) => (
-          <div class="p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-sm font-medium">{g.goal}</span>
-              <span class="text-xs text-text-muted">#{g.priority}</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="font-mono text-sm text-accent">{g.target}</span>
-              <span class="text-xs text-text-secondary">{g.timeline}</span>
-            </div>
-          </div>
-        ))}
       </div>
+    </nav>
 
-      {meta.targetRaces.length > 0 && (
-        <>
-          <h3 class="text-sm font-semibold mt-5 mb-3 text-text-secondary">Target Races</h3>
-          {meta.targetRaces.map((r) => (
-            <div class="flex items-center justify-between p-2 text-sm">
-              <span>{r.race}</span>
-              <span class="font-mono text-type-race">{r.goal}</span>
-            </div>
-          ))}
-        </>
-      )}
-    </div>
-  </div>
-
-  <!-- Block Timeline -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
-    <h2 class="text-lg font-semibold mb-4">Training Timeline</h2>
-    <div class="flex gap-2 overflow-x-auto pb-2">
-      {[
-        { id: 'recovery', label: 'Recovery', dates: 'Mar-Apr', active: meta.currentPhase === 'recovery' },
-        { id: 'base', label: 'Base/Strength', dates: 'Mid Apr-May', active: meta.currentPhase === 'base' },
-        { id: 'speed', label: 'Speed Block 1', dates: 'May-Jul', active: meta.currentPhase === 'speed' },
-        { id: 'speed', label: 'Speed Block 2', dates: 'Jul-Sep', active: false },
-        { id: 'taper', label: 'TBD', dates: 'Autumn', active: false },
-      ].map((phase) => {
-        const color = PHASE_COLORS[phase.id] || '#747d8c';
-        return (
-          <div
-            class:list={[
-              'flex-1 min-w-[120px] rounded-lg p-3 border transition-all',
-              phase.active ? 'border-2' : 'border-border-subtle opacity-50',
-            ]}
-            style={phase.active ? `border-color: ${color}; background: ${color}10;` : ''}
+    <!-- Hero -->
+    <section class="pt-32 pb-20 px-6">
+      <div class="mx-auto max-w-3xl text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6">
+          <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
+          Block-based periodization
+        </div>
+        <h1 class="text-5xl sm:text-6xl font-extrabold leading-tight mb-6">
+          Train smarter.<br/>
+          <span class="text-accent">Race faster.</span>
+        </h1>
+        <p class="text-lg text-text-secondary max-w-xl mx-auto mb-10">
+          AI-powered coaching platform for runners and cyclists.
+          Structured training blocks, Strava sync, real-time analytics,
+          and a coach that adapts to your progress.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a
+            href="/api/auth/login"
+            class="flex items-center gap-3 px-8 py-3.5 rounded-xl bg-white text-gray-800 font-semibold text-sm hover:bg-gray-100 transition-colors shadow-lg shadow-white/10"
           >
-            <div class="text-xs font-semibold uppercase tracking-wider" style={`color: ${color};`}>{phase.label}</div>
-            <div class="text-xs text-text-muted mt-1">{phase.dates}</div>
-          </div>
-        );
-      })}
-    </div>
-  </div>
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </a>
+        </div>
+      </div>
+    </section>
 
-  <!-- Recent Runs -->
-  <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
-    <h2 class="text-lg font-semibold mb-4">Recent Runs</h2>
-    <div class="overflow-x-auto">
-      <table class="w-full text-sm">
-        <thead>
-          <tr class="text-left text-text-muted text-xs uppercase tracking-wider">
-            <th class="pb-2 pr-4">Date</th>
-            <th class="pb-2 pr-4">Name</th>
-            <th class="pb-2 pr-4 text-right">Distance</th>
-            <th class="pb-2 pr-4 text-right">Pace</th>
-            <th class="pb-2 text-right">HR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {recentRuns.map((r) => (
-            <tr class="border-t border-border-subtle">
-              <td class="py-2 pr-4 text-text-secondary">{formatDate(r.date)}</td>
-              <td class="py-2 pr-4 truncate max-w-[200px]">{r.name}</td>
-              <td class="py-2 pr-4 text-right font-mono">{formatDistance(r.dist)}km</td>
-              <td class="py-2 pr-4 text-right font-mono" style={`color: ${r.pace < 250 ? '#ff4757' : r.pace < 300 ? '#ffa502' : '#2ed573'};`}>
-                {formatPace(r.pace)}
-              </td>
-              <td class="py-2 text-right font-mono text-text-secondary">{r.hr > 0 ? Math.round(r.hr) : '-'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-</BaseLayout>
+    <!-- Features -->
+    <section class="py-16 px-6 border-t border-border-subtle">
+      <div class="mx-auto max-w-5xl">
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
+            <div class="w-10 h-10 rounded-xl bg-type-easy/15 flex items-center justify-center text-lg mb-4">&#x1F3C3;</div>
+            <h3 class="font-semibold text-lg mb-2">Block Periodization</h3>
+            <p class="text-sm text-text-secondary">
+              2-3 week training blocks with clear stimulus, goals, and success metrics.
+              80/20 polarized approach adapted to your fitness.
+            </p>
+          </div>
+          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
+            <div class="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center text-lg mb-4">&#x1F4CA;</div>
+            <h3 class="font-semibold text-lg mb-2">Strava Sync</h3>
+            <p class="text-sm text-text-secondary">
+              Automatic daily sync from Strava. All activity types — runs, rides,
+              swims, yoga, strength. Planned vs actual comparison.
+            </p>
+          </div>
+          <div class="rounded-2xl bg-bg-card border border-border-subtle p-6">
+            <div class="w-10 h-10 rounded-xl bg-type-key/15 flex items-center justify-center text-lg mb-4">&#x1F916;</div>
+            <h3 class="font-semibold text-lg mb-2">AI Coach</h3>
+            <p class="text-sm text-text-secondary">
+              Claude-powered plan generation based on your goals, PBs, and
+              current fitness. Your coach reviews and approves every block.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 px-6 border-t border-border-subtle text-center text-xs text-text-muted">
+      <p>Blockwork — Built for athletes who want structure without rigidity.</p>
+    </footer>
+  </body>
+</html>
