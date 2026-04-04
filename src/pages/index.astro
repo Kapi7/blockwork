@@ -1,0 +1,193 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StatCard from '../components/ui/StatCard.astro';
+import Badge from '../components/ui/Badge.astro';
+import { getMeta, getCurrentBlock, getFitness, getWeeklyVolumes, getRecentRuns } from '../lib/data';
+import { formatPace, formatDate, formatDistance } from '../lib/format';
+import { PHASE_COLORS, TYPE_COLORS } from '../lib/types';
+
+const meta = getMeta();
+const block = getCurrentBlock();
+const fitness = getFitness();
+const recentRuns = getRecentRuns(10);
+
+const phaseColor = PHASE_COLORS[meta.currentPhase] || '#747d8c';
+
+const today = new Date().toISOString().slice(0, 10);
+const upcomingSessions = block?.sessions.filter((s) => s.date >= today).slice(0, 5) || [];
+---
+
+<BaseLayout title="Dashboard" active="dashboard">
+  <!-- Current State Banner -->
+  <div class="mb-6 rounded-xl bg-bg-card border border-border-subtle p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="phase-badge" style={`background: ${phaseColor}20; color: ${phaseColor}; border: 1px solid ${phaseColor}40;`}>
+            <span class="w-2 h-2 rounded-full" style={`background: ${phaseColor};`}></span>
+            {meta.currentPhase}
+          </span>
+          {block && (
+            <span class="text-sm text-text-secondary">
+              Block {block.number}: {block.name}
+            </span>
+          )}
+        </div>
+        <h1 class="text-2xl font-bold mb-1">{meta.athleteName}</h1>
+        <p class="text-text-secondary text-sm">
+          {block ? `${formatDate(block.startDate)} — ${formatDate(block.endDate)}` : ''}
+          {block?.stimulus && ` · ${block.stimulus}`}
+        </p>
+      </div>
+      <div class="flex flex-col items-end gap-1">
+        {meta.goals.slice(0, 2).map((g) => (
+          <div class="text-sm">
+            <span class="text-text-muted">#{g.priority}</span>
+            <span class="text-text-secondary ml-1">{g.goal}:</span>
+            <span class="font-mono text-accent ml-1">{g.target}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Fitness Indicators -->
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+    <StatCard label="7-Day Volume" value={`${fitness.volume7d}km`} color="#00d4aa" />
+    <StatCard label="28-Day Volume" value={`${fitness.volume28d}km`} sub={`${fitness.runs28d} runs`} />
+    <StatCard label="Avg Pace (28d)" value={formatPace(fitness.avgPace28d)} />
+    <StatCard label="Avg HR (28d)" value={fitness.avgHr28d ? `${fitness.avgHr28d}` : '-'} sub="bpm" />
+    <StatCard label="Runs (7d)" value={fitness.runs7d} />
+    <StatCard label="Last Run" value={fitness.lastRun ? formatDate(fitness.lastRun) : '-'} />
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6 mb-6">
+    <!-- Upcoming Sessions -->
+    <div class="lg:col-span-2 rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="text-lg font-semibold mb-4">Upcoming Sessions</h2>
+      {upcomingSessions.length > 0 ? (
+        <div class="space-y-2">
+          {upcomingSessions.map((s) => {
+            const typeColor = TYPE_COLORS[s.type] || '#747d8c';
+            return (
+              <div class="flex items-center gap-3 p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
+                <div class="w-1 h-10 rounded-full" style={`background: ${typeColor};`}></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium">{s.planned.desc}</span>
+                    <Badge color={typeColor} text={s.type} />
+                  </div>
+                  <div class="text-xs text-text-secondary mt-0.5">
+                    {formatDate(s.date)}
+                    {s.planned.distance > 0 && ` · ${s.planned.distance}km`}
+                    {s.planned.pace && ` · ${s.planned.pace}`}
+                  </div>
+                </div>
+                {s.planned.notes && (
+                  <p class="text-xs text-text-muted max-w-[200px] truncate hidden sm:block">{s.planned.notes}</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p class="text-text-secondary text-sm">No upcoming sessions in this block.</p>
+      )}
+      {block && (
+        <a href={`/blocks/${block.id}`} class="inline-block mt-3 text-sm text-accent hover:text-accent-dim transition-colors">
+          View full block &rarr;
+        </a>
+      )}
+    </div>
+
+    <!-- Goals & Targets -->
+    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="text-lg font-semibold mb-4">Goals</h2>
+      <div class="space-y-3">
+        {meta.goals.map((g) => (
+          <div class="p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-sm font-medium">{g.goal}</span>
+              <span class="text-xs text-text-muted">#{g.priority}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-sm text-accent">{g.target}</span>
+              <span class="text-xs text-text-secondary">{g.timeline}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {meta.targetRaces.length > 0 && (
+        <>
+          <h3 class="text-sm font-semibold mt-5 mb-3 text-text-secondary">Target Races</h3>
+          {meta.targetRaces.map((r) => (
+            <div class="flex items-center justify-between p-2 text-sm">
+              <span>{r.race}</span>
+              <span class="font-mono text-type-race">{r.goal}</span>
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  </div>
+
+  <!-- Block Timeline -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Training Timeline</h2>
+    <div class="flex gap-2 overflow-x-auto pb-2">
+      {[
+        { id: 'recovery', label: 'Recovery', dates: 'Mar-Apr', active: meta.currentPhase === 'recovery' },
+        { id: 'base', label: 'Base/Strength', dates: 'Mid Apr-May', active: meta.currentPhase === 'base' },
+        { id: 'speed', label: 'Speed Block 1', dates: 'May-Jul', active: meta.currentPhase === 'speed' },
+        { id: 'speed', label: 'Speed Block 2', dates: 'Jul-Sep', active: false },
+        { id: 'taper', label: 'TBD', dates: 'Autumn', active: false },
+      ].map((phase) => {
+        const color = PHASE_COLORS[phase.id] || '#747d8c';
+        return (
+          <div
+            class:list={[
+              'flex-1 min-w-[120px] rounded-lg p-3 border transition-all',
+              phase.active ? 'border-2' : 'border-border-subtle opacity-50',
+            ]}
+            style={phase.active ? `border-color: ${color}; background: ${color}10;` : ''}
+          >
+            <div class="text-xs font-semibold uppercase tracking-wider" style={`color: ${color};`}>{phase.label}</div>
+            <div class="text-xs text-text-muted mt-1">{phase.dates}</div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  <!-- Recent Runs -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+    <h2 class="text-lg font-semibold mb-4">Recent Runs</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-text-muted text-xs uppercase tracking-wider">
+            <th class="pb-2 pr-4">Date</th>
+            <th class="pb-2 pr-4">Name</th>
+            <th class="pb-2 pr-4 text-right">Distance</th>
+            <th class="pb-2 pr-4 text-right">Pace</th>
+            <th class="pb-2 text-right">HR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {recentRuns.map((r) => (
+            <tr class="border-t border-border-subtle">
+              <td class="py-2 pr-4 text-text-secondary">{formatDate(r.date)}</td>
+              <td class="py-2 pr-4 truncate max-w-[200px]">{r.name}</td>
+              <td class="py-2 pr-4 text-right font-mono">{formatDistance(r.dist)}km</td>
+              <td class="py-2 pr-4 text-right font-mono" style={`color: ${r.pace < 250 ? '#ff4757' : r.pace < 300 ? '#ffa502' : '#2ed573'};`}>
+                {formatPace(r.pace)}
+              </td>
+              <td class="py-2 text-right font-mono text-text-secondary">{r.hr > 0 ? Math.round(r.hr) : '-'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</BaseLayout>

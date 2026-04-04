@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getWeeklyVolumes, getRuns } from '../lib/data';
+
+const volumes = getWeeklyVolumes();
+const runs = getRuns();
+
+// Pre-compute pace progression data (last 60 runs with 5km+)
+const paceData = runs
+  .filter((r) => r.dist >= 5)
+  .slice(0, 60)
+  .reverse()
+  .map((r) => ({ date: r.date, pace: r.pace, dist: r.dist, hr: r.hr }));
+---
+
+<BaseLayout title="Analytics" active="analytics">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-1">Analytics</h1>
+    <p class="text-text-secondary text-sm">Training data from {runs.length} running activities</p>
+  </div>
+
+  <!-- Weekly Volume Chart -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Weekly Volume</h2>
+    <div class="h-[300px]">
+      <canvas id="volumeChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Pace Progression Chart -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Pace Progression</h2>
+    <div class="h-[300px]">
+      <canvas id="paceChart"></canvas>
+    </div>
+  </div>
+
+  <!-- HR Trend Chart -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Heart Rate Trend</h2>
+    <div class="h-[300px]">
+      <canvas id="hrChart"></canvas>
+    </div>
+  </div>
+
+  <script define:vars={{ volumes, paceData }}>
+    async function initCharts() {
+      const { Chart, registerables } = await import('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.esm.js');
+      Chart.register(...registerables);
+
+      const chartDefaults = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          x: {
+            ticks: { color: '#8899aa', font: { size: 10 } },
+            grid: { color: 'rgba(255,255,255,0.04)' },
+          },
+          y: {
+            ticks: { color: '#8899aa', font: { size: 10 } },
+            grid: { color: 'rgba(255,255,255,0.04)' },
+          },
+        },
+      };
+
+      // Weekly Volume
+      const volLabels = volumes.map((v) => v.week.replace(/\d{4}-W/, 'W'));
+      const volData = volumes.map((v) => v.km);
+      const volColors = volData.map((v) =>
+        v > 80 ? '#ff4757' : v > 60 ? '#ffa502' : v > 40 ? '#2ed573' : '#70a1ff'
+      );
+
+      new Chart(document.getElementById('volumeChart'), {
+        type: 'bar',
+        data: {
+          labels: volLabels,
+          datasets: [{ data: volData, backgroundColor: volColors, borderRadius: 4 }],
+        },
+        options: {
+          ...chartDefaults,
+          scales: {
+            ...chartDefaults.scales,
+            y: { ...chartDefaults.scales.y, title: { display: true, text: 'km', color: '#8899aa' } },
+          },
+        },
+      });
+
+      // Pace Progression
+      function formatPace(sec) {
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${m}:${s.toString().padStart(2, '0')}`;
+      }
+
+      new Chart(document.getElementById('paceChart'), {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            data: paceData.map((p) => ({ x: p.date, y: p.pace })),
+            backgroundColor: paceData.map((p) =>
+              p.pace < 250 ? '#ff4757' : p.pace < 300 ? '#ffa502' : '#2ed573'
+            ),
+            pointRadius: paceData.map((p) => Math.min(p.dist / 5, 6)),
+          }],
+        },
+        options: {
+          ...chartDefaults,
+          scales: {
+            x: { ...chartDefaults.scales.x, type: 'category' },
+            y: {
+              ...chartDefaults.scales.y,
+              reverse: true,
+              ticks: {
+                ...chartDefaults.scales.y.ticks,
+                callback: (v) => formatPace(v),
+              },
+              title: { display: true, text: 'Pace/km', color: '#8899aa' },
+            },
+          },
+          plugins: {
+            ...chartDefaults.plugins,
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const p = paceData[ctx.dataIndex];
+                  return `${p.date}: ${formatPace(p.pace)} · ${p.dist}km`;
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // HR Trend
+      const hrData = paceData.filter((p) => p.hr > 0);
+      new Chart(document.getElementById('hrChart'), {
+        type: 'line',
+        data: {
+          labels: hrData.map((p) => p.date),
+          datasets: [{
+            data: hrData.map((p) => p.hr),
+            borderColor: '#ff6348',
+            backgroundColor: 'rgba(255,99,72,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 2,
+          }],
+        },
+        options: {
+          ...chartDefaults,
+          scales: {
+            x: { ...chartDefaults.scales.x, type: 'category' },
+            y: {
+              ...chartDefaults.scales.y,
+              title: { display: true, text: 'Avg HR (bpm)', color: '#8899aa' },
+            },
+          },
+        },
+      });
+    }
+
+    initCharts();
+  </script>
+</BaseLayout>

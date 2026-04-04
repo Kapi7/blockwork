@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Badge from '../../components/ui/Badge.astro';
+import { getBlocks } from '../../lib/data';
+import { formatDate } from '../../lib/format';
+import { PHASE_COLORS, TYPE_COLORS } from '../../lib/types';
+
+const blocks = getBlocks();
+---
+
+<BaseLayout title="Training Blocks" active="blocks">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-1">Training Blocks</h1>
+    <p class="text-text-secondary text-sm">2-3 week training blocks with clear stimulus and exit criteria</p>
+  </div>
+
+  <div class="space-y-4">
+    {blocks.map((block) => {
+      const phaseColor = PHASE_COLORS[block.phase] || '#747d8c';
+      const completedSessions = block.sessions.filter((s) => s.actual).length;
+      const totalSessions = block.sessions.length;
+
+      return (
+        <a href={`/blocks/${block.id}`} class="block card-hover">
+          <div
+            class="rounded-xl bg-bg-card border border-border-subtle p-5 flex flex-col sm:flex-row sm:items-center gap-4"
+            style={`border-left: 4px solid ${phaseColor};`}
+          >
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2">
+                <Badge color={phaseColor} text={block.phase} size="md" />
+                <span class="text-xs text-text-muted">Block {block.number}</span>
+                {block.status === 'active' && (
+                  <span class="flex items-center gap-1 text-xs text-accent">
+                    <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+                    Active
+                  </span>
+                )}
+                {block.status === 'completed' && (
+                  <span class="text-xs text-type-easy">Completed</span>
+                )}
+              </div>
+              <h2 class="text-lg font-semibold">{block.name}</h2>
+              <p class="text-sm text-text-secondary mt-1">{block.stimulus}</p>
+              <div class="flex items-center gap-4 mt-2 text-xs text-text-muted">
+                <span>{formatDate(block.startDate)} — {formatDate(block.endDate)}</span>
+                <span>Run: {block.runVolume}</span>
+                <span>Bike: {block.bikeVolume}</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col items-end gap-2">
+              <div class="text-right">
+                <div class="text-sm font-mono text-text-secondary">
+                  {completedSessions}/{totalSessions}
+                </div>
+                <div class="text-xs text-text-muted">sessions</div>
+              </div>
+              <div class="w-24 h-1.5 bg-bg-main rounded-full overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all"
+                  style={`width: ${totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0}%; background: ${phaseColor};`}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </a>
+      );
+    })}
+  </div>
+
+  {blocks.length === 0 && (
+    <div class="text-center py-12 text-text-secondary">
+      <p class="text-lg mb-2">No blocks yet</p>
+      <p class="text-sm">Blocks will be added as training progresses.</p>
+    </div>
+  )}
+</BaseLayout>

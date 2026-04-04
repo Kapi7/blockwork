@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg-main: #0f0f17;
+  --color-bg-card: #1a1a2e;
+  --color-bg-card-hover: #22223a;
+  --color-accent: #00d4aa;
+  --color-accent-dim: #00b894;
+
+  --color-type-key: #ff4757;
+  --color-type-threshold: #ff6348;
+  --color-type-steady: #ffa502;
+  --color-type-easy: #2ed573;
+  --color-type-recovery: #70a1ff;
+  --color-type-race: #eccc68;
+  --color-type-rest: #747d8c;
+  --color-type-bike: #45aaf2;
+
+  --color-phase-recovery: #70a1ff;
+  --color-phase-base: #2ed573;
+  --color-phase-speed: #ff4757;
+  --color-phase-taper: #ffa502;
+  --color-phase-race: #eccc68;
+
+  --color-text-primary: #e8e8f0;
+  --color-text-secondary: #8899aa;
+  --color-text-muted: #556677;
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-main); }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+.card-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

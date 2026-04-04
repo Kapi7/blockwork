@@ -1,0 +1,15 @@
+{
+  "currentPhase": "recovery",
+  "currentBlockId": "block-0-recovery",
+  "athleteName": "Itay Kapiloto",
+  "goals": [
+    { "priority": 1, "goal": "Fix the 5K", "target": "~17:00", "timeline": "June/July 2026" },
+    { "priority": 2, "goal": "Fix the 10K", "target": "Sub-36:00", "timeline": "September/October 2026" },
+    { "priority": 3, "goal": "Rebuild from strength", "target": "-", "timeline": "Ongoing" }
+  ],
+  "targetRaces": [
+    { "date": "TBD", "race": "5K race", "goal": "~17:00", "role": "A-race (speed block)" },
+    { "date": "TBD", "race": "10K race", "goal": "Sub-36:00", "role": "A-race (10K block)" }
+  ],
+  "lastUpdated": "2026-04-04"
+}

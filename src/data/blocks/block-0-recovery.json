@@ -1,0 +1,41 @@
+{
+  "id": "block-0-recovery",
+  "name": "Post-Marathon Recovery",
+  "number": 0,
+  "phase": "recovery",
+  "startDate": "2026-03-23",
+  "endDate": "2026-04-13",
+  "stimulus": "Physical and mental recovery from Limassol Marathon blow-up (3:02 vs 2:48 target)",
+  "goals": [
+    "Keep running volume under 25km/week",
+    "Use cycling for aerobic maintenance (3-5hrs/week)",
+    "Mental reset — no pace targets, no structure",
+    "Let body fully absorb marathon training load"
+  ],
+  "successMetrics": [
+    { "metric": "Running volume", "target": "< 25km/week", "actual": null, "hit": null },
+    { "metric": "Easy run HR", "target": "< 140bpm at 5:30+ pace", "actual": null, "hit": null },
+    { "metric": "No injuries/niggles", "target": "Clean bill", "actual": null, "hit": null },
+    { "metric": "Cycling volume", "target": "3-5hrs/week", "actual": null, "hit": null }
+  ],
+  "sessions": [
+    { "date": "2026-03-24", "type": "easy", "planned": { "desc": "Easy shakeout", "distance": 5, "pace": "5:30+/km", "notes": "HR < 140. Just move." }, "actual": null, "feedback": null },
+    { "date": "2026-03-26", "type": "bike", "planned": { "desc": "Easy ride", "distance": 0, "pace": "60-90min Z2", "notes": "Zwift or outdoor. Keep it conversational." }, "actual": null, "feedback": null },
+    { "date": "2026-03-28", "type": "easy", "planned": { "desc": "Easy run", "distance": 6, "pace": "5:20+/km", "notes": "If legs feel heavy, cut to 4km." }, "actual": null, "feedback": null },
+    { "date": "2026-03-30", "type": "bike", "planned": { "desc": "Long easy ride", "distance": 0, "pace": "90-120min Z1-Z2", "notes": "Aerobic maintenance without impact." }, "actual": null, "feedback": null },
+    { "date": "2026-03-31", "type": "easy", "planned": { "desc": "Easy run", "distance": 5, "pace": "5:30+/km", "notes": "" }, "actual": null, "feedback": null },
+    { "date": "2026-04-02", "type": "bike", "planned": { "desc": "Easy ride", "distance": 0, "pace": "60min Z2", "notes": "" }, "actual": null, "feedback": null },
+    { "date": "2026-04-03", "type": "easy", "planned": { "desc": "Easy run + strides", "distance": 6, "pace": "5:15/km + 4x100m", "notes": "First strides post-marathon. Short, relaxed." }, "actual": null, "feedback": null },
+    { "date": "2026-04-05", "type": "bike", "planned": { "desc": "Long easy ride", "distance": 0, "pace": "90-120min Z1-Z2", "notes": "" }, "actual": null, "feedback": null },
+    { "date": "2026-04-06", "type": "easy", "planned": { "desc": "Easy run", "distance": 7, "pace": "5:15/km", "notes": "Slight bump in distance if feeling good." }, "actual": null, "feedback": null },
+    { "date": "2026-04-08", "type": "easy", "planned": { "desc": "Easy run", "distance": 6, "pace": "5:15/km", "notes": "" }, "actual": null, "feedback": null },
+    { "date": "2026-04-09", "type": "bike", "planned": { "desc": "Easy ride", "distance": 0, "pace": "60min Z2", "notes": "" }, "actual": null, "feedback": null },
+    { "date": "2026-04-11", "type": "easy", "planned": { "desc": "Easy run + strides", "distance": 7, "pace": "5:10/km + 4x100m", "notes": "Building toward base block." }, "actual": null, "feedback": null },
+    { "date": "2026-04-12", "type": "bike", "planned": { "desc": "Moderate ride", "distance": 0, "pace": "90min Z2-Z3", "notes": "Can push a bit if legs are ready." }, "actual": null, "feedback": null },
+    { "date": "2026-04-13", "type": "rest", "planned": { "desc": "Rest / Block review", "distance": 0, "pace": "", "notes": "Assess readiness for base/strength block." }, "actual": null, "feedback": null }
+  ],
+  "status": "active",
+  "summary": null,
+  "runVolume": "~20-25km/week",
+  "bikeVolume": "3-5hrs/week"
+}

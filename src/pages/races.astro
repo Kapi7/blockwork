@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Badge from '../components/ui/Badge.astro';
+import StatCard from '../components/ui/StatCard.astro';
+import { getRaces, getPBs } from '../lib/data';
+import { formatPace, formatTime, formatDate, formatDistance } from '../lib/format';
+
+const races = getRaces();
+const pbs = getPBs();
+
+const categoryColors: Record<string, string> = {
+  marathon: '#ff4757',
+  half: '#ff6348',
+  '10k': '#ffa502',
+  '5k': '#2ed573',
+  other: '#747d8c',
+};
+
+const categoryLabels: Record<string, string> = {
+  marathon: 'Marathon',
+  half: 'Half Marathon',
+  '10k': '10K',
+  '5k': '5K',
+  other: 'Other',
+};
+---
+
+<BaseLayout title="Races" active="races">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-1">Race Results</h1>
+    <p class="text-text-secondary text-sm">{races.length} races detected from activity data</p>
+  </div>
+
+  <!-- PB Cards -->
+  <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+    {['5k', '10k', 'half', 'marathon'].map((cat) => {
+      const pb = pbs[cat];
+      const color = categoryColors[cat];
+      return (
+        <div class="rounded-xl bg-bg-card border border-border-subtle p-4" style={`border-top: 3px solid ${color};`}>
+          <p class="text-xs font-medium uppercase tracking-wider text-text-muted mb-1">{categoryLabels[cat]} PB</p>
+          {pb ? (
+            <>
+              <p class="text-xl font-bold font-mono" style={`color: ${color};`}>{formatTime(pb.time)}</p>
+              <p class="text-xs text-text-secondary mt-1">
+                {formatPace(pb.pace)} · {formatDate(pb.date)}
+              </p>
+            </>
+          ) : (
+            <p class="text-sm text-text-muted">No data</p>
+          )}
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Race Table -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-text-muted text-xs uppercase tracking-wider">
+            <th class="pb-3 pr-4">Date</th>
+            <th class="pb-3 pr-4">Race</th>
+            <th class="pb-3 pr-4">Category</th>
+            <th class="pb-3 pr-4 text-right">Distance</th>
+            <th class="pb-3 pr-4 text-right">Time</th>
+            <th class="pb-3 pr-4 text-right">Pace</th>
+            <th class="pb-3 pr-4 text-right">Avg HR</th>
+            <th class="pb-3 text-right">Max HR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {races.map((r) => {
+            const color = categoryColors[r.category] || '#747d8c';
+            const isPB = pbs[r.category]?.date === r.date && pbs[r.category]?.time === r.time;
+            return (
+              <tr class:list={['border-t border-border-subtle', isPB && 'bg-accent/5']}>
+                <td class="py-2.5 pr-4 text-text-secondary">{formatDate(r.date)}</td>
+                <td class="py-2.5 pr-4 max-w-[200px] truncate">
+                  {r.name}
+                  {isPB && <span class="ml-1 text-accent text-xs font-bold">PB</span>}
+                </td>
+                <td class="py-2.5 pr-4">
+                  <Badge color={color} text={categoryLabels[r.category] || r.category} />
+                </td>
+                <td class="py-2.5 pr-4 text-right font-mono">{formatDistance(r.dist)}km</td>
+                <td class="py-2.5 pr-4 text-right font-mono font-medium">{formatTime(r.time)}</td>
+                <td class="py-2.5 pr-4 text-right font-mono" style={`color: ${color};`}>{formatPace(r.pace)}</td>
+                <td class="py-2.5 pr-4 text-right font-mono text-text-secondary">{r.hr > 0 ? Math.round(r.hr) : '-'}</td>
+                <td class="py-2.5 text-right font-mono text-text-secondary">{r.maxHr > 0 ? Math.round(r.maxHr) : '-'}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</BaseLayout>

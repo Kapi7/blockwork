@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Feedback" active="feedback">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold mb-1">Session Feedback</h1>
+    <p class="text-text-secondary text-sm">Log how sessions felt. Export for coaching review.</p>
+  </div>
+
+  <div class="grid lg:grid-cols-2 gap-6">
+    <!-- Feedback Form -->
+    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="text-lg font-semibold mb-4">Log Session</h2>
+      <form id="feedbackForm" class="space-y-4">
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Date</label>
+          <input
+            type="date"
+            id="fbDate"
+            class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm text-text-secondary mb-2">RPE (1-10)</label>
+          <div class="flex items-center gap-2">
+            <input
+              type="range"
+              id="fbRpe"
+              min="1"
+              max="10"
+              value="5"
+              class="flex-1 accent-accent"
+            />
+            <span id="rpeValue" class="font-mono text-lg font-bold w-8 text-center text-accent">5</span>
+          </div>
+          <div class="flex justify-between text-xs text-text-muted mt-1">
+            <span>Easy</span><span>Moderate</span><span>Max</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm text-text-secondary mb-2">How did you feel?</label>
+          <div class="flex gap-2" id="feelingSelector">
+            {['great', 'good', 'ok', 'tired', 'bad'].map((f) => (
+              <button
+                type="button"
+                data-feeling={f}
+                class="flex-1 py-2 px-3 rounded-lg border border-border-subtle text-sm text-text-secondary hover:bg-bg-card-hover transition-colors feeling-btn"
+              >
+                {f === 'great' ? 'Great' : f === 'good' ? 'Good' : f === 'ok' ? 'OK' : f === 'tired' ? 'Tired' : 'Bad'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm text-text-secondary mb-1">Notes</label>
+          <textarea
+            id="fbNotes"
+            rows="3"
+            placeholder="How did the session go? Anything notable?"
+            class="w-full bg-bg-main border border-border-subtle rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent focus:outline-none resize-none"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-2.5 rounded-lg bg-accent text-bg-main font-semibold text-sm hover:bg-accent-dim transition-colors"
+        >
+          Save Feedback
+        </button>
+      </form>
+    </div>
+
+    <!-- Feedback History -->
+    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-semibold">History</h2>
+        <div class="flex gap-2">
+          <button
+            id="exportBtn"
+            class="px-3 py-1.5 rounded-lg border border-border-subtle text-xs text-text-secondary hover:text-accent hover:border-accent transition-colors"
+          >
+            Export JSON
+          </button>
+          <button
+            id="clearBtn"
+            class="px-3 py-1.5 rounded-lg border border-border-subtle text-xs text-text-secondary hover:text-type-key hover:border-type-key transition-colors"
+          >
+            Clear All
+          </button>
+        </div>
+      </div>
+      <div id="feedbackList" class="space-y-2">
+        <p class="text-sm text-text-muted">No feedback logged yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'blockwork_feedback';
+
+    interface Feedback {
+      date: string;
+      rpe: number;
+      feeling: string;
+      notes: string;
+      timestamp: string;
+    }
+
+    function getAll(): Feedback[] {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function save(fb: Feedback) {
+      const all = getAll();
+      const idx = all.findIndex((f) => f.date === fb.date);
+      if (idx >= 0) all[idx] = fb; else all.push(fb);
+      all.sort((a, b) => b.date.localeCompare(a.date));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+    }
+
+    function escapeHtml(str: string): string {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.textContent || '';
+    }
+
+    function rpeColor(rpe: number): string {
+      if (rpe <= 3) return '#2ed573';
+      if (rpe <= 5) return '#7bed9f';
+      if (rpe <= 7) return '#ffa502';
+      if (rpe <= 8) return '#ff6348';
+      return '#ff4757';
+    }
+
+    function feelingColor(f: string): string {
+      return f === 'great' ? '#2ed573' : f === 'good' ? '#7bed9f' : f === 'ok' ? '#ffa502' : f === 'tired' ? '#ff6348' : '#ff4757';
+    }
+
+    function renderList() {
+      const list = document.getElementById('feedbackList')!;
+      const all = getAll();
+
+      // Clear existing children
+      while (list.firstChild) list.removeChild(list.firstChild);
+
+      if (all.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'text-sm text-text-muted';
+        p.textContent = 'No feedback logged yet.';
+        list.appendChild(p);
+        return;
+      }
+
+      all.forEach((f) => {
+        const card = document.createElement('div');
+        card.className = 'p-3 rounded-lg bg-bg-main/50 border border-border-subtle';
+
+        const header = document.createElement('div');
+        header.className = 'flex items-center justify-between mb-1';
+
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'text-sm font-mono text-text-secondary';
+        dateSpan.textContent = f.date;
+
+        const rightDiv = document.createElement('div');
+        rightDiv.className = 'flex items-center gap-2';
+
+        const rpeSpan = document.createElement('span');
+        rpeSpan.className = 'font-mono font-bold text-sm';
+        rpeSpan.style.color = rpeColor(f.rpe);
+        rpeSpan.textContent = `RPE ${f.rpe}`;
+
+        const feelSpan = document.createElement('span');
+        feelSpan.className = 'px-2 py-0.5 rounded-full text-xs border';
+        feelSpan.style.color = feelingColor(f.feeling);
+        feelSpan.style.borderColor = 'currentColor';
+        feelSpan.textContent = f.feeling;
+
+        rightDiv.appendChild(rpeSpan);
+        rightDiv.appendChild(feelSpan);
+        header.appendChild(dateSpan);
+        header.appendChild(rightDiv);
+        card.appendChild(header);
+
+        if (f.notes) {
+          const notesP = document.createElement('p');
+          notesP.className = 'text-xs text-text-secondary mt-1';
+          notesP.textContent = f.notes;
+          card.appendChild(notesP);
+        }
+
+        list.appendChild(card);
+      });
+    }
+
+    // Init
+    const dateInput = document.getElementById('fbDate') as HTMLInputElement;
+    dateInput.value = new Date().toISOString().slice(0, 10);
+
+    const rpeSlider = document.getElementById('fbRpe') as HTMLInputElement;
+    const rpeDisplay = document.getElementById('rpeValue')!;
+    rpeSlider.addEventListener('input', () => {
+      rpeDisplay.textContent = rpeSlider.value;
+      rpeDisplay.style.color = rpeColor(parseInt(rpeSlider.value));
+    });
+
+    let selectedFeeling = '';
+    document.querySelectorAll('.feeling-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.feeling-btn').forEach((b) => {
+          b.classList.remove('bg-accent/20', 'border-accent', 'text-accent');
+          b.classList.add('border-border-subtle', 'text-text-secondary');
+        });
+        btn.classList.add('bg-accent/20', 'border-accent', 'text-accent');
+        btn.classList.remove('border-border-subtle', 'text-text-secondary');
+        selectedFeeling = (btn as HTMLElement).dataset.feeling || '';
+      });
+    });
+
+    document.getElementById('feedbackForm')!.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fb: Feedback = {
+        date: dateInput.value,
+        rpe: parseInt(rpeSlider.value),
+        feeling: selectedFeeling || 'ok',
+        notes: (document.getElementById('fbNotes') as HTMLTextAreaElement).value,
+        timestamp: new Date().toISOString(),
+      };
+      save(fb);
+      renderList();
+      (document.getElementById('fbNotes') as HTMLTextAreaElement).value = '';
+    });
+
+    document.getElementById('exportBtn')!.addEventListener('click', () => {
+      const data = JSON.stringify(getAll(), null, 2);
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `blockwork-feedback-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('clearBtn')!.addEventListener('click', () => {
+      if (confirm('Clear all feedback? This cannot be undone.')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderList();
+      }
+    });
+
+    renderList();
+  </script>
+</BaseLayout>

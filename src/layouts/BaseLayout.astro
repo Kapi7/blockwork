@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  active?: string;
+}
+
+const { title, active = '' } = Astro.props;
+
+const nav = [
+  { href: '/', label: 'Dashboard', id: 'dashboard' },
+  { href: '/blocks', label: 'Blocks', id: 'blocks' },
+  { href: '/analytics', label: 'Analytics', id: 'analytics' },
+  { href: '/races', label: 'Races', id: 'races' },
+  { href: '/feedback', label: 'Feedback', id: 'feedback' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Blockwork</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen bg-bg-main">
+    <nav class="sticky top-0 z-50 border-b border-border-subtle bg-bg-main/95 backdrop-blur-sm">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="flex h-14 items-center justify-between">
+          <a href="/" class="flex items-center gap-2">
+            <span class="text-lg font-bold text-accent">BLOCKWORK</span>
+          </a>
+          <div class="flex items-center gap-1">
+            {nav.map((item) => (
+              <a
+                href={item.href}
+                class:list={[
+                  'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                  active === item.id
+                    ? 'bg-accent/15 text-accent'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-white/5',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+      <slot />
+    </main>
+  </body>
+</html>

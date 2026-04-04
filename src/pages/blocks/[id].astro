@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Badge from '../../components/ui/Badge.astro';
+import StatCard from '../../components/ui/StatCard.astro';
+import { getBlocks, getBlock, getRunsByDate } from '../../lib/data';
+import { formatPace, formatDate, formatDateFull, formatTime, formatDistance } from '../../lib/format';
+import { PHASE_COLORS, TYPE_COLORS } from '../../lib/types';
+
+export function getStaticPaths() {
+  const blocks = getBlocks();
+  return blocks.map((b) => ({ params: { id: b.id } }));
+}
+
+const { id } = Astro.params;
+const block = getBlock(id);
+if (!block) return Astro.redirect('/blocks');
+
+const phaseColor = PHASE_COLORS[block.phase] || '#747d8c';
+const runsByDate = getRunsByDate();
+
+// Match actual runs to planned sessions
+const sessionsWithActual = block.sessions.map((s) => ({
+  ...s,
+  actual: s.actual || runsByDate[s.date] || null,
+}));
+
+const completedCount = sessionsWithActual.filter((s) => s.actual).length;
+const totalDist = sessionsWithActual.reduce((sum, s) => sum + (s.actual?.dist || 0), 0);
+---
+
+<BaseLayout title={block.name} active="blocks">
+  <!-- Header -->
+  <div class="mb-6">
+    <a href="/blocks" class="text-sm text-text-secondary hover:text-accent transition-colors mb-2 inline-block">&larr; All Blocks</a>
+    <div class="flex items-center gap-3 mb-2">
+      <Badge color={phaseColor} text={block.phase} size="md" />
+      <span class="text-sm text-text-muted">Block {block.number}</span>
+      {block.status === 'active' && (
+        <span class="flex items-center gap-1 text-sm text-accent">
+          <span class="w-1.5 h-1.5 rounded-full bg-accent animate-pulse"></span>
+          Active
+        </span>
+      )}
+    </div>
+    <h1 class="text-2xl font-bold">{block.name}</h1>
+    <p class="text-text-secondary mt-1">{block.stimulus}</p>
+    <div class="flex items-center gap-4 mt-2 text-sm text-text-muted">
+      <span>{formatDateFull(block.startDate)} — {formatDateFull(block.endDate)}</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <StatCard label="Sessions" value={`${completedCount}/${block.sessions.length}`} color={phaseColor} />
+    <StatCard label="Run Volume" value={block.runVolume} />
+    <StatCard label="Bike Volume" value={block.bikeVolume} />
+    <StatCard label="Actual km" value={`${formatDistance(totalDist)}km`} />
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6 mb-6">
+    <!-- Goals -->
+    <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="font-semibold mb-3">Goals</h2>
+      <ul class="space-y-2">
+        {block.goals.map((g) => (
+          <li class="flex items-start gap-2 text-sm">
+            <span class="text-text-muted mt-0.5">&#9679;</span>
+            <span>{g}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Success Metrics -->
+    <div class="lg:col-span-2 rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="font-semibold mb-3">Success Metrics</h2>
+      <div class="space-y-2">
+        {block.successMetrics.map((m) => (
+          <div class="flex items-center justify-between p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
+            <div>
+              <span class="text-sm font-medium">{m.metric}</span>
+              <span class="text-xs text-text-muted ml-2">Target: {m.target}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              {m.actual && <span class="font-mono text-sm">{m.actual}</span>}
+              {m.hit === true && <span class="text-type-easy text-sm">&#10003;</span>}
+              {m.hit === false && <span class="text-type-key text-sm">&#10007;</span>}
+              {m.hit === null && <span class="text-text-muted text-xs">pending</span>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Sessions -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5">
+    <h2 class="font-semibold mb-4">Sessions</h2>
+    <div class="space-y-2">
+      {sessionsWithActual.map((s) => {
+        const typeColor = TYPE_COLORS[s.type] || '#747d8c';
+        const isToday = s.date === new Date().toISOString().slice(0, 10);
+        const isPast = s.date < new Date().toISOString().slice(0, 10);
+
+        return (
+          <div
+            class:list={[
+              'flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border',
+              isToday ? 'border-accent/30 bg-accent/5' : 'border-border-subtle bg-bg-main/30',
+            ]}
+          >
+            <div class="w-1 sm:h-12 rounded-full hidden sm:block" style={`background: ${typeColor};`}></div>
+
+            {/* Date & Type */}
+            <div class="sm:w-28 flex items-center gap-2">
+              <span class="text-sm font-mono text-text-secondary">{formatDate(s.date)}</span>
+              <Badge color={typeColor} text={s.type} />
+            </div>
+
+            {/* Planned */}
+            <div class="flex-1 min-w-0">
+              <span class="text-sm font-medium">{s.planned.desc}</span>
+              <div class="text-xs text-text-muted">
+                {s.planned.distance > 0 && `${s.planned.distance}km`}
+                {s.planned.pace && ` · ${s.planned.pace}`}
+                {s.planned.notes && ` · ${s.planned.notes}`}
+              </div>
+            </div>
+
+            {/* Actual */}
+            <div class="sm:w-48 text-right">
+              {s.actual ? (
+                <div>
+                  <span class="font-mono text-sm text-type-easy">{formatDistance(s.actual.dist)}km</span>
+                  <span class="font-mono text-xs text-text-secondary ml-2">{formatPace(s.actual.pace)}</span>
+                  {s.actual.hr > 0 && (
+                    <span class="text-xs text-text-muted ml-2">{Math.round(s.actual.hr)}bpm</span>
+                  )}
+                </div>
+              ) : isPast ? (
+                <span class="text-xs text-text-muted">—</span>
+              ) : (
+                <span class="text-xs text-text-muted">upcoming</span>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+
+  {/* Block Summary */}
+  {block.summary && (
+    <div class="mt-6 rounded-xl bg-bg-card border border-border-subtle p-5">
+      <h2 class="font-semibold mb-3">Block Summary</h2>
+      <p class="text-sm text-text-secondary">{block.summary}</p>
+    </div>
+  )}
+</BaseLayout>
