@@ -12,8 +12,10 @@ import coachContextData from '../data/coach-context.json';
 // Import blocks statically (no fs in Cloudflare Workers)
 import block0 from '../data/blocks/block-0-recovery.json';
 import block1 from '../data/blocks/block-1-base-strength.json';
+import block2 from '../data/blocks/block-2-speed1.json';
+import block3 from '../data/blocks/block-3-speed2.json';
 
-const ALL_BLOCKS = [block0, block1];
+const ALL_BLOCKS = [block0, block1, block2, block3];
 
 export function getRuns(): SlimRun[] {
   return runsData as SlimRun[];
@@ -132,7 +134,11 @@ export function getCalendarDays(weeksBack: number = 8): MatchedDay[] {
   const start = new Date(today);
   start.setDate(start.getDate() - (weeksBack * 7) - start.getDay() + 1); // Start on Monday
   const end = new Date(today);
-  end.setDate(end.getDate() + (4 * 7)); // 4 weeks ahead
+  // Extend forward to cover all blocks
+  const allBlockEndDates = blocks.map(b => new Date(b.endDate + 'T00:00:00').getTime());
+  const latestBlock = allBlockEndDates.length > 0 ? new Date(Math.max(...allBlockEndDates)) : new Date(today);
+  const weeksAhead = Math.max(4, Math.ceil((latestBlock.getTime() - today.getTime()) / (7 * 86400000)) + 1);
+  end.setDate(end.getDate() + (weeksAhead * 7));
 
   const days: MatchedDay[] = [];
   const current = new Date(start);

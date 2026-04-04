@@ -1,0 +1,51 @@
+{
+  "id": "block-2-speed1",
+  "name": "Hunt the 5K",
+  "number": 2,
+  "phase": "speed",
+  "startDate": "2026-05-05",
+  "endDate": "2026-05-25",
+  "stimulus": "5K-specific speed. Track intervals at race pace. Zwift races for bike intensity. Long run maintains endurance. Target: sub 17:30.",
+  "goals": [
+    "5K pace reps at 3:28-3:32 feeling controlled",
+    "Track: 400m in 80-82sec, 800m in 2:44-2:48",
+    "Tempo at 3:55-4:05 for 3km continuous",
+    "Maintain 18-20km long run",
+    "Parkrun or time trial at end of block"
+  ],
+  "successMetrics": [
+    { "metric": "1km reps @ 5K pace", "target": "3:28-3:32 with HR < 178", "actual": null, "hit": null },
+    { "metric": "400m reps", "target": "80-82sec feeling smooth", "actual": null, "hit": null },
+    { "metric": "Tempo", "target": "3km @ 3:58-4:05 controlled", "actual": null, "hit": null },
+    { "metric": "5K time trial", "target": "< 17:45 (progress check)", "actual": null, "hit": null }
+  ],
+  "sessions": [
+    { "date": "2026-05-05", "type": "easy", "planned": { "desc": "AM: Easy run 8km + 6x100m strides\nPM: Strength 40min\nExplosive: jump squats 3x5, bounding 3x6\nCore + hip stability", "distance": 8, "pace": "5:05/km", "notes": "Speed block starts. Strides should feel FAST." } },
+    { "date": "2026-05-06", "type": "key", "planned": { "desc": "TRACK — 5K pace reps\nWU: 2km + drills + 3x100m\nMAIN: 5x1km @ 3:28-3:32\n(90sec jog recovery)\nCD: 2km easy", "distance": 11, "pace": "3:28-3:32/km", "notes": "THE session. This is your race pace. Smooth, relaxed, fast." } },
+    { "date": "2026-05-07", "type": "easy", "planned": { "desc": "Recovery run 7km\nSuper easy, shake out the track", "distance": 7, "pace": "5:20/km", "notes": "" } },
+    { "date": "2026-05-08", "type": "bike", "planned": { "desc": "Zwift race — B or A category\nWU: 15min\nRACE: 30-45min FULL GAS\nCD: 10min spin", "distance": 0, "pace": "Race pace", "notes": "Race hard on the bike. This is your Thursday intensity — no running needed." } },
+    { "date": "2026-05-09", "type": "easy", "planned": { "desc": "AM: Easy run 7km\nPM: Mobility 20min", "distance": 7, "pace": "5:15/km", "notes": "Pre-long run day. Easy." } },
+    { "date": "2026-05-10", "type": "steady", "planned": { "desc": "Long run 18km\nkm 1-12 @ 5:00\nkm 13-15 @ 4:40\nkm 16-18 @ 4:20-4:30\nNegative split — finish flying", "distance": 18, "pace": "5:00 → 4:20", "notes": "Long run with fast finish. The last 3km should feel like you're racing." } },
+    { "date": "2026-05-11", "type": "bike", "planned": { "desc": "Long ride 2.5-3hrs\nOutdoor — easy Z2\nOr Zwift social ride\nJust spin. Recovery from long run.", "distance": 0, "pace": "2.5-3hrs Z2", "notes": "Easy legs. No pushing. Enjoy." } },
+
+    { "date": "2026-05-12", "type": "easy", "planned": { "desc": "AM: Easy run 8km + 6x strides\nPM: Strength 40min\nPlyometrics: depth jumps, bounds\nCore + ankle strength", "distance": 8, "pace": "5:05/km", "notes": "" } },
+    { "date": "2026-05-13", "type": "key", "planned": { "desc": "TRACK — 800m reps\nWU: 2km + drills\nMAIN: 6x800m @ 2:44-2:48\n(400m jog recovery — 2min)\nCD: 2km easy", "distance": 11, "pace": "800m @ 2:44-2:48", "notes": "Faster than race pace. Builds VO2max. Should be hard but not dying." } },
+    { "date": "2026-05-14", "type": "easy", "planned": { "desc": "Recovery run 7km\nOR recovery spin 45min\n(pick what your body needs)", "distance": 7, "pace": "5:20/km", "notes": "Listen to your legs. If they're heavy, ride instead." } },
+    { "date": "2026-05-15", "type": "key", "planned": { "desc": "Tempo + speed\nWU: 2km easy\nMAIN SET 1: 3km tempo @ 3:58-4:05\n(3min jog)\nMAIN SET 2: 4x400m @ 78-80sec\n(200m jog)\nCD: 2km easy", "distance": 13, "pace": "Mixed", "notes": "Combo session: tempo for endurance, 400s for turnover. This is a hard day." } },
+    { "date": "2026-05-16", "type": "bike", "planned": { "desc": "Recovery spin\n60min Z1\nFlat, easy, spin out the legs", "distance": 0, "pace": "60min Z1", "notes": "You did 2 hard days in 3. Rest the running legs." } },
+    { "date": "2026-05-17", "type": "steady", "planned": { "desc": "Long run 20km\nkm 1-14 @ 5:00\nkm 15-17 @ 4:35-4:40\nkm 18-20 @ 4:15-4:25\nPACKING FOR 10K", "distance": 20, "pace": "5:00 → 4:15", "notes": "Building toward 10K strength. Last 6km is the workout." } },
+    { "date": "2026-05-18", "type": "bike", "planned": { "desc": "Endurance ride 2-2.5hrs\nOutdoor or Zwift\nZ2 with 3x5min Z3 surges", "distance": 0, "pace": "2-2.5hrs Z2-Z3", "notes": "Not flat easy — include some effort. Building bike fitness." } },
+
+    { "date": "2026-05-19", "type": "easy", "planned": { "desc": "Easy run 7km\nAbsorb week — back off", "distance": 7, "pace": "5:15/km", "notes": "Recovery week. Let the speed soak in." } },
+    { "date": "2026-05-20", "type": "key", "planned": { "desc": "TRACK — sharpener\nWU: 2km + drills\nMAIN: 3x1km @ 3:25-3:30\n(2min jog)\n+ 2x400m @ 76-78sec\n(200m jog)\nCD: 2km easy", "distance": 10, "pace": "3:25-3:30/km + fast 400s", "notes": "FASTER than race pace. Short reps. Feel the speed. Don't chase, just flow." } },
+    { "date": "2026-05-21", "type": "easy", "planned": { "desc": "Easy run 6km", "distance": 6, "pace": "5:20/km", "notes": "Short and easy." } },
+    { "date": "2026-05-22", "type": "bike", "planned": { "desc": "Zwift — easy group ride\n60min Z2\nNo racing this week", "distance": 0, "pace": "60min Z2", "notes": "Absorb week. Easy bike." } },
+    { "date": "2026-05-23", "type": "easy", "planned": { "desc": "Pre-race shakeout\n4km easy + 4x100m strides\n+ 2x200m at 5K pace", "distance": 4, "pace": "Easy + strides", "notes": "Tomorrow you race. Feel sharp. Sleep well." } },
+    { "date": "2026-05-24", "type": "race", "planned": { "desc": "5K TIME TRIAL or PARKRUN\nWU: 2km easy + 4x100m\nRACE: 5km — target 17:30\nPlan: 3:28-3:30 per km\nDon't go out in 3:20!\nCD: 2km easy", "distance": 9, "pace": "3:28-3:30/km", "notes": "First test. Even splits. If you're under 17:30, we're on track." } },
+    { "date": "2026-05-25", "type": "bike", "planned": { "desc": "Recovery spin\n60min Z1\nCelebrate or regroup", "distance": 0, "pace": "60min Z1", "notes": "Speed 1 done. How did the 5K feel? Report back." } }
+  ],
+  "status": "upcoming",
+  "summary": null,
+  "runVolume": "50-60km/week",
+  "bikeVolume": "5-7hrs/week"
+}
