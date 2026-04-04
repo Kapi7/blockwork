@@ -75,33 +75,43 @@ export function getActivitiesByDate(): Record<string, SlimRun[]> {
   return byDate;
 }
 
+/** Map session type to expected sport categories */
+const SESSION_SPORT_MAP: Record<string, string[]> = {
+  key: ['run'], easy: ['run'], steady: ['run'], recovery: ['run'],
+  threshold: ['run'], race: ['run'],
+  bike: ['bike'],
+  yoga: ['yoga'], strength: ['strength'],
+  rest: [],
+};
+
 /** Match a planned session to the best activity from a list */
 function matchActivity(session: Session, activities: SlimRun[]): SlimRun | null {
   if (!activities || activities.length === 0) return null;
 
-  const isBikeSession = session.type === 'bike';
+  const expectedSports = SESSION_SPORT_MAP[session.type] || ['run'];
+  if (expectedSports.length === 0) return null; // rest day
 
-  // Filter by activity type
-  const candidates = activities.filter((a) => {
-    if (isBikeSession) return a.type === 'Ride' || a.type === 'VirtualRide';
-    return a.type === 'Run' || a.type === 'VirtualRun';
-  });
+  // Filter by expected sport category
+  const candidates = activities.filter((a) => expectedSports.includes(a.sport || 'other'));
 
-  if (candidates.length === 0) return null;
-  if (candidates.length === 1) return candidates[0];
+  // Fallback: if no match by sport, try all activities
+  const pool = candidates.length > 0 ? candidates : activities;
+
+  if (pool.length === 0) return null;
+  if (pool.length === 1) return pool[0];
 
   // If planned has distance, pick closest match
   if (session.planned.distance > 0) {
-    candidates.sort((a, b) => {
+    pool.sort((a, b) => {
       const diffA = Math.abs(a.dist - session.planned.distance);
       const diffB = Math.abs(b.dist - session.planned.distance);
       return diffA - diffB;
     });
-    return candidates[0];
+    return pool[0];
   }
 
-  // No planned distance (rest/bike) — take longest
-  return candidates.reduce((best, r) => (r.dist > best.dist ? r : best), candidates[0]);
+  // No planned distance — take longest
+  return pool.reduce((best, r) => (r.dist > best.dist ? r : best), pool[0]);
 }
 
 /** Build a calendar of matched days across all blocks */

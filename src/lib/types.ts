@@ -23,8 +23,29 @@ export interface SlimRun {
   hr: number;
   maxHr: number;
   elev: number;
-  type: string; // 'Run' | 'Ride' | 'VirtualRide'
+  type: string; // Strava sport_type: 'Run', 'Ride', 'Yoga', etc.
+  sport: string; // category: 'run', 'bike', 'swim', 'yoga', 'strength', 'hike', 'other'
 }
+
+export const SPORT_COLORS: Record<string, string> = {
+  run: '#2ed573',
+  bike: '#45aaf2',
+  swim: '#00d4aa',
+  yoga: '#a55eea',
+  strength: '#ff6348',
+  hike: '#ffa502',
+  other: '#747d8c',
+};
+
+export const SPORT_ICONS: Record<string, string> = {
+  run: '\u{1F3C3}',
+  bike: '\u{1F6B4}',
+  swim: '\u{1F3CA}',
+  yoga: '\u{1F9D8}',
+  strength: '\u{1F4AA}',
+  hike: '\u{26F0}',
+  other: '\u{2B50}',
+};
 
 export interface MatchedDay {
   date: string;

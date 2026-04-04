@@ -30,15 +30,29 @@ interface SlimRun {
   maxHr: number;
   elev: number;
   type: string;
+  sport: string;
+}
+
+function sportCategory(sportType: string): string {
+  const map: Record<string, string> = {
+    Run: 'run', VirtualRun: 'run', TrailRun: 'run',
+    Ride: 'bike', VirtualRide: 'bike', EBikeRide: 'bike', MountainBikeRide: 'bike', GravelRide: 'bike',
+    Swim: 'swim',
+    Yoga: 'yoga', Pilates: 'yoga',
+    WeightTraining: 'strength', Crossfit: 'strength', Workout: 'strength',
+    Hike: 'hike', Walk: 'hike',
+    Rowing: 'other', Elliptical: 'other', StairStepper: 'other',
+  };
+  return map[sportType] || 'other';
 }
 
 function slimRuns(raw: RawRun[]): SlimRun[] {
-  const validTypes = ['Run', 'VirtualRun', 'Ride', 'VirtualRide'];
   return raw
-    .filter((r) => validTypes.includes(r.type) || validTypes.includes(r.sport_type))
+    .filter((r) => r.distance > 0 || r.moving_time > 60) // keep anything with distance or > 1min
     .map((r) => {
       const distKm = r.distance / 1000;
       const pace = distKm > 0 ? r.moving_time / distKm : 0;
+      const sport = r.sport_type || r.type;
       return {
         id: r.id,
         name: r.name,
@@ -49,7 +63,8 @@ function slimRuns(raw: RawRun[]): SlimRun[] {
         hr: r.average_heartrate || 0,
         maxHr: r.max_heartrate || 0,
         elev: r.total_elevation_gain || 0,
-        type: r.sport_type || r.type,
+        type: sport,
+        sport: sportCategory(sport),
       };
     })
     .sort((a, b) => b.date.localeCompare(a.date));
@@ -84,7 +99,7 @@ function detectRaces(runs: SlimRun[]) {
 function computeWeeklyVolumes(runs: SlimRun[]) {
   const weeks: Record<string, { km: number; runs: number; paces: number[]; hrs: number[]; longRun: number }> = {};
   for (const r of runs) {
-    if (!r.date) continue;
+    if (!r.date || r.sport !== 'run') continue;
     const d = new Date(r.date);
     const iso = getISOWeek(d);
     if (!weeks[iso]) weeks[iso] = { km: 0, runs: 0, paces: [], hrs: [], longRun: 0 };
@@ -120,7 +135,7 @@ function computeFitness(runs: SlimRun[]) {
   const now = new Date();
   const last7: SlimRun[] = [];
   const last28: SlimRun[] = [];
-  for (const r of runs) {
+  for (const r of runs.filter((r) => r.sport === 'run')) {
     const d = new Date(r.date);
     const daysAgo = Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
     if (daysAgo <= 7) last7.push(r);

@@ -5,18 +5,83 @@ import { getWeeklyVolumes, getRuns } from '../lib/data';
 const volumes = getWeeklyVolumes();
 const runs = getRuns();
 
-// Pre-compute pace progression data (last 60 runs with 5km+)
-const paceData = runs
+// Only running activities for pace/HR charts
+const runOnly = runs.filter((r) => r.sport === 'run');
+const paceData = runOnly
   .filter((r) => r.dist >= 5)
-  .slice(0, 60)
+  .slice(0, 80)
   .reverse()
   .map((r) => ({ date: r.date, pace: r.pace, dist: r.dist, hr: r.hr }));
+
+// Activity type distribution
+const sportCounts: Record<string, number> = {};
+for (const r of runs) {
+  const s = r.sport || 'other';
+  sportCounts[s] = (sportCounts[s] || 0) + 1;
+}
+const sportDistribution = Object.entries(sportCounts).sort((a, b) => b[1] - a[1]);
+
+// Total stats
+const totalKm = Math.round(runOnly.reduce((s, r) => s + r.dist, 0));
+const totalRuns = runOnly.length;
+const totalActivities = runs.length;
 ---
 
 <BaseLayout title="Analytics" active="analytics">
   <div class="mb-6">
     <h1 class="text-2xl font-bold mb-1">Analytics</h1>
-    <p class="text-text-secondary text-sm">Training data from {runs.length} running activities</p>
+    <p class="text-text-secondary text-sm">{totalActivities} activities · {totalRuns} runs · {totalKm}km total</p>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+    <div class="rounded-lg bg-bg-card p-4 border border-border-subtle">
+      <p class="text-xs font-medium uppercase tracking-wider text-text-muted mb-1">Total Activities</p>
+      <p class="text-2xl font-bold font-mono text-accent">{totalActivities}</p>
+    </div>
+    <div class="rounded-lg bg-bg-card p-4 border border-border-subtle">
+      <p class="text-xs font-medium uppercase tracking-wider text-text-muted mb-1">Running km</p>
+      <p class="text-2xl font-bold font-mono">{totalKm}</p>
+    </div>
+    <div class="rounded-lg bg-bg-card p-4 border border-border-subtle">
+      <p class="text-xs font-medium uppercase tracking-wider text-text-muted mb-1">Activity Types</p>
+      <p class="text-2xl font-bold font-mono">{sportDistribution.length}</p>
+    </div>
+    <div class="rounded-lg bg-bg-card p-4 border border-border-subtle">
+      <p class="text-xs font-medium uppercase tracking-wider text-text-muted mb-1">Weeks Tracked</p>
+      <p class="text-2xl font-bold font-mono">{volumes.length}</p>
+    </div>
+  </div>
+
+  <!-- Activity Distribution -->
+  <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
+    <h2 class="text-lg font-semibold mb-4">Activity Distribution</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {sportDistribution.map(([sport, count]) => {
+        const colors = {
+          run: '#2ed573', bike: '#45aaf2', swim: '#00d4aa',
+          yoga: '#a55eea', strength: '#ff6348', hike: '#ffa502', other: '#747d8c',
+        } as any;
+        const icons = {
+          run: '\u{1F3C3}', bike: '\u{1F6B4}', swim: '\u{1F3CA}',
+          yoga: '\u{1F9D8}', strength: '\u{1F4AA}', hike: '\u26F0\uFE0F', other: '\u2B50',
+        } as any;
+        const pct = Math.round((count / totalActivities) * 100);
+        return (
+          <div class="p-3 rounded-lg bg-bg-main/50 border border-border-subtle">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-lg">{icons[sport] || '\u2B50'}</span>
+              <span class="text-sm font-medium capitalize">{sport}</span>
+            </div>
+            <div class="text-xl font-bold font-mono" style={`color: ${colors[sport] || '#747d8c'}`}>{count}</div>
+            <div class="w-full h-1 bg-bg-main rounded-full mt-1">
+              <div class="h-full rounded-full" style={`width: ${pct}%; background: ${colors[sport] || '#747d8c'}`}></div>
+            </div>
+            <div class="text-xs text-text-muted mt-0.5">{pct}%</div>
+          </div>
+        );
+      })}
+    </div>
   </div>
 
   <!-- Weekly Volume Chart -->
@@ -29,7 +94,7 @@ const paceData = runs
 
   <!-- Pace Progression Chart -->
   <div class="rounded-xl bg-bg-card border border-border-subtle p-5 mb-6">
-    <h2 class="text-lg font-semibold mb-4">Pace Progression</h2>
+    <h2 class="text-lg font-semibold mb-4">Pace Progression (runs 5km+)</h2>
     <div class="h-[300px]">
       <canvas id="paceChart"></canvas>
     </div>
@@ -43,125 +108,109 @@ const paceData = runs
     </div>
   </div>
 
-  <script define:vars={{ volumes, paceData }}>
+  <script is:inline id="chartData" type="application/json" set:html={JSON.stringify({ volumes, paceData })}></script>
+  <script is:inline>
     async function initCharts() {
-      const { Chart, registerables } = await import('https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.esm.js');
-      Chart.register(...registerables);
+      var chartDataEl = document.getElementById('chartData');
+      var chartJson = JSON.parse(chartDataEl ? chartDataEl.textContent : '{}');
+      var volumes = chartJson.volumes || [];
+      var paceData = chartJson.paceData || [];
 
-      const chartDefaults = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-        },
-        scales: {
-          x: {
-            ticks: { color: '#8899aa', font: { size: 10 } },
-            grid: { color: 'rgba(255,255,255,0.04)' },
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+      script.onload = () => {
+        const Chart = window.Chart;
+
+        const chartDefaults = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#8899aa', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+            y: { ticks: { color: '#8899aa', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
           },
-          y: {
-            ticks: { color: '#8899aa', font: { size: 10 } },
-            grid: { color: 'rgba(255,255,255,0.04)' },
+        };
+
+        function formatPace(sec) {
+          const m = Math.floor(sec / 60);
+          const s = Math.floor(sec % 60);
+          return m + ':' + s.toString().padStart(2, '0');
+        }
+
+        // Weekly Volume
+        new Chart(document.getElementById('volumeChart'), {
+          type: 'bar',
+          data: {
+            labels: volumes.map(function(v) { return v.week.replace(/\d{4}-W/, 'W'); }),
+            datasets: [{
+              data: volumes.map(function(v) { return v.km; }),
+              backgroundColor: volumes.map(function(v) { return v.km > 80 ? '#ff4757' : v.km > 60 ? '#ffa502' : v.km > 40 ? '#2ed573' : '#70a1ff'; }),
+              borderRadius: 4
+            }],
           },
-        },
+          options: Object.assign({}, chartDefaults, {
+            scales: Object.assign({}, chartDefaults.scales, {
+              y: Object.assign({}, chartDefaults.scales.y, { title: { display: true, text: 'km', color: '#8899aa' } })
+            })
+          }),
+        });
+
+        // Pace Progression
+        if (paceData.length > 0) {
+          new Chart(document.getElementById('paceChart'), {
+            type: 'scatter',
+            data: {
+              datasets: [{
+                data: paceData.map(function(p) { return { x: p.date, y: p.pace }; }),
+                backgroundColor: paceData.map(function(p) { return p.pace < 250 ? '#ff4757' : p.pace < 300 ? '#ffa502' : '#2ed573'; }),
+                pointRadius: paceData.map(function(p) { return Math.min(p.dist / 5, 6); }),
+              }],
+            },
+            options: Object.assign({}, chartDefaults, {
+              scales: {
+                x: Object.assign({}, chartDefaults.scales.x, { type: 'category' }),
+                y: Object.assign({}, chartDefaults.scales.y, {
+                  reverse: true,
+                  ticks: Object.assign({}, chartDefaults.scales.y.ticks, { callback: function(v) { return formatPace(v); } }),
+                  title: { display: true, text: 'Pace/km', color: '#8899aa' },
+                }),
+              },
+              plugins: Object.assign({}, chartDefaults.plugins, {
+                tooltip: {
+                  callbacks: { label: function(ctx) { var p = paceData[ctx.dataIndex]; return p.date + ': ' + formatPace(p.pace) + ' · ' + p.dist + 'km'; } }
+                }
+              }),
+            }),
+          });
+        }
+
+        // HR Trend
+        var hrData = paceData.filter(function(p) { return p.hr > 0; });
+        if (hrData.length > 0) {
+          new Chart(document.getElementById('hrChart'), {
+            type: 'line',
+            data: {
+              labels: hrData.map(function(p) { return p.date; }),
+              datasets: [{
+                data: hrData.map(function(p) { return p.hr; }),
+                borderColor: '#ff6348',
+                backgroundColor: 'rgba(255,99,72,0.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 2,
+              }],
+            },
+            options: Object.assign({}, chartDefaults, {
+              scales: {
+                x: Object.assign({}, chartDefaults.scales.x, { type: 'category' }),
+                y: Object.assign({}, chartDefaults.scales.y, { title: { display: true, text: 'Avg HR (bpm)', color: '#8899aa' } }),
+              },
+            }),
+          });
+        }
       };
-
-      // Weekly Volume
-      const volLabels = volumes.map((v) => v.week.replace(/\d{4}-W/, 'W'));
-      const volData = volumes.map((v) => v.km);
-      const volColors = volData.map((v) =>
-        v > 80 ? '#ff4757' : v > 60 ? '#ffa502' : v > 40 ? '#2ed573' : '#70a1ff'
-      );
-
-      new Chart(document.getElementById('volumeChart'), {
-        type: 'bar',
-        data: {
-          labels: volLabels,
-          datasets: [{ data: volData, backgroundColor: volColors, borderRadius: 4 }],
-        },
-        options: {
-          ...chartDefaults,
-          scales: {
-            ...chartDefaults.scales,
-            y: { ...chartDefaults.scales.y, title: { display: true, text: 'km', color: '#8899aa' } },
-          },
-        },
-      });
-
-      // Pace Progression
-      function formatPace(sec) {
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return `${m}:${s.toString().padStart(2, '0')}`;
-      }
-
-      new Chart(document.getElementById('paceChart'), {
-        type: 'scatter',
-        data: {
-          datasets: [{
-            data: paceData.map((p) => ({ x: p.date, y: p.pace })),
-            backgroundColor: paceData.map((p) =>
-              p.pace < 250 ? '#ff4757' : p.pace < 300 ? '#ffa502' : '#2ed573'
-            ),
-            pointRadius: paceData.map((p) => Math.min(p.dist / 5, 6)),
-          }],
-        },
-        options: {
-          ...chartDefaults,
-          scales: {
-            x: { ...chartDefaults.scales.x, type: 'category' },
-            y: {
-              ...chartDefaults.scales.y,
-              reverse: true,
-              ticks: {
-                ...chartDefaults.scales.y.ticks,
-                callback: (v) => formatPace(v),
-              },
-              title: { display: true, text: 'Pace/km', color: '#8899aa' },
-            },
-          },
-          plugins: {
-            ...chartDefaults.plugins,
-            tooltip: {
-              callbacks: {
-                label: (ctx) => {
-                  const p = paceData[ctx.dataIndex];
-                  return `${p.date}: ${formatPace(p.pace)} · ${p.dist}km`;
-                },
-              },
-            },
-          },
-        },
-      });
-
-      // HR Trend
-      const hrData = paceData.filter((p) => p.hr > 0);
-      new Chart(document.getElementById('hrChart'), {
-        type: 'line',
-        data: {
-          labels: hrData.map((p) => p.date),
-          datasets: [{
-            data: hrData.map((p) => p.hr),
-            borderColor: '#ff6348',
-            backgroundColor: 'rgba(255,99,72,0.1)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 2,
-          }],
-        },
-        options: {
-          ...chartDefaults,
-          scales: {
-            x: { ...chartDefaults.scales.x, type: 'category' },
-            y: {
-              ...chartDefaults.scales.y,
-              title: { display: true, text: 'Avg HR (bpm)', color: '#8899aa' },
-            },
-          },
-        },
-      });
+      document.head.appendChild(script);
     }
-
     initCharts();
   </script>
 </BaseLayout>
