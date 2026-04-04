@@ -145,6 +145,16 @@ const meta = getMeta();
 
       localStorage.setItem('blockwork_preferences', JSON.stringify(prefs));
 
+      // Also save to D1 via API
+      var user = JSON.parse(localStorage.getItem('blockwork_user') || '{}');
+      if (user.email) {
+        fetch('/api/preferences', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user.email, preferences: prefs }),
+        }).catch(function() {});
+      }
+
       var btn = document.getElementById('saveBtn');
       btn.textContent = 'Saved!';
       btn.style.background = '#0be881';
