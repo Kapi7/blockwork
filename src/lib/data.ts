@@ -12,9 +12,8 @@ import coachContextData from '../data/coach-context.json';
 // Import blocks statically (no fs in Cloudflare Workers)
 import block0 from '../data/blocks/block-0-recovery.json';
 import block1 from '../data/blocks/block-1-base-strength.json';
-import block2 from '../data/blocks/block-2-speed.json';
 
-const ALL_BLOCKS = [block0, block1, block2];
+const ALL_BLOCKS = [block0, block1];
 
 export function getRuns(): SlimRun[] {
   return runsData as SlimRun[];
