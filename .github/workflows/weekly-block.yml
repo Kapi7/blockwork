@@ -1,0 +1,41 @@
+name: Weekly Block Builder
+
+on:
+  schedule:
+    - cron: '0 5 * * 0'
+  workflow_dispatch:
+
+jobs:
+  build-block:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Read preferences and generate block
+        env:
+          BLOCKWORK_URL: https://blockwork-91h.pages.dev
+          ATHLETE_EMAIL: kapoosha@gmail.com
+        run: npx tsx scripts/build-blocks.ts
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "Coach K Bot"
+          git config user.email "actions@github.com"
+          git add src/data/blocks/
+          if git diff --staged --quiet; then
+            echo "No block changes"
+          else
+            WEEK_DATE="$(date +%Y-%m-%d)"
+            git commit -m "chore: generate training block for week of ${WEEK_DATE}"
+            git push
+          fi
