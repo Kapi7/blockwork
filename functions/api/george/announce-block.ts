@@ -15,6 +15,7 @@ import {
   listWorkouts,
   createWorkout,
   createCalendarNote,
+  deleteWorkout,
 } from '../lib/tp-client';
 import { BLOCKS } from '../lib/training-plan';
 
@@ -33,6 +34,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const blockNum = parseInt(url.searchParams.get('block') || '1', 10);
   const force = url.searchParams.get('force') === '1';
+  const reset = url.searchParams.get('reset') === '1';
 
   try {
     const token = await getBearerToken(env.TP_AUTH_COOKIE);
@@ -40,6 +42,28 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     if (!block) return jsonError(`Block ${blockNum} not found`, 404);
     if (!block.sessions || block.sessions.length === 0) {
       return jsonError(`Block ${block.name} has no sessions defined`, 400);
+    }
+
+    // Reset: delete all PLANNED-ONLY (uncompleted, future) workouts in block range
+    // Safety: never deletes past or completed workouts.
+    const deletedIds: number[] = [];
+    if (reset) {
+      const todayIso = new Date().toISOString().slice(0, 10);
+      const existingForReset = await listWorkouts(token, ATHLETE_ID, block.startDate, block.endDate);
+      for (const w of existingForReset) {
+        const wDate = (w.workoutDay || '').slice(0, 10);
+        // only future dates, only with no actual data (planned-only)
+        const isFuture = wDate >= todayIso;
+        const hasActual = (w.distance || 0) > 0 || (w.totalTime || 0) > 0 || (w.tssActual || 0) > 0;
+        if (isFuture && !hasActual) {
+          try {
+            await deleteWorkout(token, ATHLETE_ID, w.workoutId);
+            deletedIds.push(w.workoutId);
+          } catch (e) {
+            // keep going; a best-effort reset
+          }
+        }
+      }
     }
 
     // Push all sessions (with dedup)
@@ -145,6 +169,7 @@ Reply on THIS note or on any specific workout.`;
         created: pushResults.filter((r) => r.status === 'created').length,
         skipped: pushResults.filter((r) => r.status === 'skipped').length,
         errors: pushResults.filter((r) => r.status === 'error').length,
+        deletedByReset: deletedIds.length,
       },
       pushResults,
       noteId: noteResult.id,
