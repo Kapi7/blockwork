@@ -97,22 +97,29 @@ function singleStep(
 }
 
 /**
- * Format a distance for display: km for ≥ 1000m, meters otherwise.
- * NOTE: The earlier 400 "Invalid workout structure" from `kilometer` was
- * likely caused by a primaryLengthMetric mismatch (was 'duration'). Now
- * that runStructure() auto-sets it to 'distance' when any active step uses
- * distance units, kilometer should be accepted. If TP still rejects it,
- * we fall back to meter (handled at the call site via a test).
+ * Distance length for a step. Always stored as `meter` — TP's UI renders
+ * the `kilometer` unit as "undefined" in the segment label. We show km to
+ * the athlete by encoding the distance into the step NAME (see distLabel).
  */
-function distLen(meters: number): { value: number; unit: 'meter' | 'kilometer' } {
-  if (meters >= 1000 && meters % 1 === 0 && (meters / 1000) % 0.1 < 0.01) {
-    // Use km when the value divides cleanly (e.g. 10000 → 10km, 1500 → 1.5km)
-    return { value: meters / 1000, unit: 'kilometer' };
-  }
+function distLen(meters: number): { value: number; unit: 'meter' } {
   return { value: meters, unit: 'meter' };
 }
 
-/** Single-step block by DISTANCE. Uses kilometer/meter automatically. */
+/**
+ * Human-readable distance label injected into step names:
+ *   ≥1000m → "1.5 km" / "6 km" (one decimal, trailing zero stripped)
+ *   <1000m → "400 m"
+ */
+function distLabel(meters: number): string {
+  if (meters >= 1000) {
+    const km = meters / 1000;
+    const str = km.toFixed(1).replace(/\.0$/, '');
+    return `${str} km`;
+  }
+  return `${meters} m`;
+}
+
+/** Single-step block by DISTANCE. Appends km/m label to the step name. */
 function distStep(
   name: string,
   meters: number,
@@ -125,7 +132,7 @@ function distStep(
     length: { value: 1, unit: 'repetition' },
     steps: [{
       type: 'step',
-      name,
+      name: `${name} ${distLabel(meters)}`,
       length: distLen(meters),
       targets: [{ minValue: minPct, maxValue: maxPct }],
       intensityClass,
@@ -136,7 +143,7 @@ function distStep(
 
 /**
  * Repeating distance-based interval set (e.g. 6x 400m hard + 200m jog).
- * Both phases use meter/kilometer as appropriate.
+ * Step names carry the km/m label since TP renders `kilometer` unit as undefined.
  */
 function repeatSetDist(
   reps: number,
@@ -149,7 +156,7 @@ function repeatSetDist(
     steps: [
       {
         type: 'step',
-        name: 'Hard',
+        name: `Hard ${distLabel(hardMeters)}`,
         length: distLen(hardMeters),
         targets: [{ minValue: hardMinPct, maxValue: hardMaxPct }],
         intensityClass: 'active',
@@ -157,7 +164,7 @@ function repeatSetDist(
       },
       {
         type: 'step',
-        name: 'Jog',
+        name: `Jog ${distLabel(restMeters)}`,
         length: distLen(restMeters),
         targets: [{ minValue: restMinPct, maxValue: restMaxPct }],
         intensityClass: 'rest',
