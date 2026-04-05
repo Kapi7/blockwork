@@ -53,6 +53,10 @@ export interface TpStructureGroup {
   type: 'step' | 'repetition';
   length: { value: number; unit: 'repetition' };
   steps: TpStructureStep[];
+  /** Cumulative start offset in meters (for distance-based) or seconds (duration). */
+  begin?: number;
+  /** Cumulative end offset in the same unit as begin. */
+  end?: number;
 }
 
 export interface TpWorkoutStructure {
@@ -61,6 +65,13 @@ export interface TpWorkoutStructure {
   primaryIntensityMetric: 'percentOfThresholdPace' | 'percentOfFtp' | 'percentOfThresholdHr';
   primaryIntensityTargetOrRange: 'target' | 'range';
   polyline?: Array<[number, number]>;
+  /**
+   * Display unit for distance labels in the TP UI. Without this, the segment
+   * bar shows "undefined" instead of km/m. Captured from TP library workouts
+   * (e.g. "Track Work 4x800m" uses "mile" for US users). Itay is metric →
+   * "kilometer". The `length.value` stays in meters regardless.
+   */
+  visualizationDistanceUnit?: 'kilometer' | 'mile';
 }
 
 // ────────────────────────────────────────────────────────────────────────
@@ -97,29 +108,15 @@ function singleStep(
 }
 
 /**
- * Distance length for a step. Always stored as `meter` — TP's UI renders
- * the `kilometer` unit as "undefined" in the segment label. We show km to
- * the athlete by encoding the distance into the step NAME (see distLabel).
+ * Distance length for a step. Always stored as `meter` with value in meters.
+ * TP renders the UI label using the structure-root `visualizationDistanceUnit`
+ * ("kilometer" for metric users), converting 1000 m → "1 km" automatically.
  */
 function distLen(meters: number): { value: number; unit: 'meter' } {
   return { value: meters, unit: 'meter' };
 }
 
-/**
- * Human-readable distance label injected into step names:
- *   ≥1000m → "1.5 km" / "6 km" (one decimal, trailing zero stripped)
- *   <1000m → "400 m"
- */
-function distLabel(meters: number): string {
-  if (meters >= 1000) {
-    const km = meters / 1000;
-    const str = km.toFixed(1).replace(/\.0$/, '');
-    return `${str} km`;
-  }
-  return `${meters} m`;
-}
-
-/** Single-step block by DISTANCE. Appends km/m label to the step name. */
+/** Single-step block by DISTANCE. */
 function distStep(
   name: string,
   meters: number,
@@ -132,7 +129,7 @@ function distStep(
     length: { value: 1, unit: 'repetition' },
     steps: [{
       type: 'step',
-      name: `${name} ${distLabel(meters)}`,
+      name,
       length: distLen(meters),
       targets: [{ minValue: minPct, maxValue: maxPct }],
       intensityClass,
@@ -143,7 +140,6 @@ function distStep(
 
 /**
  * Repeating distance-based interval set (e.g. 6x 400m hard + 200m jog).
- * Step names carry the km/m label since TP renders `kilometer` unit as undefined.
  */
 function repeatSetDist(
   reps: number,
@@ -156,7 +152,7 @@ function repeatSetDist(
     steps: [
       {
         type: 'step',
-        name: `Hard ${distLabel(hardMeters)}`,
+        name: 'Hard',
         length: distLen(hardMeters),
         targets: [{ minValue: hardMinPct, maxValue: hardMaxPct }],
         intensityClass: 'active',
@@ -164,7 +160,7 @@ function repeatSetDist(
       },
       {
         type: 'step',
-        name: `Jog ${distLabel(restMeters)}`,
+        name: 'Jog',
         length: distLen(restMeters),
         targets: [{ minValue: restMinPct, maxValue: restMaxPct }],
         intensityClass: 'rest',
@@ -293,25 +289,55 @@ function computePolyline(groups: TpStructureGroup[]): Array<[number, number]> {
   return pts.map(([x, y]) => [Math.round(x * 1000) / 1000, Math.round(y * 1000) / 1000]);
 }
 
+/**
+ * Annotate each group with cumulative begin/end offsets. TP library workouts
+ * include these on every group (e.g. Track Work 4x800m). Offsets are in the
+ * same unit as the primary length metric: meters for distance, seconds for
+ * duration. Repetition groups account for reps × per-rep length.
+ */
+function withBeginEnd(groups: TpStructureGroup[]): TpStructureGroup[] {
+  let cursor = 0;
+  return groups.map((g) => {
+    const reps = g.length.unit === 'repetition' ? g.length.value : 1;
+    let perRep = 0;
+    for (const st of g.steps) {
+      const u = st.length.unit;
+      let len = st.length.value;
+      if (u === 'kilometer') len *= 1000;
+      else if (u === 'mile') len *= 1609.344;
+      // second stays as seconds; meter stays as meters
+      perRep += len;
+    }
+    const begin = cursor;
+    const end = cursor + perRep * reps;
+    cursor = end;
+    return { ...g, begin, end };
+  });
+}
+
 /** Run workout structure keyed to Itay's threshold pace (3:45/km). */
 function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
+  const primary = detectPrimaryLengthMetric(groups);
   return {
-    structure: groups,
-    primaryLengthMetric: detectPrimaryLengthMetric(groups),
+    structure: withBeginEnd(groups),
+    primaryLengthMetric: primary,
     primaryIntensityMetric: 'percentOfThresholdPace',
     primaryIntensityTargetOrRange: 'range',
     polyline: computePolyline(groups),
+    ...(primary === 'distance' ? { visualizationDistanceUnit: 'kilometer' as const } : {}),
   };
 }
 
 /** Bike workout structure keyed to Itay's FTP (300W). */
 function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
+  const primary = detectPrimaryLengthMetric(groups);
   return {
-    structure: groups,
-    primaryLengthMetric: detectPrimaryLengthMetric(groups),
+    structure: withBeginEnd(groups),
+    primaryLengthMetric: primary,
     primaryIntensityMetric: 'percentOfFtp',
     primaryIntensityTargetOrRange: 'range',
     polyline: computePolyline(groups),
+    ...(primary === 'distance' ? { visualizationDistanceUnit: 'kilometer' as const } : {}),
   };
 }
 
