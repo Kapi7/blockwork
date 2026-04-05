@@ -34,8 +34,9 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     if (!env.TP_AUTH_COOKIE) {
       return jsonError('TP_AUTH_COOKIE secret not configured', 500);
     }
-    if (!env.ANTHROPIC_API_KEY) {
-      return jsonError('ANTHROPIC_API_KEY secret not configured', 500);
+    const dryRun = url.searchParams.get('dry') === '1';
+    if (!env.ANTHROPIC_API_KEY && !dryRun) {
+      return jsonError('ANTHROPIC_API_KEY secret not configured (use ?dry=1 to skip Claude)', 500);
     }
 
     const token = await getBearerToken(env.TP_AUTH_COOKIE);
@@ -86,6 +87,28 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     const recent14d = completed.filter((w) => w.workoutId !== target.workoutId).slice(0, 14);
+
+    if (dryRun) {
+      return Response.json({
+        mode: 'session-dry',
+        coach: 'George (dry run — no Claude call)',
+        workout: {
+          id: target.workoutId,
+          date: target.workoutDay.slice(0, 10),
+          title: target.title,
+          distance_km: target.distance ? (target.distance / 1000).toFixed(2) : null,
+          duration_min: target.totalTime ? Math.round(target.totalTime * 60) : null,
+          avg_hr: target.heartRateAverage,
+          max_hr: target.heartRateMaximum,
+          tss: target.tssActual,
+          if: target.if,
+          compliance_dist: target.complianceDistancePercent,
+          compliance_tss: target.complianceTssPercent,
+        },
+        recent14d_count: recent14d.length,
+        recent14d_summary: recent14d.slice(0, 10).map(formatWorkout),
+      });
+    }
 
     const feedback = await generateSessionFeedback({
       apiKey: env.ANTHROPIC_API_KEY,
