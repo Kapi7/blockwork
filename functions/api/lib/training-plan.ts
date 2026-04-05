@@ -60,6 +60,7 @@ export interface TpWorkoutStructure {
   primaryLengthMetric: 'duration' | 'distance';
   primaryIntensityMetric: 'percentOfThresholdPace' | 'percentOfFtp' | 'percentOfThresholdHr';
   primaryIntensityTargetOrRange: 'target' | 'range';
+  polyline?: Array<[number, number]>;
 }
 
 // ────────────────────────────────────────────────────────────────────────
@@ -223,6 +224,68 @@ function detectPrimaryLengthMetric(
   return hasMeterMain ? 'distance' : 'duration';
 }
 
+/**
+ * Compute the polyline visualization array for a structured workout.
+ * TP's UI uses this to render the blue bar chart at the top of the workout
+ * detail modal AND to resolve segment tooltip labels. Without it, tooltips
+ * show "undefined" for the unit.
+ *
+ * Format: array of [x, y] pairs where x is cumulative position (0..1) and
+ * y is intensity (0..1). Each step creates 4 points: rise up from baseline,
+ * plateau across the step's length, drop back to baseline. Repetition groups
+ * expand to their rep count.
+ *
+ * Reference: captured from TP library "30-30 Fun" on 2026-04-05.
+ */
+function computePolyline(groups: TpStructureGroup[]): Array<[number, number]> {
+  // First pass: expand repetitions and collect flat step list with length+intensity
+  interface FlatStep {
+    length: number; // normalized units (seconds OR meters depending on step)
+    unit: 'second' | 'meter';
+    intensity: number; // midpoint of target % / 100
+  }
+  const flat: FlatStep[] = [];
+  for (const g of groups) {
+    const reps = g.length.unit === 'repetition' ? g.length.value : 1;
+    for (let r = 0; r < reps; r++) {
+      for (const st of g.steps) {
+        const u = st.length.unit;
+        const unit: 'second' | 'meter' =
+          u === 'meter' || u === 'kilometer' || u === 'mile' ? 'meter' : 'second';
+        // Normalize distance to meters regardless of input unit (for length math)
+        let len = st.length.value;
+        if (u === 'kilometer') len *= 1000;
+        else if (u === 'mile') len *= 1609.344;
+        // Intensity = midpoint of first target, clipped to [0,2] then divided by max
+        const tgt = st.targets?.[0];
+        const mid = tgt ? (tgt.minValue + tgt.maxValue) / 2 : 75;
+        flat.push({ length: len, unit, intensity: mid / 100 });
+      }
+    }
+  }
+  if (flat.length === 0) return [];
+
+  // Find max intensity to normalize y to 0..1
+  const maxI = Math.max(...flat.map((s) => s.intensity), 1);
+  // Compute total length (sum; mixed-unit workouts still render correctly since
+  // TP uses this array as a relative-width polyline)
+  const total = flat.reduce((a, s) => a + s.length, 0) || 1;
+
+  const pts: Array<[number, number]> = [[0, 0]];
+  let cursor = 0;
+  for (const s of flat) {
+    const x0 = cursor / total;
+    cursor += s.length;
+    const x1 = cursor / total;
+    const y = Math.min(1, Math.max(0, s.intensity / maxI));
+    pts.push([x0, y]);
+    pts.push([x1, y]);
+  }
+  pts.push([1, 0]);
+  // Round to 3 decimals to match TP's precision
+  return pts.map(([x, y]) => [Math.round(x * 1000) / 1000, Math.round(y * 1000) / 1000]);
+}
+
 /** Run workout structure keyed to Itay's threshold pace (3:45/km). */
 function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
   return {
@@ -230,6 +293,7 @@ function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
     primaryLengthMetric: detectPrimaryLengthMetric(groups),
     primaryIntensityMetric: 'percentOfThresholdPace',
     primaryIntensityTargetOrRange: 'range',
+    polyline: computePolyline(groups),
   };
 }
 
@@ -240,6 +304,7 @@ function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
     primaryLengthMetric: detectPrimaryLengthMetric(groups),
     primaryIntensityMetric: 'percentOfFtp',
     primaryIntensityTargetOrRange: 'range',
+    polyline: computePolyline(groups),
   };
 }
 
