@@ -16,6 +16,7 @@ import {
   listWorkouts,
   updateWorkout,
   createWorkout,
+  deleteWorkout,
 } from '../lib/tp-client';
 import { BLOCKS } from '../lib/training-plan';
 
@@ -45,13 +46,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     const existing = await listWorkouts(token, ATHLETE_ID, block.startDate, block.endDate);
-    // Index by (date, type) for matching. A session's title is matched loosely.
-    const byDateType = new Map<string, any[]>();
+    // Index by date only so we can match across workoutType changes (e.g. 8 → 9).
+    const byDate = new Map<string, any[]>();
     for (const w of existing) {
       const date = (w.workoutDay || '').slice(0, 10);
-      const key = `${date}_${w.workoutTypeValueId}`;
-      if (!byDateType.has(key)) byDateType.set(key, []);
-      byDateType.get(key)!.push(w);
+      if (!byDate.has(date)) byDate.set(date, []);
+      byDate.get(date)!.push(w);
     }
 
     const results: any[] = [];
@@ -65,21 +65,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         continue;
       }
 
-      const key = `${session.date}_${session.workoutType}`;
-      const candidates = byDateType.get(key) || [];
-      // Match by title similarity (loose): any existing workout with same first word
-      // or with a title that the session title starts with (or vice versa).
+      const dayWorkouts = byDate.get(session.date) || [];
+      // Match by (title similarity) first — title is more stable than workoutType
+      // because the type can change (e.g. strength 8 → 9). Prefer exact title
+      // match, then startsWith, then first-word match, finally same-type-fallback.
+      const sTitleLower = session.title.toLowerCase();
       const firstWord = (s: string) => (s || '').trim().split(/\s+/)[0].toLowerCase();
-      const match = candidates.find((w) => {
-        const eTitle = (w.title || '').toLowerCase();
-        const sTitle = session.title.toLowerCase();
-        return (
-          eTitle === sTitle ||
-          eTitle.startsWith(sTitle) ||
-          sTitle.startsWith(eTitle) ||
-          firstWord(w.title) === firstWord(session.title)
-        );
-      }) || candidates[0];
+      const exactTitleMatch = dayWorkouts.find((w) => (w.title || '').toLowerCase() === sTitleLower);
+      const prefixMatch = dayWorkouts.find((w) => {
+        const eT = (w.title || '').toLowerCase();
+        return eT.startsWith(sTitleLower) || sTitleLower.startsWith(eT);
+      });
+      const firstWordMatch = dayWorkouts.find((w) => firstWord(w.title) === firstWord(session.title));
+      // Fallback: same workoutType on this day (catches generic-title cases)
+      const typeMatch = dayWorkouts.find((w) => w.workoutTypeValueId === session.workoutType);
+      const match = exactTitleMatch || prefixMatch || firstWordMatch || typeMatch;
 
       if (match) {
         // Safety: don't modify already-COMPLETED workouts (has actual distance/time)
@@ -92,6 +92,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             workoutId: match.workoutId,
           });
           continue;
+        }
+        // Dedup: delete any OTHER planned workouts on this day with the same
+        // first-word title (catches stale type-8 duplicates from previous runs).
+        const fwS = firstWord(session.title);
+        const staleDupes = dayWorkouts.filter((w) => {
+          if (w.workoutId === match.workoutId) return false;
+          if (((w.distance || 0) + (w.totalTime || 0)) > 0) return false; // never delete completed
+          return firstWord(w.title) === fwS;
+        });
+        for (const dup of staleDupes) {
+          try {
+            await deleteWorkout(token, ATHLETE_ID, dup.workoutId);
+            opCount += 1;
+          } catch {}
         }
         try {
           await updateWorkout(token, ATHLETE_ID, match.workoutId, {
