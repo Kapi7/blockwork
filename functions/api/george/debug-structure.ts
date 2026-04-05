@@ -49,33 +49,41 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 
     const workouts = await listWorkouts(token, ATHLETE_ID, isoDate(start), isoDate(end));
 
+    // Full raw JSON of the most recent completed workout (to find embedded zones)
+    const completed = workouts
+      .filter((w: any) => (w.distance || 0) > 0 || (w.totalTime || 0) > 0)
+      .sort((a: any, b: any) => (b.workoutDay || '').localeCompare(a.workoutDay || ''));
+
+    const recentRaw = completed[0] ? await getWorkoutRaw(token, ATHLETE_ID, completed[0].workoutId) : null;
+
     // Filter to ones with any structure data
     const withStructure = workouts.filter((w: any) => {
       return w.structure && (typeof w.structure === 'object' || typeof w.structure === 'string');
     });
 
-    // Also get the raw JSON of the first few with structure, for schema analysis
-    const samples: any[] = [];
-    for (const w of withStructure.slice(0, 5)) {
+    const structureSamples: any[] = [];
+    for (const w of withStructure.slice(0, 3)) {
       try {
         const raw = await getWorkoutRaw(token, ATHLETE_ID, w.workoutId);
-        samples.push({
+        structureSamples.push({
           workoutId: w.workoutId,
           title: w.title,
           date: w.workoutDay,
           type: w.workoutTypeValueId,
           structure: raw.structure,
-          rawKeys: Object.keys(raw),
         });
-      } catch (e: any) {
-        samples.push({ workoutId: w.workoutId, error: e.message });
-      }
+      } catch {}
     }
 
     return Response.json({
       totalScanned: workouts.length,
       withStructure: withStructure.length,
-      samples,
+      mostRecentCompleted: completed[0]
+        ? { id: completed[0].workoutId, date: completed[0].workoutDay, title: completed[0].title }
+        : null,
+      mostRecentRawKeys: recentRaw ? Object.keys(recentRaw).sort() : [],
+      mostRecentRaw: recentRaw,
+      structureSamples,
     });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
