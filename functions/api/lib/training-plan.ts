@@ -803,9 +803,9 @@ MAIN
 TOTAL: 75min  |  TSS ~40
 Base block DONE.
 How did the 18km feel?
-Block review → Speed block (Hunt the 5K) starts tomorrow.`, totalTimePlanned: 1.25, tssPlanned: 40 },
+Block review → Speed block (Hunt the 5K) starts tomorrow.`, totalTimePlanned: 1.25, tssPlanned: 40, structure: STRUCTURES.recoveryRide60 },
     ],
- , structure: STRUCTURES.recoveryRide60 },
+  },
   {
     id: 'block-2-speed1',
     number: 2,
