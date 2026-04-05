@@ -15,6 +15,10 @@ on:
         description: 'Max subrequests per call (stay under 50)'
         required: false
         default: '20'
+      offset:
+        description: 'Session offset (for chunked updates across multiple calls)'
+        required: false
+        default: '0'
 
 jobs:
   update:
@@ -25,6 +29,7 @@ jobs:
           SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
           BLOCK: ${{ inputs.block }}
           LIMIT: ${{ inputs.limit }}
+          OFFSET: ${{ inputs.offset }}
         run: |
           set -eu
           # Strict numeric validation — prevents command injection
@@ -36,6 +41,10 @@ jobs:
             [0-9]|[0-9][0-9]) ;;
             *) echo "Invalid limit"; exit 1 ;;
           esac
-          URL="https://blockwork-91h.pages.dev/api/george/update-plan?token=${SYNC_TOKEN}&block=${BLOCK}&limit=${LIMIT}"
+          case "$OFFSET" in
+            [0-9]|[0-9][0-9]|[0-9][0-9][0-9]) ;;
+            *) echo "Invalid offset"; exit 1 ;;
+          esac
+          URL="https://blockwork-91h.pages.dev/api/george/update-plan?token=${SYNC_TOKEN}&block=${BLOCK}&limit=${LIMIT}&offset=${OFFSET}"
           curl -sS -X POST "$URL" | head -c 8000
           echo ""

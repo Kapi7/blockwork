@@ -34,6 +34,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const blockNum = parseInt(url.searchParams.get('block') || '1', 10);
   const limit = parseInt(url.searchParams.get('limit') || '20', 10);
+  const offset = parseInt(url.searchParams.get('offset') || '0', 10);
 
   try {
     const token = await getBearerToken(env.TP_AUTH_COOKIE);
@@ -55,8 +56,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
     const results: any[] = [];
     let opCount = 0;
+    const sessions = block.sessions.slice(offset); // start from offset
 
-    for (const session of block.sessions) {
+    for (const session of sessions) {
       // Budget: each update = 2 subrequests, each create = 1. Keep headroom.
       if (opCount >= limit) {
         results.push({ date: session.date, title: session.title, status: 'deferred' });
@@ -148,8 +150,16 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       }
     }
 
+    const processed = results.filter((r) => r.status !== 'deferred').length;
+    const nextOffset = offset + processed;
+    const hasMore = nextOffset < block.sessions.length;
+
     return Response.json({
       block: { number: block.number, name: block.name, dates: `${block.startDate} to ${block.endDate}` },
+      offset,
+      nextOffset,
+      hasMore,
+      totalSessions: block.sessions.length,
       summary: {
         updated: results.filter((r) => r.status === 'updated').length,
         created: results.filter((r) => r.status === 'created').length,
