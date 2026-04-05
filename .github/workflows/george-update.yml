@@ -1,0 +1,41 @@
+name: George Update Block (in place)
+
+# Manual-only. Updates existing block workouts in place without delete+recreate.
+# All inputs flow through env vars + strict allow-list validation to prevent
+# command injection. No ${{ }} interpolation directly in run: body.
+
+on:
+  workflow_dispatch:
+    inputs:
+      block:
+        description: 'Block number to update'
+        required: true
+        default: '1'
+      limit:
+        description: 'Max subrequests per call (stay under 50)'
+        required: false
+        default: '20'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call update-plan safely
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          BLOCK: ${{ inputs.block }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          set -eu
+          # Strict numeric validation — prevents command injection
+          case "$BLOCK" in
+            [0-9]|[0-9][0-9]) ;;
+            *) echo "Invalid block"; exit 1 ;;
+          esac
+          case "$LIMIT" in
+            [0-9]|[0-9][0-9]) ;;
+            *) echo "Invalid limit"; exit 1 ;;
+          esac
+          URL="https://blockwork-91h.pages.dev/api/george/update-plan?token=${SYNC_TOKEN}&block=${BLOCK}&limit=${LIMIT}"
+          curl -sS -X POST "$URL" | head -c 8000
+          echo ""

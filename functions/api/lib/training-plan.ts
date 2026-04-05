@@ -20,7 +20,7 @@
 export interface BlockSession {
   date: string;                    // YYYY-MM-DD
   title: string;                   // short calendar title, max ~35 chars
-  workoutType: number;             // 1=swim, 2=bike, 3=run, 8=strength, 100=other
+  workoutType: number;             // 1=swim, 2=bike, 3=run, 9=strength, 100=other/yoga
   description: string;             // full structured session (WU/MAIN/CD)
   distancePlanned?: number;        // meters
   totalTimePlanned?: number;       // hours
@@ -95,7 +95,19 @@ function singleStep(
   };
 }
 
-/** Single-step block by DISTANCE (meters). Use when target is "run X km @ pace Y". */
+/**
+ * Convert meters to the appropriate {value, unit} — TP's UI renders `meter`
+ * as "undefined" for large values in the segment preview, so use `kilometer`
+ * when the distance is ≥ 1000m (metric athletes).
+ */
+function distLen(meters: number): { value: number; unit: 'kilometer' | 'meter' } {
+  if (meters >= 1000) {
+    return { value: meters / 1000, unit: 'kilometer' };
+  }
+  return { value: meters, unit: 'meter' };
+}
+
+/** Single-step block by DISTANCE. Uses kilometer/meter automatically. */
 function distStep(
   name: string,
   meters: number,
@@ -109,7 +121,7 @@ function distStep(
     steps: [{
       type: 'step',
       name,
-      length: { value: meters, unit: 'meter' },
+      length: distLen(meters),
       targets: [{ minValue: minPct, maxValue: maxPct }],
       intensityClass,
       openDuration: false,
@@ -119,7 +131,7 @@ function distStep(
 
 /**
  * Repeating distance-based interval set (e.g. 6x 400m hard + 200m jog).
- * Hard phase measured in meters, rest phase can be meters or seconds.
+ * Both phases use meter/kilometer as appropriate.
  */
 function repeatSetDist(
   reps: number,
@@ -133,7 +145,7 @@ function repeatSetDist(
       {
         type: 'step',
         name: 'Hard',
-        length: { value: hardMeters, unit: 'meter' },
+        length: distLen(hardMeters),
         targets: [{ minValue: hardMinPct, maxValue: hardMaxPct }],
         intensityClass: 'active',
         openDuration: false,
@@ -141,7 +153,7 @@ function repeatSetDist(
       {
         type: 'step',
         name: 'Jog',
-        length: { value: restMeters, unit: 'meter' },
+        length: distLen(restMeters),
         targets: [{ minValue: restMinPct, maxValue: restMaxPct }],
         intensityClass: 'rest',
         openDuration: false,
@@ -536,7 +548,7 @@ export const BLOCKS: TrainingBlock[] = [
       // Week 1 (Mar 23 — Mar 29): full rest transitioning to easy movement
       { date: '2026-04-06', title: 'Easy run', workoutType: 3, description: 'Easy run 6km @ 5:20/km\nHR cap 140bpm. If legs feel heavy, cut to 4km.', distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-04-07', title: 'AM Easy bike', workoutType: 2, description: 'Easy spin 45min Z1-Z2\nCadence focus: 85-90rpm\nActive recovery before tomorrow\'s run.', totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
-      { date: '2026-04-07', title: 'PM Strength (light)', workoutType: 8, description: 'Bodyweight strength 30min\n\n- Squats 3x10\n- Lunges 3x8\n- Glute bridges 3x12\n- Plank 3x30sec\n- Bird-dog 3x8/side\n\nLight. Learn the movements. No DOMS.', totalTimePlanned: 0.5 },
+      { date: '2026-04-07', title: 'PM Strength (light)', workoutType: 9, description: 'Bodyweight strength 30min\n\n- Squats 3x10\n- Lunges 3x8\n- Glute bridges 3x12\n- Plank 3x30sec\n- Bird-dog 3x8/side\n\nLight. Learn the movements. No DOMS.', totalTimePlanned: 0.5 },
       { date: '2026-04-08', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 6km @ 5:15/km\n+ 4x100m strides (build to 90%, full recovery walk)\nStrides should feel fast but relaxed, NOT sprinting.', distancePlanned: 6000, totalTimePlanned: 0.58, structure: STRUCTURES.easyRunStrides6km },
       { date: '2026-04-09', title: 'Bike endurance', workoutType: 2, description: 'Endurance ride 75-90min Z2\nOutdoor or Zwift. Steady effort, conversational pace.', totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance90 },
       { date: '2026-04-10', title: 'Yoga / Mobility', workoutType: 100, description: 'Yoga / Mobility 40min\n- Sun salutations 8min\n- Hip openers 10min\n- Runner lunges 8min\n- Foam roll quads, calves, glutes 10min\n- Savasana 4min', totalTimePlanned: 0.67 },
@@ -614,7 +626,7 @@ TOTAL: ~10km  |  TSS ~65
 PURPOSE: neuromuscular power + form under load.
 Hills are the foundation that 5K speed sits on.`, distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65, structure: STRUCTURES.hillRepeats6x200 },
       { date: '2026-04-15', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Sun salutations\n- Hip openers, runner\'s lunge sequence\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes, IT band\n\nRecovery-focused flow between key sessions.', totalTimePlanned: 0.67 },
-      { date: '2026-04-15', title: 'PM Strength', workoutType: 8, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
+      { date: '2026-04-15', title: 'PM Strength', workoutType: 9, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
       { date: '2026-04-16', title: 'KEY 2 — Fartlek', workoutType: 3, description: `KEY 2 — FARTLEK  (find the gears)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2km)
@@ -726,7 +738,7 @@ TOTAL: ~10km  |  TSS ~80
 Targets: 84s=fast end | 86s=control end.
 Negative split the set (6th = fastest).`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80, structure: STRUCTURES.track6x400 },
       { date: '2026-04-22', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\nRecovery-focused flow between key sessions.\nFocus: hips, hamstrings, calves.', totalTimePlanned: 0.67 },
-      { date: '2026-04-22', title: 'PM Strength', workoutType: 8, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
+      { date: '2026-04-22', title: 'PM Strength', workoutType: 9, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
       { date: '2026-04-23', title: 'KEY 2 — Tempo 3x1.5km', workoutType: 3, description: `KEY 2 — TEMPO CRUISE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km)
@@ -836,7 +848,7 @@ COOL-DOWN  (2km)
 TOTAL: ~10km  |  TSS ~60
 Absorb-week key. Sharp nervous system, contained TSS.`, distancePlanned: 10000, totalTimePlanned: 0.88, tssPlanned: 60, structure: STRUCTURES.hillSprintsTempo },
       { date: '2026-04-29', title: 'AM Yoga deep stretch', workoutType: 100, description: 'Yoga 40min — deep stretch (absorb week)\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- IT band foam roll\n- Hip 90/90 rotations', totalTimePlanned: 0.67 },
-      { date: '2026-04-29', title: 'PM Strength (lighter)', workoutType: 8, description: 'Strength 40min — absorb week, lighter loads\n\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n\nMaintain, don\'t overload. Body needs to absorb.', totalTimePlanned: 0.67 },
+      { date: '2026-04-29', title: 'PM Strength (lighter)', workoutType: 9, description: 'Strength 40min — absorb week, lighter loads\n\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n\nMaintain, don\'t overload. Body needs to absorb.', totalTimePlanned: 0.67 },
       { date: '2026-04-30', title: 'Zwift race', workoutType: 2, description: `ZWIFT RACE — B/C category
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)

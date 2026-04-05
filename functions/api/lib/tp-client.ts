@@ -183,6 +183,59 @@ export async function createWorkout(
 }
 
 /**
+ * Update an existing workout in place. Partial patch — only the fields passed
+ * are overwritten. Uses PUT to /fitness/v6/athletes/{aid}/workouts/{wid}.
+ * Useful for fixing descriptions/structures without deleting the workout.
+ */
+export async function updateWorkout(
+  token: string,
+  athleteId: number,
+  workoutId: number,
+  patch: Partial<CreateWorkoutInput> & { structure?: unknown },
+): Promise<{ workoutId: number }> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${athleteId}/workouts/${workoutId}`;
+  // Fetch current workout so we send a complete body back (TP requires full object)
+  const currentRes = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'User-Agent': 'blockwork-bridge',
+    },
+  });
+  if (!currentRes.ok) {
+    throw new Error(`updateWorkout GET failed: ${currentRes.status}`);
+  }
+  const current = (await currentRes.json()) as any;
+
+  const merged = {
+    ...current,
+    ...(patch.title !== undefined ? { title: patch.title } : {}),
+    ...(patch.description !== undefined ? { description: patch.description } : {}),
+    ...(patch.workoutTypeValueId !== undefined ? { workoutTypeValueId: patch.workoutTypeValueId } : {}),
+    ...(patch.distancePlanned !== undefined ? { distancePlanned: patch.distancePlanned } : {}),
+    ...(patch.totalTimePlanned !== undefined ? { totalTimePlanned: patch.totalTimePlanned } : {}),
+    ...(patch.tssPlanned !== undefined ? { tssPlanned: patch.tssPlanned } : {}),
+    ...(patch.ifPlanned !== undefined ? { ifPlanned: patch.ifPlanned } : {}),
+    ...(patch.structure !== undefined ? { structure: patch.structure } : {}),
+  };
+
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      Referer: 'https://app.trainingpeaks.com/',
+      'User-Agent': 'blockwork-bridge',
+    },
+    body: JSON.stringify(merged),
+  });
+  if (!res.ok) {
+    throw new Error(`updateWorkout PUT failed: ${res.status} ${(await res.text()).slice(0, 300)}`);
+  }
+  return { workoutId };
+}
+
+/**
  * Delete a workout.
  * DELETE /fitness/v6/athletes/{athleteId}/workouts/{workoutId}
  */
