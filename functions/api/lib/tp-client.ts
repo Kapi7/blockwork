@@ -143,6 +143,7 @@ export interface CreateWorkoutInput {
   totalTimePlanned?: number;      // hours
   tssPlanned?: number;
   ifPlanned?: number;
+  structure?: unknown;            // TP structured workout JSON (syncs to Garmin)
 }
 
 export async function createWorkout(
@@ -171,6 +172,7 @@ export async function createWorkout(
       totalTimePlanned: input.totalTimePlanned,
       tssPlanned: input.tssPlanned,
       ifPlanned: input.ifPlanned,
+      ...(input.structure ? { structure: input.structure } : {}),
     }),
   });
   if (!res.ok) {

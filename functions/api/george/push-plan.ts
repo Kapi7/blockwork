@@ -88,6 +88,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
           distancePlanned: session.distancePlanned,
           totalTimePlanned: session.totalTimePlanned,
           tssPlanned: session.tssPlanned,
+          structure: session.structure,
         });
 
         results.push({

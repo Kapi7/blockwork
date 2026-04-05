@@ -92,6 +92,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
           distancePlanned: session.distancePlanned,
           totalTimePlanned: session.totalTimePlanned,
           tssPlanned: session.tssPlanned,
+          structure: session.structure,
         });
         pushResults.push({ date: session.date, title: session.title, status: 'created', workoutId: result.workoutId });
         existingKeys.add(key);

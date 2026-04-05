@@ -25,7 +25,261 @@ export interface BlockSession {
   distancePlanned?: number;        // meters
   totalTimePlanned?: number;       // hours
   tssPlanned?: number;
+  structure?: TpWorkoutStructure;  // real TP structured workout (synced to Garmin)
 }
+
+/**
+ * TP structured workout schema (reverse-engineered from live capture of
+ * TrainingPeaks default library item "30-30 Fun" on 2026-04-05).
+ *
+ * Key insight: `percentOfThresholdPace` means 100% = his LTP (3:45/km).
+ * Higher % = FASTER pace. So 5K goal (3:30/km = 210s) = 225/210 = 107%.
+ *
+ * primaryIntensityMetric options:
+ *   - "percentOfThresholdPace"  (for running, relative to pace threshold)
+ *   - "percentOfFtp"            (for cycling, relative to FTP)
+ *   - "percentOfThresholdHr"    (HR-targeted, relative to LTHR)
+ */
+export interface TpStructureStep {
+  type?: 'step';
+  name: string;
+  length: { value: number; unit: 'second' | 'meter' | 'kilometer' | 'mile' };
+  targets: Array<{ minValue: number; maxValue: number }>;
+  intensityClass: 'warmUp' | 'active' | 'rest' | 'coolDown';
+  openDuration?: boolean;
+}
+
+export interface TpStructureGroup {
+  type: 'step' | 'repetition';
+  length: { value: number; unit: 'repetition' };
+  steps: TpStructureStep[];
+}
+
+export interface TpWorkoutStructure {
+  structure: TpStructureGroup[];
+  primaryLengthMetric: 'duration' | 'distance';
+  primaryIntensityMetric: 'percentOfThresholdPace' | 'percentOfFtp' | 'percentOfThresholdHr';
+  primaryIntensityTargetOrRange: 'target' | 'range';
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Structure builder helpers — converts high-level intent into TP schema
+// ────────────────────────────────────────────────────────────────────────
+
+/** Convert pace (mm:ss/km) to % of Itay's threshold pace (3:45/km = 225s). */
+function pacePctOfThreshold(paceMmSs: string): number {
+  const [m, s] = paceMmSs.split(':').map(Number);
+  const seconds = m * 60 + s;
+  return Math.round((225 / seconds) * 100);
+}
+
+/** Single-step block (warm-up, cool-down, or standalone steady segment). */
+function singleStep(
+  name: string,
+  seconds: number,
+  minPct: number,
+  maxPct: number,
+  intensityClass: TpStructureStep['intensityClass'],
+): TpStructureGroup {
+  return {
+    type: 'step',
+    length: { value: 1, unit: 'repetition' },
+    steps: [{
+      type: 'step',
+      name,
+      length: { value: seconds, unit: 'second' },
+      targets: [{ minValue: minPct, maxValue: maxPct }],
+      intensityClass,
+      openDuration: false,
+    }],
+  };
+}
+
+/** Repeating interval set (e.g. 6x400m hard/rest). */
+function repeatSet(
+  reps: number,
+  hardSeconds: number, hardMinPct: number, hardMaxPct: number,
+  restSeconds: number, restMinPct: number, restMaxPct: number,
+): TpStructureGroup {
+  return {
+    type: 'repetition',
+    length: { value: reps, unit: 'repetition' },
+    steps: [
+      {
+        type: 'step',
+        name: 'Hard',
+        length: { value: hardSeconds, unit: 'second' },
+        targets: [{ minValue: hardMinPct, maxValue: hardMaxPct }],
+        intensityClass: 'active',
+        openDuration: false,
+      },
+      {
+        type: 'step',
+        name: 'Easy',
+        length: { value: restSeconds, unit: 'second' },
+        targets: [{ minValue: restMinPct, maxValue: restMaxPct }],
+        intensityClass: 'rest',
+        openDuration: false,
+      },
+    ],
+  };
+}
+
+/** Run workout structure keyed to Itay's threshold pace (3:45/km). */
+function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
+  return {
+    structure: groups,
+    primaryLengthMetric: 'duration',
+    primaryIntensityMetric: 'percentOfThresholdPace',
+    primaryIntensityTargetOrRange: 'range',
+  };
+}
+
+/** Bike workout structure keyed to Itay's FTP (300W). */
+function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
+  return {
+    structure: groups,
+    primaryLengthMetric: 'duration',
+    primaryIntensityMetric: 'percentOfFtp',
+    primaryIntensityTargetOrRange: 'range',
+  };
+}
+
+// Pre-built structures for Block 1's key sessions.
+// Pace % = 100 × (225 / targetPaceSeconds) — FASTER pace = HIGHER %.
+export const STRUCTURES = {
+  // Easy run: 1km WU → 6km steady easy (Z1-Z2, 70-80% threshold pace = 5:21-4:41/km) → 1km CD
+  easyRun8km: runStructure([
+    singleStep('Warm up', 360,  65, 75, 'warmUp'),
+    singleStep('Steady',  2160, 72, 82, 'active'),
+    singleStep('Cool down', 360, 65, 75, 'coolDown'),
+  ]),
+
+  // Easy run 9km + 6x100m strides finisher
+  easyRunStrides9km: runStructure([
+    singleStep('Warm up', 420, 65, 75, 'warmUp'),
+    singleStep('Steady',  2100, 72, 82, 'active'),
+    {
+      type: 'repetition',
+      length: { value: 6, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Stride',    length: { value: 20, unit: 'second' }, targets: [{ minValue: 110, maxValue: 125 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back', length: { value: 60, unit: 'second' }, targets: [{ minValue: 45, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
+      ],
+    },
+    singleStep('Cool down', 240, 60, 70, 'coolDown'),
+  ]),
+
+  // Easy run 6km + 4x100m strides (shorter, pre-long fallback)
+  easyRunStrides6km: runStructure([
+    singleStep('Warm up', 360, 65, 75, 'warmUp'),
+    singleStep('Steady',  1500, 72, 82, 'active'),
+    {
+      type: 'repetition',
+      length: { value: 4, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Stride',    length: { value: 20, unit: 'second' }, targets: [{ minValue: 110, maxValue: 125 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back', length: { value: 60, unit: 'second' }, targets: [{ minValue: 45, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
+      ],
+    },
+    singleStep('Cool down', 240, 60, 70, 'coolDown'),
+  ]),
+
+  // 6x 200m uphill @ 9/10 (~3:30/km = 107%). Walk-down recovery 90s easy jog (65%).
+  hillRepeats6x200: runStructure([
+    singleStep('Warm up', 900, 65, 75, 'warmUp'),   // 15min WU + drills
+    {
+      type: 'repetition',
+      length: { value: 6, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Uphill HARD', length: { value: 45, unit: 'second' }, targets: [{ minValue: 105, maxValue: 115 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk down',   length: { value: 90, unit: 'second' }, targets: [{ minValue: 55, maxValue: 65 }],   intensityClass: 'rest', openDuration: false },
+      ],
+    },
+    singleStep('Cool down + strides', 720, 70, 80, 'coolDown'), // 12min
+  ]),
+
+  // 8x (90s threshold / 90s easy) — 4:00/km = 94%, easy 5:15/km = 71%
+  fartlek8x90: runStructure([
+    singleStep('Warm up', 720, 65, 75, 'warmUp'),   // 12min
+    repeatSet(8, 90, 90, 100, 90, 65, 75),          // 8 × (90s hard Z4 / 90s easy)
+    singleStep('Cool down', 720, 65, 75, 'coolDown'),
+  ]),
+
+  // 6x 400m @ 3:30-3:35/km (Z5b 5K pace), 200m jog recovery ~90s
+  track6x400: runStructure([
+    singleStep('Warm up + drills', 1080, 65, 75, 'warmUp'), // 18min
+    repeatSet(6, 85, 105, 110, 90, 55, 65),                // 6 × (85s HARD / 90s jog)
+    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+  ]),
+
+  // 3x 1.5km tempo @ 4:15/km (88% threshold), 90s jog recovery
+  tempo3x1500: runStructure([
+    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    repeatSet(3, 390, 86, 92, 90, 60, 70),   // 3 × (~6:30 tempo / 90s)
+    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+  ]),
+
+  // Progressive long run 14km — 10km @ 73-75% → 2km @ 80% → 2km @ 85%
+  longRun14kmProgressive: runStructure([
+    singleStep('Segment 1 — patience',  3000, 70, 76, 'active'),   // 50min easy
+    singleStep('Segment 2 — shift',     540,  78, 83, 'active'),   // 9min
+    singleStep('Segment 3 — push',      540,  83, 88, 'active'),   // 9min
+  ]),
+
+  longRun16kmProgressive: runStructure([
+    singleStep('Segment 1 — hold back', 3300, 70, 76, 'active'),
+    singleStep('Segment 2 — shift',     840,  78, 83, 'active'),
+    singleStep('Segment 3 — surge',     540,  83, 90, 'active'),
+  ]),
+
+  longRun18kmTest: runStructure([
+    singleStep('Segment 1 — patience', 3900, 70, 75, 'active'),
+    singleStep('Segment 2 — shift',    540,  80, 85, 'active'),
+    singleStep('Segment 3 — push',     540,  85, 92, 'active'),
+    singleStep('Segment 4 — FAST',     270,  92, 100, 'active'),
+  ]),
+
+  // ──────── BIKE ────────
+  // Easy bike 60min @ Z1-Z2 (50-70% FTP)
+  easyBike60: bikeStructure([
+    singleStep('Warm up', 600, 50, 60, 'warmUp'),
+    singleStep('Z2 steady', 2700, 60, 70, 'active'),
+    singleStep('Cool down', 300, 50, 60, 'coolDown'),
+  ]),
+
+  // Long ride 2.5hrs aerobic Z2 (65-75% FTP)
+  longRide150: bikeStructure([
+    singleStep('Warm up',  900, 50, 65, 'warmUp'),
+    singleStep('Z2 endurance', 7500, 65, 75, 'active'),
+    singleStep('Cool down', 600, 50, 60, 'coolDown'),
+  ]),
+
+  longRide165Hills: bikeStructure([
+    singleStep('Warm up',  900, 50, 65, 'warmUp'),
+    singleStep('Z2 base + Z3 climbs', 8100, 68, 80, 'active'),
+    singleStep('Cool down', 600, 50, 60, 'coolDown'),
+  ]),
+
+  recoveryRide60: bikeStructure([
+    singleStep('Easy Z1', 3600, 45, 58, 'active'),
+  ]),
+
+  // Zwift race — 55min: 15 WU, 25 race (90-110% FTP), 15 CD
+  zwiftRace: bikeStructure([
+    singleStep('Warm up + openers', 900, 55, 85, 'warmUp'),
+    singleStep('RACE', 1500, 90, 110, 'active'),
+    singleStep('Cool down', 600, 45, 60, 'coolDown'),
+  ]),
+
+  // Key lite — 10x 10sec hill sprints + 2km tempo finish
+  hillSprintsTempo: runStructure([
+    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    repeatSet(10, 10, 120, 140, 80, 50, 60),  // 10 × (10s ALL-OUT / 80s walk-back)
+    singleStep('Tempo 2km', 540, 86, 92, 'active'),  // ~9min tempo
+    singleStep('Cool down', 540, 65, 75, 'coolDown'),
+  ]),
+};
 
 export interface TrainingBlock {
   id: string;
@@ -216,23 +470,23 @@ export const BLOCKS: TrainingBlock[] = [
     ],
     sessions: [
       // ============ WEEK 1 (Apr 13-19) Mon-Sun — Build introduction ============
-      { date: '2026-04-13', title: 'Easy run', workoutType: 3, description: `EASY RUN — base aerobic
+      { date: '2026-04-13', title: 'Easy bike — bridge from Block 0', workoutType: 2, description: `EASY BIKE — base aerobic bridge
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (1km)
-  • Easy jog 5:20/km (Z1 Recovery) | HR Z1 <145 (Z1 Recovery) | RPE 3/10
+WARM-UP  (10min)
+  • Progressive Z1 | 140→180W | 90rpm
 
-MAIN  (6km)
-  • Steady easy 5:05-5:15/km (Z1-low Z2)
-  • HR cap: Z2 146-156 (stay UNDER 156)
-  • Breathing: full nasal, could chat easily
-  • RPE 3-4/10
+MAIN  (45min)
+  • Steady Z2 | 195-225W (65-75% of 300W FTP)
+  • HR Z1-Z2 146-156 | Cadence 85-90rpm
+  • RPE 3-4/10 — full conversation pace
 
-COOL-DOWN  (1km)
-  • Jog 5:25/km + walk 2min
+COOL-DOWN  (5min)
+  • Easy spin Z1 | <165W | 95rpm
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: 8km ~42min  |  TSS ~40
-FIRST RUN OF BASE BLOCK — no ego. Pace is a CAP, not a target.`, distancePlanned: 8000, totalTimePlanned: 0.7, tssPlanned: 40 },
+TOTAL: 60min  |  TSS ~45
+FIRST DAY OF BASE BLOCK.
+Running starts tomorrow with KEY 1 hills — protect the legs today.`, totalTimePlanned: 1.0, tssPlanned: 45, structure: STRUCTURES.easyBike60 },
       { date: '2026-04-14', title: 'KEY 1 — Hill repeats', workoutType: 3, description: `KEY 1 — HILL REPEATS (power)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~15min)
@@ -254,7 +508,7 @@ COOL-DOWN  (2.5km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~65
 PURPOSE: neuromuscular power + form under load.
-Hills are the foundation that 5K speed sits on.`, distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65 },
+Hills are the foundation that 5K speed sits on.`, distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65, structure: STRUCTURES.hillRepeats6x200 },
       { date: '2026-04-15', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Sun salutations\n- Hip openers, runner\'s lunge sequence\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes, IT band\n\nRecovery-focused flow between key sessions.', totalTimePlanned: 0.67 },
       { date: '2026-04-15', title: 'PM Strength', workoutType: 8, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
       { date: '2026-04-16', title: 'KEY 2 — Fartlek', workoutType: 3, description: `KEY 2 — FARTLEK  (find the gears)
@@ -276,16 +530,19 @@ COOL-DOWN  (2km)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~75
-PURPOSE: teach the body to switch gears without blowing up.`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 75 },
-      { date: '2026-04-17', title: 'Easy run pre-long', workoutType: 3, description: `EASY PRE-LONG
+PURPOSE: teach the body to switch gears without blowing up.`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 75, structure: STRUCTURES.fartlek8x90 },
+      { date: '2026-04-17', title: 'Easy bike / yoga pre-long', workoutType: 2, description: `EASY BIKE PRE-LONG  (60min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-MAIN  (6km)
-  • Easy 5:15-5:25/km (Z1 Recovery) | HR Z1-Z2 <156 (stay in Z1/Z2) | RPE 3/10
-  • Flush legs, stay loose, no surges
+MAIN  (60min)
+  • Easy Z1 | 150-180W (Z1 Recovery, 50-60% of 300W FTP)
+  • HR Z1 <145 | Cadence 90-95rpm
+  • Flat route only, zero surges
+  • RPE 2/10 — flushing, not training
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: 6km ~32min  |  TSS ~30
-Tomorrow is the long run — protect the tank.`, distancePlanned: 6000, totalTimePlanned: 0.52, tssPlanned: 30 },
+TOTAL: 60min  |  TSS ~30
+Pre-long run flush. Bike > run today — protect the legs.
+Yoga 40min is an equal substitute if you prefer.`, totalTimePlanned: 1.0, tssPlanned: 30, structure: STRUCTURES.easyBike60 },
       { date: '2026-04-18', title: 'Long run — negative split', workoutType: 3, description: `LONG RUN — NEGATIVE SPLIT  (14km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-10  (PATIENCE)
@@ -307,7 +564,7 @@ SEGMENT 3  —  km 13-14  (CONTROLLED PUSH)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 14km ~70min  |  TSS ~90
 Last km should be your fastest.
-If Seg 3 feels desperate, Seg 1 was too hot.`, distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 90 },
+If Seg 3 feels desperate, Seg 1 was too hot.`, distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 90, structure: STRUCTURES.longRun14kmProgressive },
       { date: '2026-04-19', title: 'Long ride — aerobic builder', workoutType: 2, description: `LONG RIDE — Z2 AEROBIC (2.5hrs)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -325,7 +582,7 @@ COOL-DOWN  (10min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 2.5hrs  |  TSS ~150
 Bike = aerobic volume with ZERO impact on legs.
-Hydrate: 750ml/hr + electrolytes.`, totalTimePlanned: 2.5, tssPlanned: 150 },
+Hydrate: 750ml/hr + electrolytes.`, totalTimePlanned: 2.5, tssPlanned: 150, structure: STRUCTURES.longRide150 },
 
       // ============ WEEK 2 (Apr 20-26) Mon-Sun — Build intensity ============
       { date: '2026-04-20', title: 'Easy run + strides', workoutType: 3, description: `EASY + STRIDES
@@ -341,7 +598,7 @@ FINISHER — 6x 100m STRIDES
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 9km ~48min  |  TSS ~50
-Strides prime the nervous system for tomorrow's track.`, distancePlanned: 9000, totalTimePlanned: 0.79, tssPlanned: 50 },
+Strides prime the nervous system for tomorrow's track.`, distancePlanned: 9000, totalTimePlanned: 0.79, tssPlanned: 50, structure: STRUCTURES.easyRunStrides9km },
       { date: '2026-04-21', title: 'KEY 1 — Track 6x400m', workoutType: 3, description: `KEY 1 — TRACK SPEED ENDURANCE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~15min)
@@ -363,7 +620,7 @@ COOL-DOWN  (2km)
 TOTAL: ~10km  |  TSS ~80
 5K PACE TERRITORY.
 Targets: 84s=fast end | 86s=control end.
-Negative split the set (6th = fastest).`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80 },
+Negative split the set (6th = fastest).`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80, structure: STRUCTURES.track6x400 },
       { date: '2026-04-22', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\nRecovery-focused flow between key sessions.\nFocus: hips, hamstrings, calves.', totalTimePlanned: 0.67 },
       { date: '2026-04-22', title: 'PM Strength', workoutType: 8, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
       { date: '2026-04-23', title: 'KEY 2 — Tempo 3x1.5km', workoutType: 3, description: `KEY 2 — TEMPO CRUISE
@@ -385,7 +642,7 @@ COOL-DOWN  (2km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~11km  |  TSS ~85
 First real tempo of the block.
-If HR drifts >185 (Z5b) mid-rep → ease back.`, distancePlanned: 11000, totalTimePlanned: 0.95, tssPlanned: 85 },
+If HR drifts >185 (Z5b) mid-rep → ease back.`, distancePlanned: 11000, totalTimePlanned: 0.95, tssPlanned: 85, structure: STRUCTURES.tempo3x1500 },
       { date: '2026-04-24', title: 'Easy bike recovery', workoutType: 2, description: `RECOVERY RIDE  (60min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (5min)
@@ -402,7 +659,7 @@ COOL-DOWN  (5min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 60min  |  TSS ~35
 Protect the legs for tomorrow's long run.
-Bike > run today. No exceptions.`, totalTimePlanned: 1.0, tssPlanned: 35 },
+Bike > run today. No exceptions.`, totalTimePlanned: 1.0, tssPlanned: 35, structure: STRUCTURES.recoveryRide60 },
       { date: '2026-04-25', title: 'Long run — progressive', workoutType: 3, description: `LONG RUN — PROGRESSIVE  (16km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-11  (HOLD BACK)
@@ -423,7 +680,7 @@ SEGMENT 3  —  km 15-16  (CONTROLLED SURGE)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km ~82min  |  TSS ~110
 Last 5km teaches the body to run fast when TIRED.
-Fueling: 30g carbs at km 9 if available.`, distancePlanned: 16000, totalTimePlanned: 1.35, tssPlanned: 110 },
+Fueling: 30g carbs at km 9 if available.`, distancePlanned: 16000, totalTimePlanned: 1.35, tssPlanned: 110, structure: STRUCTURES.longRun16kmProgressive },
       { date: '2026-04-26', title: 'Long ride + hills', workoutType: 2, description: `LONG RIDE + HILLS  (2h45)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -443,10 +700,10 @@ COOL-DOWN  (10min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 2h45  |  TSS ~170
 Hills on the bike = free strength work for running.
-Stand on EVERY climb for at least 30sec.`, totalTimePlanned: 2.75, tssPlanned: 170 },
+Stand on EVERY climb for at least 30sec.`, totalTimePlanned: 2.75, tssPlanned: 170, structure: STRUCTURES.longRide165Hills },
 
       // ============ WEEK 3 (Apr 27 - May 3) Mon-Sun — Absorb + test ============
-      { date: '2026-04-27', title: 'Easy bike Z2', workoutType: 2, description: 'Easy recovery ride 60-75min Z1-Z2\n\nFlat, easy, conversation pace.\nAbsorb week — back off running, let the body absorb 2 weeks of work.', totalTimePlanned: 1.25 },
+      { date: '2026-04-27', title: 'Easy bike Z2', workoutType: 2, description: 'Easy recovery ride 60-75min Z1-Z2\n\nFlat, easy, conversation pace.\nAbsorb week — back off running, let the body absorb 2 weeks of work.', totalTimePlanned: 1.25, structure: STRUCTURES.easyBike60 },
       { date: '2026-04-28', title: 'KEY lite — Hill sprints + tempo', workoutType: 3, description: `KEY LITE — HILL SPRINTS + TEMPO
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2km)
@@ -473,7 +730,7 @@ COOL-DOWN  (2km)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~60
-Absorb-week key. Sharp nervous system, contained TSS.`, distancePlanned: 10000, totalTimePlanned: 0.88, tssPlanned: 60 },
+Absorb-week key. Sharp nervous system, contained TSS.`, distancePlanned: 10000, totalTimePlanned: 0.88, tssPlanned: 60, structure: STRUCTURES.hillSprintsTempo },
       { date: '2026-04-29', title: 'AM Yoga deep stretch', workoutType: 100, description: 'Yoga 40min — deep stretch (absorb week)\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- IT band foam roll\n- Hip 90/90 rotations', totalTimePlanned: 0.67 },
       { date: '2026-04-29', title: 'PM Strength (lighter)', workoutType: 8, description: 'Strength 40min — absorb week, lighter loads\n\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n\nMaintain, don\'t overload. Body needs to absorb.', totalTimePlanned: 0.67 },
       { date: '2026-04-30', title: 'Zwift race', workoutType: 2, description: `ZWIFT RACE — B/C category
@@ -494,7 +751,7 @@ COOL-DOWN  (10min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~55min  |  TSS ~60
 Absorb-week intensity goes on the BIKE.
-Running stays easy — impact drops, aerobic stays up.`, totalTimePlanned: 0.92, tssPlanned: 60 },
+Running stays easy — impact drops, aerobic stays up.`, totalTimePlanned: 0.92, tssPlanned: 60, structure: STRUCTURES.zwiftRace },
       { date: '2026-05-01', title: 'Easy run + strides', workoutType: 3, description: `EASY PRE-LONG
 ━━━━━━━━━━━━━━━━━━━━━━━━
 MAIN  (6km)
@@ -505,7 +762,7 @@ FINISHER — 4x 100m strides
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 6km ~32min  |  TSS ~30
-Tomorrow = THE block test. Protect the tank.`, distancePlanned: 6000, totalTimePlanned: 0.52, tssPlanned: 30 },
+Tomorrow = THE block test. Protect the tank.`, distancePlanned: 6000, totalTimePlanned: 0.52, tssPlanned: 30, structure: STRUCTURES.easyRunStrides6km },
       { date: '2026-05-02', title: 'Long run — THE BLOCK TEST', workoutType: 3, description: `LONG RUN — THE BLOCK TEST  (18km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-13  (PATIENCE)
@@ -533,7 +790,7 @@ TOTAL: 18km ~90min  |  TSS ~125
 THE BLOCK 1 EXAM.
 Finish strong → GREEN LIGHT for Block 2 (speed).
 Last km MUST be your fastest.
-Fuel: 30g carbs at km 9 + 30g at km 14.`, distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 125 },
+Fuel: 30g carbs at km 9 + 30g at km 14.`, distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 125, structure: STRUCTURES.longRun18kmTest },
       { date: '2026-05-03', title: 'Easy recovery ride', workoutType: 2, description: `RECOVERY RIDE  (75min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 MAIN
@@ -548,7 +805,7 @@ Base block DONE.
 How did the 18km feel?
 Block review → Speed block (Hunt the 5K) starts tomorrow.`, totalTimePlanned: 1.25, tssPlanned: 40 },
     ],
-  },
+ , structure: STRUCTURES.recoveryRide60 },
   {
     id: 'block-2-speed1',
     number: 2,
