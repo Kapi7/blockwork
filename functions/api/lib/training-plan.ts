@@ -190,11 +190,38 @@ function repeatSet(
   };
 }
 
+/**
+ * Decide primaryLengthMetric based on the character of the MAIN work.
+ * TP renders the segment preview using this as the unit label — mismatch with
+ * step units shows "undefined" in the UI (confirmed by capturing TP's own
+ * library workout "Long run, tempo finish" which uses distance + meter steps).
+ *
+ * Rule: if any ACTIVE-class step uses meters, the workout is distance-based.
+ * Warm-up and cool-down segments don't count toward this decision (they're
+ * usually time-based regardless).
+ */
+function detectPrimaryLengthMetric(
+  groups: TpStructureGroup[],
+): 'distance' | 'duration' {
+  const activeSteps: TpStructureStep[] = [];
+  for (const g of groups) {
+    for (const st of g.steps) {
+      if (st.intensityClass === 'active' || st.intensityClass === 'rest') {
+        activeSteps.push(st);
+      }
+    }
+  }
+  const hasMeterMain = activeSteps.some(
+    (s) => s.length.unit === 'meter' || s.length.unit === 'kilometer' || s.length.unit === 'mile',
+  );
+  return hasMeterMain ? 'distance' : 'duration';
+}
+
 /** Run workout structure keyed to Itay's threshold pace (3:45/km). */
 function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
   return {
     structure: groups,
-    primaryLengthMetric: 'duration',
+    primaryLengthMetric: detectPrimaryLengthMetric(groups),
     primaryIntensityMetric: 'percentOfThresholdPace',
     primaryIntensityTargetOrRange: 'range',
   };
@@ -204,7 +231,7 @@ function runStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
 function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
   return {
     structure: groups,
-    primaryLengthMetric: 'duration',
+    primaryLengthMetric: detectPrimaryLengthMetric(groups),
     primaryIntensityMetric: 'percentOfFtp',
     primaryIntensityTargetOrRange: 'range',
   };
