@@ -55,7 +55,7 @@ export interface SessionFeedbackInput {
   upcomingPlanned?: TpWorkout[];
 }
 
-/** Initial feedback on a newly-completed workout. */
+/** Initial feedback on a newly-completed workout. Intelligent analysis using all available data. */
 export async function generateSessionFeedback(input: SessionFeedbackInput): Promise<string> {
   const { apiKey, workout, recent14d, upcomingPlanned } = input;
 
@@ -71,42 +71,119 @@ export async function generateSessionFeedback(input: SessionFeedbackInput): Prom
     ? upcoming.map((w) => `  - ${formatWorkout(w)}`).join('\n')
     : '  (no planned sessions in TP yet)';
 
-  const prompt = `Just-finished workout:
+  // Compute intelligent deltas — these are what a real coach would look at
+  const isRun = workout.workoutTypeValueId === 3;
+  const isBike = workout.workoutTypeValueId === 2;
 
-${formatWorkout(workout)}
+  const actualDistKm = workout.distance ? workout.distance / 1000 : 0;
+  const plannedDistKm = workout.distancePlanned ? workout.distancePlanned / 1000 : 0;
+  const actualDurMin = workout.totalTime ? workout.totalTime * 60 : 0;
+  const plannedDurMin = workout.totalTimePlanned ? workout.totalTimePlanned * 60 : 0;
 
-Details:
-- Planned: ${workout.distancePlanned ? (workout.distancePlanned / 1000).toFixed(1) + 'km' : '-'} / ${workout.totalTimePlanned ? Math.round(workout.totalTimePlanned * 60) + 'min' : '-'} / TSS ${workout.tssPlanned?.toFixed(0) ?? '-'}
-- Actual: ${workout.distance ? (workout.distance / 1000).toFixed(2) + 'km' : '-'} / ${workout.totalTime ? Math.round(workout.totalTime * 60) + 'min' : '-'} / TSS ${workout.tssActual?.toFixed(0) ?? '-'}
-- HR: avg ${workout.heartRateAverage ?? '-'}, max ${workout.heartRateMaximum ?? '-'}
-- IF: ${workout.if?.toFixed(2) ?? '-'}
-- Compliance: dist ${workout.complianceDistancePercent ?? '-'}%, time ${workout.complianceDurationPercent ?? '-'}%, tss ${workout.complianceTssPercent ?? '-'}%
-- RPE: ${workout.rpe ?? 'not logged'} / Feeling: ${workout.feeling ?? 'not logged'}
-- Description: ${workout.description?.slice(0, 300) ?? '(none)'}
+  const distDelta = plannedDistKm > 0 ? ((actualDistKm - plannedDistKm) / plannedDistKm) * 100 : null;
+  const durDelta = plannedDurMin > 0 ? ((actualDurMin - plannedDurMin) / plannedDurMin) * 100 : null;
+  const tssDelta = workout.tssPlanned && workout.tssActual ? ((workout.tssActual - workout.tssPlanned) / workout.tssPlanned) * 100 : null;
 
-Last 14 days (${runCount} runs, ${bikeCount} rides):
+  // HR analysis context (vs his aerobic threshold ~145bpm, lactate ~170bpm, max ~190)
+  let hrAnalysis = '';
+  if (workout.heartRateAverage) {
+    const avg = workout.heartRateAverage;
+    if (avg < 135) hrAnalysis = `avg HR ${avg} — deep aerobic / recovery zone`;
+    else if (avg < 145) hrAnalysis = `avg HR ${avg} — Z2 aerobic (base-building zone)`;
+    else if (avg < 160) hrAnalysis = `avg HR ${avg} — Z3 tempo territory`;
+    else if (avg < 172) hrAnalysis = `avg HR ${avg} — Z4 threshold`;
+    else hrAnalysis = `avg HR ${avg} — Z5 VO2max / hard`;
+    if (workout.heartRateMaximum) {
+      const drift = workout.heartRateMaximum - avg;
+      hrAnalysis += `, max ${workout.heartRateMaximum} (drift ${drift}bpm)`;
+    }
+  }
+
+  // Compare RPE vs HR — mismatch is useful signal
+  let rpeHrSignal = '';
+  if (workout.rpe !== null && workout.rpe !== undefined && workout.heartRateAverage) {
+    const rpe = workout.rpe;
+    const hr = workout.heartRateAverage;
+    // Rough RPE→HR: 1-3=<135, 4-5=135-150, 6-7=150-165, 8=165-175, 9-10=175+
+    const expectedHrByRpe = rpe <= 3 ? 130 : rpe <= 5 ? 143 : rpe <= 7 ? 157 : rpe <= 8 ? 170 : 180;
+    const gap = hr - expectedHrByRpe;
+    if (Math.abs(gap) > 12) {
+      rpeHrSignal = gap > 0
+        ? `RPE ${rpe} but HR ${hr} — felt easier than it actually was (possible fatigue masking or HR drift)`
+        : `RPE ${rpe} but HR only ${hr} — felt harder than the body was working (fresh CNS or under-fueled?)`;
+    }
+  }
+
+  // Compute athlete's comment (latest non-George comment)
+  const comments = workout.workoutComments || [];
+  const athleteComments = comments.filter((c) => !(c.comment || '').trim().startsWith('George:'));
+  const athleteComment = athleteComments.length > 0
+    ? (athleteComments[athleteComments.length - 1].comment || '').trim()
+    : '';
+
+  const prompt = `Analyze this just-completed workout like a sharp coach who reads BETWEEN the numbers. Don't just restate stats — synthesize them.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WORKOUT: ${formatWorkout(workout)}
+Sport: ${isRun ? 'RUN' : isBike ? 'BIKE' : 'Other'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLANNED vs ACTUAL:
+- Distance: ${plannedDistKm.toFixed(1)}km planned → ${actualDistKm.toFixed(2)}km actual ${distDelta !== null ? `(${distDelta > 0 ? '+' : ''}${distDelta.toFixed(0)}%)` : ''}
+- Duration: ${plannedDurMin.toFixed(0)}min planned → ${actualDurMin.toFixed(0)}min actual ${durDelta !== null ? `(${durDelta > 0 ? '+' : ''}${durDelta.toFixed(0)}%)` : ''}
+- TSS: ${workout.tssPlanned?.toFixed(0) ?? '-'} planned → ${workout.tssActual?.toFixed(0) ?? '-'} actual ${tssDelta !== null ? `(${tssDelta > 0 ? '+' : ''}${tssDelta.toFixed(0)}%)` : ''}
+
+INTENSITY:
+- ${hrAnalysis || 'HR: no data'}
+- IF: ${workout.if?.toFixed(2) ?? '-'} ${workout.if ? `(${workout.if < 0.65 ? 'very easy/recovery' : workout.if < 0.75 ? 'Z2 endurance' : workout.if < 0.85 ? 'Z3 tempo' : workout.if < 0.95 ? 'Z4 threshold' : 'Z5 VO2max'})` : ''}
+- Normalized speed: ${workout.normalizedSpeedActual ? (3.6 * workout.normalizedSpeedActual).toFixed(1) + ' km/h' : '-'}
+- Elevation gain: ${workout.elevationGain ?? '-'}m
+- Cadence avg: ${workout.cadenceAverage ?? '-'}${isRun ? ' spm (steps/min)' : isBike ? ' rpm' : ''}
+
+ATHLETE'S SELF-REPORT:
+- RPE: ${workout.rpe !== null && workout.rpe !== undefined ? workout.rpe + '/10' : 'NOT LOGGED — ask him to log it'}
+- Feeling: ${workout.feeling !== null && workout.feeling !== undefined ? workout.feeling + '/5' : 'NOT LOGGED'}
+- ${rpeHrSignal || 'RPE-HR alignment: normal'}
+- His comment on the workout: ${athleteComment ? `"${athleteComment}"` : '(none yet)'}
+
+COMPLIANCE vs PLAN:
+- Distance compliance: ${workout.complianceDistancePercent?.toFixed(0) ?? '-'}%
+- Duration compliance: ${workout.complianceDurationPercent?.toFixed(0) ?? '-'}%
+- TSS compliance: ${workout.complianceTssPercent?.toFixed(0) ?? '-'}%
+
+WORKOUT DESCRIPTION / PLAN:
+${workout.description?.slice(0, 500) ?? '(none)'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LAST 14 DAYS (${runCount} runs, ${bikeCount} rides):
 ${recentSummary}
 
-Upcoming planned sessions:
+UPCOMING PLANNED:
 ${upcomingSummary}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Write 80-120 words of feedback in a natural, conversational voice — no bullet points, no headers, no formulaic openings.
+YOUR JOB:
+Write 80-120 words as George (texting voice, no bullet points, no headers).
 
-AVOID these openings (they feel robotic):
-- "Solid session"
-- "Nice work"
-- "Good [noun]"
-- "[Distance]km at [pace]..."
+INTELLIGENT SYNTHESIS — don't just list numbers, CONNECT them:
+1. Did the planned vs actual tell a story? (He went too hard / held back too much / hit it perfectly)
+2. Does the HR match the RPE? (Mismatch = fatigue / under-fuelling / great day)
+3. Is the athlete's comment giving you more info than the metrics alone? Always address it if present.
+4. Does the TSS planned vs actual signal anything (over-cooked, under-loaded)?
+5. ${isBike ? 'For bikes: use IF and NP over pace. Watts if available.' : 'For runs: pace + HR drift + cadence tell the story.'}
 
-INSTEAD, open with an observation specific to THIS session vs his pattern. Examples:
-- "HR crept up in the last 20 minutes — you were fighting it, weren't you?"
-- "Three days in a row now hitting Z2 and holding it. That's the point."
-- "Compliance says 95% but your IF says otherwise — tell me about the last 15 minutes."
-- "Different from Tuesday's grind — this one looks smooth."
+TONE:
+- First sentence = an observation that COULDN'T be made without all this data synthesized
+- NO formulaic openings ("Solid session", "Nice work", "Good [noun]")
+- If athlete commented, reference their comment directly
+- End with ONE clear next action from his current block's planned sessions
 
-Reference specific numbers from the workout. Tie feedback to his CURRENT BLOCK (respect the restrictions above). End with ONE clear next action matching the block phase — not random generic advice.`;
+AVOID:
+- "Distance compliance was 95%..." (boring restatement)
+- Generic advice like "keep it consistent"
+- Anything that would violate the current block's restrictions`;
 
-  return callClaude(apiKey, prompt, 500);
+  return callClaude(apiKey, prompt, 600);
 }
 
 export interface ChatReplyInput {
