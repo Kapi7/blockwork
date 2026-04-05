@@ -1,0 +1,31 @@
+name: George Debug
+
+# Manual-only. Calls a debug endpoint via env vars (no ${{ }} inside run:).
+# Endpoint value validated against an allow-list regex before use.
+
+on:
+  workflow_dispatch:
+    inputs:
+      endpoint:
+        description: 'debug-zones | debug-structure'
+        required: true
+        default: 'debug-zones'
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call debug endpoint safely
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          ENDPOINT: ${{ inputs.endpoint }}
+        run: |
+          set -eu
+          # Allow-list validation — prevent command injection via crafted input
+          case "$ENDPOINT" in
+            debug-zones|debug-structure) ;;
+            *) echo "Invalid endpoint: $ENDPOINT"; exit 1 ;;
+          esac
+          URL="https://blockwork-91h.pages.dev/api/george/${ENDPOINT}?token=${SYNC_TOKEN}"
+          curl -sS "$URL" | head -c 40000
+          echo ""
