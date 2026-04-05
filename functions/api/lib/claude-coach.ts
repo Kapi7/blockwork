@@ -310,7 +310,7 @@ async function callClaude(apiKey: string, prompt: string, maxTokens = 500): Prom
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: maxTokens,
-      system: COACH_SYSTEM,
+      system: buildSystemPrompt(),
       messages: [{ role: 'user', content: prompt }],
     }),
   });
