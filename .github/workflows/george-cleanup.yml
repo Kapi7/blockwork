@@ -1,0 +1,50 @@
+name: George Cleanup Planned Workouts
+
+# Manual-only. Deletes FUTURE planned-only workouts in a date range.
+# All inputs flow through env vars + strict regex validation — no direct
+# ${{ }} interpolation inside run: body. Protected against command injection.
+
+on:
+  workflow_dispatch:
+    inputs:
+      from_date:
+        description: 'Start date YYYY-MM-DD'
+        required: true
+        default: '2026-04-13'
+      to_date:
+        description: 'End date YYYY-MM-DD'
+        required: true
+        default: '2026-05-03'
+      limit:
+        description: 'Max deletes per run (stay under 50)'
+        required: false
+        default: '30'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cleanup safely
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          FROM_DATE: ${{ inputs.from_date }}
+          TO_DATE: ${{ inputs.to_date }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          set -eu
+          # Strict ISO date format validation — prevents injection
+          case "$FROM_DATE" in
+            [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+            *) echo "Invalid from_date"; exit 1 ;;
+          esac
+          case "$TO_DATE" in
+            [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+            *) echo "Invalid to_date"; exit 1 ;;
+          esac
+          case "$LIMIT" in
+            [0-9]*) ;;
+            *) echo "Invalid limit"; exit 1 ;;
+          esac
+          URL="https://blockwork-91h.pages.dev/api/george/cleanup?token=${SYNC_TOKEN}&from=${FROM_DATE}&to=${TO_DATE}&limit=${LIMIT}"
+          curl -sS -X POST "$URL" | head -c 4000
+          echo ""

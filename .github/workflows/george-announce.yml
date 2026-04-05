@@ -1,5 +1,7 @@
 name: George Announce Block
 
+# Note: a separate george-cleanup.yml handles deleting old planned workouts.
+
 # Manual-only: pushes a whole block's sessions to TP and posts a calendar note.
 # All inputs flow through env vars (safe — no ${{ }} interpolation in run: body).
 
