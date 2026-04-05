@@ -36,6 +36,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const blockNum = parseInt(url.searchParams.get('block') || '1', 10);
   const limit = parseInt(url.searchParams.get('limit') || '20', 10);
   const offset = parseInt(url.searchParams.get('offset') || '0', 10);
+  const deleteUnmatched = url.searchParams.get('deleteUnmatched') === '1';
 
   try {
     const token = await getBearerToken(env.TP_AUTH_COOKIE);
@@ -164,6 +165,32 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       }
     }
 
+    // Optional: delete any FUTURE planned workouts in range that were not
+    // matched by any session in this block plan. Safe: never touches completed.
+    const deletedUnmatched: any[] = [];
+    if (deleteUnmatched && opCount + 5 < 50) {
+      const claimedIds = new Set<number>();
+      for (const r of results) {
+        if (r.workoutId) claimedIds.add(r.workoutId);
+      }
+      const todayIso = new Date().toISOString().slice(0, 10);
+      for (const dayKey of Array.from(byDate.keys())) {
+        const workouts = byDate.get(dayKey) || [];
+        for (const w of workouts) {
+          if (claimedIds.has(w.workoutId)) continue;
+          const hasActual = (w.distance || 0) > 0 || (w.totalTime || 0) > 0 || (w.tssActual || 0) > 0;
+          if (hasActual) continue;
+          if (dayKey < todayIso) continue;
+          if (opCount >= limit) break;
+          try {
+            await deleteWorkout(token, ATHLETE_ID, w.workoutId);
+            deletedUnmatched.push({ id: w.workoutId, date: dayKey, title: w.title });
+            opCount += 1;
+          } catch {}
+        }
+      }
+    }
+
     const processed = results.filter((r) => r.status !== 'deferred').length;
     const nextOffset = offset + processed;
     const hasMore = nextOffset < block.sessions.length;
@@ -180,8 +207,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         skippedCompleted: results.filter((r) => r.status === 'skipped-completed').length,
         deferred: results.filter((r) => r.status === 'deferred').length,
         errors: results.filter((r) => r.status === 'error').length,
+        deletedUnmatched: deletedUnmatched.length,
       },
       results,
+      deletedUnmatched,
     });
   } catch (err: any) {
     return jsonError(err.message || 'Unknown error', 500);

@@ -19,6 +19,10 @@ on:
         description: 'Session offset (for chunked updates across multiple calls)'
         required: false
         default: '0'
+      deleteUnmatched:
+        description: 'Delete future planned workouts in range that do not match any session'
+        required: false
+        default: 'false'
 
 jobs:
   update:
@@ -30,6 +34,7 @@ jobs:
           BLOCK: ${{ inputs.block }}
           LIMIT: ${{ inputs.limit }}
           OFFSET: ${{ inputs.offset }}
+          DELETE_UNMATCHED: ${{ inputs.deleteUnmatched }}
         run: |
           set -eu
           # Strict numeric validation — prevents command injection
@@ -46,5 +51,6 @@ jobs:
             *) echo "Invalid offset"; exit 1 ;;
           esac
           URL="https://blockwork-91h.pages.dev/api/george/update-plan?token=${SYNC_TOKEN}&block=${BLOCK}&limit=${LIMIT}&offset=${OFFSET}"
+          if [ "$DELETE_UNMATCHED" = "true" ]; then URL="${URL}&deleteUnmatched=1"; fi
           curl -sS -X POST "$URL" | head -c 8000
           echo ""
