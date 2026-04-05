@@ -1,0 +1,33 @@
+name: George Announce Block
+
+# Manual-only: pushes a whole block's sessions to TP and posts a calendar note.
+# All inputs flow through env vars (safe — no ${{ }} interpolation in run: body).
+
+on:
+  workflow_dispatch:
+    inputs:
+      block:
+        description: 'Block number to announce (e.g. 0, 1, 2)'
+        required: true
+        default: '1'
+      force:
+        description: 'Force re-push even if workouts already exist'
+        required: false
+        default: 'false'
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call announce-block
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+          BLOCK: ${{ inputs.block }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          # Validate inputs to prevent injection
+          if ! [[ "$BLOCK" =~ ^[0-9]+$ ]]; then echo "Invalid block"; exit 1; fi
+          URL="https://blockwork-91h.pages.dev/api/george/announce-block?token=${SYNC_TOKEN}&block=${BLOCK}"
+          if [ "$FORCE" = "true" ]; then URL="${URL}&force=1"; fi
+          curl -sS -X POST "$URL" | head -c 8000
+          echo ""
