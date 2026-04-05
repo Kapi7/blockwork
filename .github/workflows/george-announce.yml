@@ -14,6 +14,10 @@ on:
         description: 'Force re-push even if workouts already exist'
         required: false
         default: 'false'
+      reset:
+        description: 'Delete future PLANNED workouts in block range first (safe: never touches completed)'
+        required: false
+        default: 'false'
 
 jobs:
   announce:
@@ -24,10 +28,12 @@ jobs:
           SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
           BLOCK: ${{ inputs.block }}
           FORCE: ${{ inputs.force }}
+          RESET: ${{ inputs.reset }}
         run: |
           # Validate inputs to prevent injection
           if ! [[ "$BLOCK" =~ ^[0-9]+$ ]]; then echo "Invalid block"; exit 1; fi
           URL="https://blockwork-91h.pages.dev/api/george/announce-block?token=${SYNC_TOKEN}&block=${BLOCK}"
           if [ "$FORCE" = "true" ]; then URL="${URL}&force=1"; fi
+          if [ "$RESET" = "true" ]; then URL="${URL}&reset=1"; fi
           curl -sS -X POST "$URL" | head -c 8000
           echo ""
