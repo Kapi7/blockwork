@@ -96,14 +96,12 @@ function singleStep(
 }
 
 /**
- * Convert meters to the appropriate {value, unit} — TP's UI renders `meter`
- * as "undefined" for large values in the segment preview, so use `kilometer`
- * when the distance is ≥ 1000m (metric athletes).
+ * TP's API only accepts `meter` as the distance unit for structure steps —
+ * tested `kilometer` → 400 "Invalid workout structure". The UI may display
+ * "undefined" as label for large meter values (>1000), but the structure is
+ * valid and will sync to Garmin correctly as distance-based intervals.
  */
-function distLen(meters: number): { value: number; unit: 'kilometer' | 'meter' } {
-  if (meters >= 1000) {
-    return { value: meters / 1000, unit: 'kilometer' };
-  }
+function distLen(meters: number): { value: number; unit: 'meter' } {
   return { value: meters, unit: 'meter' };
 }
 
