@@ -151,30 +151,35 @@ I'll adjust and re-push the affected workouts.
 
 Reply on THIS note or on any specific workout.`;
 
-    // DEDUP + CLEAN: only one "George — Block N starts:" note should exist for
-    // this block. If multiple exist from prior announces, keep one and delete the rest.
-    // If none, create one.
+    // DEDUP: only ONE "George — Block N starts:" note should exist, and only
+    // on block.startDate. Scan the full block range + a buffer to catch strays
+    // on other dates from previous buggy announces, delete all extras, keep one.
     let noteResult: { id: number };
-    const existingNotes = await listCalendarNotes(token, ATHLETE_ID, block.startDate, block.startDate);
+    const scanEnd = new Date(block.startDate + 'T00:00:00');
+    scanEnd.setDate(scanEnd.getDate() + 7); // startDate + 7 days of buffer
+    const scanEndIso = scanEnd.toISOString().slice(0, 10);
+    const existingNotes = await listCalendarNotes(token, ATHLETE_ID, block.startDate, scanEndIso);
     const blockNotes = existingNotes.filter((n) =>
       (n.title || '').startsWith(`George — Block ${block.number} starts:`)
     );
-
-    if (blockNotes.length === 0) {
+    // Prefer one that lives on the correct startDate
+    const onStartDate = blockNotes.find((n) => (n.noteDate || '').slice(0, 10) === block.startDate);
+    const keeper = onStartDate || blockNotes[0] || null;
+    const toDelete = blockNotes.filter((n) => n.id !== keeper?.id);
+    for (const dup of toDelete) {
+      try {
+        await deleteCalendarNote(token, ATHLETE_ID, dup.id);
+      } catch {}
+    }
+    if (keeper) {
+      noteResult = { id: keeper.id };
+    } else {
       noteResult = await createCalendarNote(token, {
         athleteId: ATHLETE_ID,
         noteDate: block.startDate,
         title,
         description,
       });
-    } else {
-      // Keep the first note (latest in TP order), delete any extras
-      noteResult = { id: blockNotes[0].id };
-      for (const dup of blockNotes.slice(1)) {
-        try {
-          await deleteCalendarNote(token, ATHLETE_ID, dup.id);
-        } catch {}
-      }
     }
 
     return Response.json({
