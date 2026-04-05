@@ -236,6 +236,33 @@ export async function createCalendarNote(
 }
 
 /**
+ * List calendar notes in a date range.
+ * GET /fitness/v1/athletes/{athleteId}/calendarNote/{startDate}/{endDate}
+ */
+export async function listCalendarNotes(
+  token: string,
+  athleteId: number,
+  startDate: string,
+  endDate: string,
+): Promise<Array<{ id: number; noteDate: string; title: string; description?: string }>> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v1/athletes/${athleteId}/calendarNote/${startDate}/${endDate}`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'User-Agent': 'blockwork-bridge',
+    },
+  });
+  if (!res.ok) {
+    // Some endpoints return 404 for empty ranges — treat as empty list
+    if (res.status === 404) return [];
+    throw new Error(`listCalendarNotes failed: ${res.status}`);
+  }
+  const data = (await res.json()) as any;
+  return Array.isArray(data) ? data : (data.notes || data.calendarNotes || []);
+}
+
+/**
  * Delete a calendar note.
  * DELETE /fitness/v1/athletes/{athleteId}/calendarNote/{noteId}
  */

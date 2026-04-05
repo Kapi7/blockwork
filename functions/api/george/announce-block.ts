@@ -16,6 +16,8 @@ import {
   createWorkout,
   createCalendarNote,
   deleteWorkout,
+  listCalendarNotes,
+  deleteCalendarNote,
 } from '../lib/tp-client';
 import { BLOCKS } from '../lib/training-plan';
 
@@ -149,13 +151,31 @@ I'll adjust and re-push the affected workouts.
 
 Reply on THIS note or on any specific workout.`;
 
-    // Post calendar note on block start date
-    const noteResult = await createCalendarNote(token, {
-      athleteId: ATHLETE_ID,
-      noteDate: block.startDate,
-      title,
-      description,
-    });
+    // DEDUP + CLEAN: only one "George — Block N starts:" note should exist for
+    // this block. If multiple exist from prior announces, keep one and delete the rest.
+    // If none, create one.
+    let noteResult: { id: number };
+    const existingNotes = await listCalendarNotes(token, ATHLETE_ID, block.startDate, block.startDate);
+    const blockNotes = existingNotes.filter((n) =>
+      (n.title || '').startsWith(`George — Block ${block.number} starts:`)
+    );
+
+    if (blockNotes.length === 0) {
+      noteResult = await createCalendarNote(token, {
+        athleteId: ATHLETE_ID,
+        noteDate: block.startDate,
+        title,
+        description,
+      });
+    } else {
+      // Keep the first note (latest in TP order), delete any extras
+      noteResult = { id: blockNotes[0].id };
+      for (const dup of blockNotes.slice(1)) {
+        try {
+          await deleteCalendarNote(token, ATHLETE_ID, dup.id);
+        } catch {}
+      }
+    }
 
     return Response.json({
       coach: 'George',

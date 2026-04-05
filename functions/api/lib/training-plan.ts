@@ -73,7 +73,7 @@ function pacePctOfThreshold(paceMmSs: string): number {
   return Math.round((225 / seconds) * 100);
 }
 
-/** Single-step block (warm-up, cool-down, or standalone steady segment). */
+/** Single-step block by DURATION (warm-up, cool-down, standalone segment). */
 function singleStep(
   name: string,
   seconds: number,
@@ -92,6 +92,61 @@ function singleStep(
       intensityClass,
       openDuration: false,
     }],
+  };
+}
+
+/** Single-step block by DISTANCE (meters). Use when target is "run X km @ pace Y". */
+function distStep(
+  name: string,
+  meters: number,
+  minPct: number,
+  maxPct: number,
+  intensityClass: TpStructureStep['intensityClass'],
+): TpStructureGroup {
+  return {
+    type: 'step',
+    length: { value: 1, unit: 'repetition' },
+    steps: [{
+      type: 'step',
+      name,
+      length: { value: meters, unit: 'meter' },
+      targets: [{ minValue: minPct, maxValue: maxPct }],
+      intensityClass,
+      openDuration: false,
+    }],
+  };
+}
+
+/**
+ * Repeating distance-based interval set (e.g. 6x 400m hard + 200m jog).
+ * Hard phase measured in meters, rest phase can be meters or seconds.
+ */
+function repeatSetDist(
+  reps: number,
+  hardMeters: number, hardMinPct: number, hardMaxPct: number,
+  restMeters: number, restMinPct: number, restMaxPct: number,
+): TpStructureGroup {
+  return {
+    type: 'repetition',
+    length: { value: reps, unit: 'repetition' },
+    steps: [
+      {
+        type: 'step',
+        name: 'Hard',
+        length: { value: hardMeters, unit: 'meter' },
+        targets: [{ minValue: hardMinPct, maxValue: hardMaxPct }],
+        intensityClass: 'active',
+        openDuration: false,
+      },
+      {
+        type: 'step',
+        name: 'Jog',
+        length: { value: restMeters, unit: 'meter' },
+        targets: [{ minValue: restMinPct, maxValue: restMaxPct }],
+        intensityClass: 'rest',
+        openDuration: false,
+      },
+    ],
   };
 }
 
@@ -145,99 +200,134 @@ function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
   };
 }
 
-// Pre-built structures for Block 1's key sessions.
-// Pace % = 100 × (225 / targetPaceSeconds) — FASTER pace = HIGHER %.
+// Pre-built structures keyed to Itay's real TP zones.
+//   Run pace %: 100% = 3:45/km LTP. Faster pace = higher %.
+//   Bike power %: 100% = 300W FTP.
+// Distance-based where it makes training sense (400m, 1.5km, long-run segments).
+// Time-based for warm-ups, cooldowns, and "find-the-gear" style work (fartlek).
 export const STRUCTURES = {
-  // Easy run: 1km WU → 6km steady easy (Z1-Z2, 70-80% threshold pace = 5:21-4:41/km) → 1km CD
+  // ═══════════════ RUN: EASY / BASE ═══════════════
+  // Easy 8km: 1km WU → 6km steady easy → 1km CD (all distance)
   easyRun8km: runStructure([
-    singleStep('Warm up', 360,  65, 75, 'warmUp'),
-    singleStep('Steady',  2160, 72, 82, 'active'),
-    singleStep('Cool down', 360, 65, 75, 'coolDown'),
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 6000, 72, 80, 'active'),
+    distStep('Cool down', 1000, 65, 75, 'coolDown'),
   ]),
 
-  // Easy run 9km + 6x100m strides finisher
+  // Easy 6km (short recovery run, distance-based)
+  easyRun6km: runStructure([
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 4000, 72, 80, 'active'),
+    distStep('Cool down', 1000, 65, 75, 'coolDown'),
+  ]),
+
+  // Easy 7km (Block 0 late week)
+  easyRun7km: runStructure([
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 5000, 72, 80, 'active'),
+    distStep('Cool down', 1000, 65, 75, 'coolDown'),
+  ]),
+
+  // Easy 9km + 6x100m strides finisher (distance-based body, time-based strides)
   easyRunStrides9km: runStructure([
-    singleStep('Warm up', 420, 65, 75, 'warmUp'),
-    singleStep('Steady',  2100, 72, 82, 'active'),
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 7000, 72, 80, 'active'),
     {
       type: 'repetition',
       length: { value: 6, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride',    length: { value: 20, unit: 'second' }, targets: [{ minValue: 110, maxValue: 125 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back', length: { value: 60, unit: 'second' }, targets: [{ minValue: 45, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
-    singleStep('Cool down', 240, 60, 70, 'coolDown'),
+    distStep('Cool down', 400, 60, 70, 'coolDown'),
   ]),
 
-  // Easy run 6km + 4x100m strides (shorter, pre-long fallback)
+  // Easy 6km + 4x100m strides (pre-long flush)
   easyRunStrides6km: runStructure([
-    singleStep('Warm up', 360, 65, 75, 'warmUp'),
-    singleStep('Steady',  1500, 72, 82, 'active'),
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 4000, 72, 80, 'active'),
     {
       type: 'repetition',
       length: { value: 4, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride',    length: { value: 20, unit: 'second' }, targets: [{ minValue: 110, maxValue: 125 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back', length: { value: 60, unit: 'second' }, targets: [{ minValue: 45, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
-    singleStep('Cool down', 240, 60, 70, 'coolDown'),
+    distStep('Cool down', 400, 60, 70, 'coolDown'),
   ]),
 
-  // 6x 200m uphill @ 9/10 (~3:30/km = 107%). Walk-down recovery 90s easy jog (65%).
-  hillRepeats6x200: runStructure([
-    singleStep('Warm up', 900, 65, 75, 'warmUp'),   // 15min WU + drills
+  // Easy 7km + 6x100m strides (Block 0 peak, end-of-recovery)
+  easyRunStrides7km: runStructure([
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 5000, 72, 80, 'active'),
     {
       type: 'repetition',
       length: { value: 6, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Uphill HARD', length: { value: 45, unit: 'second' }, targets: [{ minValue: 105, maxValue: 115 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk down',   length: { value: 90, unit: 'second' }, targets: [{ minValue: 55, maxValue: 65 }],   intensityClass: 'rest', openDuration: false },
+        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
-    singleStep('Cool down + strides', 720, 70, 80, 'coolDown'), // 12min
+    distStep('Cool down', 400, 60, 70, 'coolDown'),
   ]),
 
-  // 8x (90s threshold / 90s easy) — 4:00/km = 94%, easy 5:15/km = 71%
+  // 6x 200m uphill (distance-based) — 3:30-3:45/km (100-107% LTP), walk-back rest
+  hillRepeats6x200: runStructure([
+    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),   // 15min WU
+    {
+      type: 'repetition',
+      length: { value: 6, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Uphill HARD', length: { value: 200, unit: 'meter' }, targets: [{ minValue: 100, maxValue: 108 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk down',   length: { value: 90,  unit: 'second' }, targets: [{ minValue: 50, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
+      ],
+    },
+    singleStep('Cool down + 4× 100m strides', 720, 70, 80, 'coolDown'),
+  ]),
+
+  // Fartlek 8x (90s hard / 90s easy) — time-based by design (find-the-gears session)
   fartlek8x90: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),   // 12min
-    repeatSet(8, 90, 90, 100, 90, 65, 75),          // 8 × (90s hard Z4 / 90s easy)
+    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    repeatSet(8, 90, 90, 100, 90, 65, 75),
     singleStep('Cool down', 720, 65, 75, 'coolDown'),
   ]),
 
-  // 6x 400m @ 3:30-3:35/km (Z5b 5K pace), 200m jog recovery ~90s
+  // 6x 400m (DISTANCE) @ 3:30-3:35/km (Z5b 5K pace), 200m jog recovery
   track6x400: runStructure([
-    singleStep('Warm up + drills', 1080, 65, 75, 'warmUp'), // 18min
-    repeatSet(6, 85, 105, 110, 90, 55, 65),                // 6 × (85s HARD / 90s jog)
+    singleStep('Warm up + drills', 1080, 65, 75, 'warmUp'),
+    repeatSetDist(6, 400, 105, 110, 200, 55, 65),
     singleStep('Cool down', 600, 65, 75, 'coolDown'),
   ]),
 
-  // 3x 1.5km tempo @ 4:15/km (88% threshold), 90s jog recovery
+  // 3x 1.5km (DISTANCE) tempo @ 4:15/km (88% threshold), 400m jog recovery
   tempo3x1500: runStructure([
     singleStep('Warm up', 720, 65, 75, 'warmUp'),
-    repeatSet(3, 390, 86, 92, 90, 60, 70),   // 3 × (~6:30 tempo / 90s)
+    repeatSetDist(3, 1500, 86, 92, 400, 55, 65),
     singleStep('Cool down', 600, 65, 75, 'coolDown'),
   ]),
 
-  // Progressive long run 14km — 10km @ 73-75% → 2km @ 80% → 2km @ 85%
+  // Progressive long run 14km — DISTANCE segments
   longRun14kmProgressive: runStructure([
-    singleStep('Segment 1 — patience',  3000, 70, 76, 'active'),   // 50min easy
-    singleStep('Segment 2 — shift',     540,  78, 83, 'active'),   // 9min
-    singleStep('Segment 3 — push',      540,  83, 88, 'active'),   // 9min
+    distStep('Segment 1 — patience',  10000, 70, 76, 'active'),
+    distStep('Segment 2 — shift',     2000,  78, 83, 'active'),
+    distStep('Segment 3 — push',      2000,  83, 88, 'active'),
   ]),
 
+  // Progressive long run 16km — DISTANCE segments
   longRun16kmProgressive: runStructure([
-    singleStep('Segment 1 — hold back', 3300, 70, 76, 'active'),
-    singleStep('Segment 2 — shift',     840,  78, 83, 'active'),
-    singleStep('Segment 3 — surge',     540,  83, 90, 'active'),
+    distStep('Segment 1 — hold back', 11000, 70, 76, 'active'),
+    distStep('Segment 2 — shift',     3000,  78, 83, 'active'),
+    distStep('Segment 3 — surge',     2000,  83, 90, 'active'),
   ]),
 
+  // The 18km Block test — 4 distance segments, last km fastest
   longRun18kmTest: runStructure([
-    singleStep('Segment 1 — patience', 3900, 70, 75, 'active'),
-    singleStep('Segment 2 — shift',    540,  80, 85, 'active'),
-    singleStep('Segment 3 — push',     540,  85, 92, 'active'),
-    singleStep('Segment 4 — FAST',     270,  92, 100, 'active'),
+    distStep('Segment 1 — patience', 13000, 70, 75, 'active'),
+    distStep('Segment 2 — shift',    2000,  80, 85, 'active'),
+    distStep('Segment 3 — push',     2000,  85, 92, 'active'),
+    distStep('Segment 4 — FAST',     1000,  92, 100, 'active'),
   ]),
 
   // ──────── BIKE ────────

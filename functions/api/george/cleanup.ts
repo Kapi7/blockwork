@@ -7,7 +7,13 @@
  * Worker's 50 subrequest cap. Call repeatedly until deletedCount === 0.
  */
 
-import { getBearerToken, listWorkouts, deleteWorkout } from '../lib/tp-client';
+import {
+  getBearerToken,
+  listWorkouts,
+  deleteWorkout,
+  listCalendarNotes,
+  deleteCalendarNote,
+} from '../lib/tp-client';
 
 interface Env {
   TP_AUTH_COOKIE: string;
@@ -57,6 +63,23 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       }
     }
 
+    // Also dedup calendar notes in range — keep one of each (title, date), delete extras.
+    // And delete any duplicate "George — Block N starts:" notes (keep newest).
+    const notes = await listCalendarNotes(token, ATHLETE_ID, from, to);
+    const seen = new Map<string, number>(); // title+date → keep id
+    const deletedNotes: number[] = [];
+    for (const n of notes) {
+      const key = `${(n.noteDate || '').slice(0, 10)}|${n.title || ''}`;
+      if (seen.has(key)) {
+        try {
+          await deleteCalendarNote(token, ATHLETE_ID, n.id);
+          deletedNotes.push(n.id);
+        } catch {}
+      } else {
+        seen.set(key, n.id);
+      }
+    }
+
     return Response.json({
       from,
       to,
@@ -64,6 +87,9 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       deletedCount: deleted.length,
       remaining: candidates.length - deleted.length,
       errors,
+      totalNotesInRange: notes.length,
+      deletedDuplicateNotes: deletedNotes.length,
+      uniqueNotesKept: seen.size,
     });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), {
