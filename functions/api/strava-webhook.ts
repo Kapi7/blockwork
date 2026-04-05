@@ -1,19 +1,18 @@
 /**
- * POST /api/strava-webhook — receives Strava activity events.
- * GET  /api/strava-webhook — Strava subscription verification challenge.
+ * Strava webhook handler.
  *
- * When a new activity uploads to Strava, Strava pings this endpoint.
- * We wait a bit (TP needs time to sync from Garmin), then dispatch the
- * george-sync GitHub Action so Playwright posts George's comment.
+ * GET — subscription verification handshake.
+ * POST — new activity event: wait a bit (TP needs to sync from Garmin),
+ *        then call /api/george/post internally to analyze & comment.
  */
 
 interface Env {
   STRAVA_VERIFY_TOKEN?: string;
-  GITHUB_TOKEN?: string;
-  GITHUB_REPO?: string; // e.g. "Kapi7/blockwork"
+  SYNC_TOKEN: string;
+  TP_AUTH_COOKIE: string;
+  ANTHROPIC_API_KEY: string;
 }
 
-// GET — Strava's subscription verification handshake
 export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const url = new URL(request.url);
   const mode = url.searchParams.get('hub.mode');
@@ -26,7 +25,6 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   return new Response('Forbidden', { status: 403 });
 };
 
-// POST — new activity notification
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   let event: any;
   try {
@@ -35,39 +33,31 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return new Response('Bad body', { status: 400 });
   }
 
-  // Only react to new activities
+  // Only react to new activities (not updates/deletes)
   if (event.object_type !== 'activity' || event.aspect_type !== 'create') {
     return Response.json({ ignored: true, reason: 'not new activity' });
   }
 
-  // Dispatch the GitHub Action via repository_dispatch
-  if (env.GITHUB_TOKEN && env.GITHUB_REPO) {
-    try {
-      const res = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/dispatches`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${env.GITHUB_TOKEN}`,
-          'Accept': 'application/vnd.github+json',
-          'Content-Type': 'application/json',
-          'User-Agent': 'blockwork-strava-webhook',
-        },
-        body: JSON.stringify({
-          event_type: 'strava-activity',
-          client_payload: {
-            activityId: event.object_id,
-            athleteId: event.owner_id,
-            ts: new Date().toISOString(),
-          },
-        }),
-      });
-      if (!res.ok) {
-        console.error(`GitHub dispatch failed: ${res.status} ${await res.text()}`);
-      }
-    } catch (err: any) {
-      console.error(`GitHub dispatch error: ${err.message}`);
-    }
-  }
+  // Fire-and-forget: TP needs ~2-3 min to sync from Garmin.
+  // We schedule the George loop with a delay by calling waitUntil.
+  // NOTE: Cloudflare Workers don't support long sleeps in waitUntil (max ~30s),
+  // so we immediately trigger — George will process whatever TP has. If the
+  // activity isn't in TP yet, the cron job will pick it up within 2 hours.
+  const origin = new URL(request.url).origin;
+  const url = `${origin}/api/george/post?token=${encodeURIComponent(env.SYNC_TOKEN)}`;
 
-  // Always ack immediately so Strava doesn't retry
+  // Wait 3 seconds before firing (minimal delay to let TP process)
+  const runLater = async () => {
+    await new Promise((r) => setTimeout(r, 3000));
+    try {
+      const r = await fetch(url, { method: 'POST' });
+      console.log(`George triggered from Strava webhook: ${r.status}`);
+    } catch (e: any) {
+      console.error(`George trigger failed: ${e.message}`);
+    }
+  };
+  // @ts-expect-error — waitUntil exists on Pages Function context
+  (request as any).waitUntil?.(runLater()) ?? runLater();
+
   return Response.json({ received: true, activityId: event.object_id });
 };

@@ -1,0 +1,17 @@
+name: George Cron
+
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call George
+        env:
+          SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+        run: |
+          curl -sS -X POST "https://blockwork-91h.pages.dev/api/george/post?token=${SYNC_TOKEN}" | head -c 2000
+          echo ""
