@@ -42,6 +42,29 @@ export interface TrainingBlock {
   sessions?: BlockSession[];       // optional detailed session list
 }
 
+/**
+ * Training zones — calibrated from Itay's PBs (1:21 HM, 2:52 mara, 18:00 5K target sub-17:30).
+ * Use these inside every structured session so targets are explicit.
+ */
+export const ZONES = {
+  run: {
+    easy: { pace: '5:00-5:20/km', hr: 'Z1-Z2, <145bpm', rpe: '3-4/10' },
+    steady: { pace: '4:40-4:55/km', hr: 'Z2-Z3, 150-165bpm', rpe: '5/10' },
+    tempo: { pace: '4:15-4:25/km', hr: 'Z3-Z4, 165-175bpm', rpe: '7/10' },
+    threshold: { pace: '4:00-4:10/km', hr: 'Z4, 175-180bpm', rpe: '8/10' },
+    fivek: { pace: '3:28-3:35/km', hr: 'Z4-Z5, 180-187bpm', rpe: '9/10' },
+    vo2: { pace: '3:15-3:25/km', hr: 'Z5, 185+bpm', rpe: '9.5/10' },
+  },
+  bike: {
+    // Assumed FTP ≈ 250W (update if known). Percentages scale correctly either way.
+    z1: { power: '<56% FTP (<140W)', hr: '<125bpm', rpe: '2/10' },
+    z2: { power: '56-75% FTP (140-190W)', hr: '125-150bpm', rpe: '3-4/10' },
+    z3: { power: '76-90% FTP (190-225W)', hr: '150-165bpm', rpe: '5-6/10' },
+    z4: { power: '91-105% FTP (228-263W)', hr: '165-175bpm', rpe: '7-8/10' },
+    z5: { power: '106-120% FTP (265-300W)', hr: '175+bpm', rpe: '9/10' },
+  },
+};
+
 export const ATHLETE_PROFILE = {
   name: 'Itay Kapiloto',
   location: 'Cyprus',
@@ -145,34 +168,337 @@ export const BLOCKS: TrainingBlock[] = [
     ],
     sessions: [
       // ============ WEEK 1 (Apr 14-20) — Build introduction ============
-      { date: '2026-04-14', title: 'Easy run', workoutType: 3, description: 'Easy run 8km @ 5:10/km\nFirst run of base block. Keep it controlled, no ego.\nHR target < 145bpm.', distancePlanned: 8000, totalTimePlanned: 0.7 },
-      { date: '2026-04-15', title: 'KEY 1 — Hill repeats', workoutType: 3, description: 'Hill repeats — power development\n\nWU: 2km easy + dynamic drills (leg swings, high knees, A-skips)\n\nMAIN: 6x200m uphill @ hard effort (42-45sec / 3:30-3:45/km pace)\n- Find a 6-8% grade hill\n- Drive knees, pump arms, stay tall\n- Jog back down for recovery (take 90sec+)\n\nCD: 2km easy + 4x100m flat strides\n\nTotal: ~10km. Hills build the power that speed sits on.', distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65 },
+      { date: '2026-04-14', title: 'Easy run', workoutType: 3, description: `EASY RUN — base aerobic
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (1km)
+  • Easy jog 5:20/km | HR Z1 <140bpm | RPE 3/10
+
+MAIN  (6km)
+  • Steady easy 5:05-5:15/km
+  • HR cap: Z2, <145bpm
+  • Breathing: full nasal, could chat easily
+  • RPE 3-4/10
+
+COOL-DOWN  (1km)
+  • Jog 5:25/km + walk 2min
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 8km ~42min  |  TSS ~40
+FIRST RUN OF BASE BLOCK — no ego. Pace is a CAP, not a target.`, distancePlanned: 8000, totalTimePlanned: 0.7, tssPlanned: 40 },
+      { date: '2026-04-15', title: 'KEY 1 — Hill repeats', workoutType: 3, description: `KEY 1 — HILL REPEATS (power)
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (2.5km, ~15min)
+  • 2km easy jog 5:10/km | HR <150
+  • Dynamic drills: leg swings, high knees, A-skips, B-skips (5min)
+  • 3x 80m accelerations (build to 5K pace)
+
+MAIN SET  —  6x 200m UPHILL
+  • Grade: 6-8%
+  • Target: 42-45sec per rep  (≈ 3:30-3:45/km pace)
+  • Effort: 9/10 — DRIVE knees, pump arms, tall posture
+  • HR: Z4-Z5 on rep, recover to Z2 before next
+  • Recovery: easy jog DOWN the hill (~90sec), full breathing restored
+
+COOL-DOWN  (2.5km)
+  • 2km easy 5:20/km
+  • 4x 100m FLAT strides (build, not sprint)
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~10km  |  TSS ~65
+PURPOSE: neuromuscular power + form under load.
+Hills are the foundation that 5K speed sits on.`, distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65 },
       { date: '2026-04-16', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Sun salutations\n- Hip openers, runner\'s lunge sequence\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes, IT band\n\nRecovery-focused flow between key sessions.', totalTimePlanned: 0.67 },
       { date: '2026-04-16', title: 'PM Strength', workoutType: 8, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
-      { date: '2026-04-17', title: 'KEY 2 — Fartlek', workoutType: 3, description: 'Fartlek — find the gears\n\nWU: 2km easy\n\nMAIN: 8x (90sec hard / 90sec easy)\n- Hard = 4:00-4:10/km effort (by feel, not watch)\n- Easy = 5:15+ recovery jog\n- Total: ~24min of work\n\nCD: 2km easy\n\nTotal: ~10km. Run by feel. Hard should be 8/10 effort.', distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 75 },
-      { date: '2026-04-18', title: 'Easy run pre-long', workoutType: 3, description: 'Easy run 6km @ 5:15/km\n\nPre-long run day. Keep short and easy.\nFlush legs, stay loose.', distancePlanned: 6000, totalTimePlanned: 0.52 },
-      { date: '2026-04-19', title: 'Long run — build endurance', workoutType: 3, description: 'Long run 14km — negative split\n\nSeg 1: km 1-10 @ 5:00-5:05/km (easy, relaxed)\nSeg 2: km 11-12 @ 4:45-4:50/km (pick it up slightly)\nSeg 3: km 13-14 @ 4:35-4:40/km (controlled push)\n\nFinish feeling strong, not dead.\nIf Seg 3 feels hard, Seg 1 was too fast.', distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 90 },
-      { date: '2026-04-20', title: 'Long ride — aerobic builder', workoutType: 2, description: 'Long ride 2.5hrs Z2\n\n- Outdoor route with some hills\n- Or Zwift — pick a hilly world\n- Steady Z2, natural Z3 on climbs\n- Hydrate properly\n\nBike does the aerobic volume. No impact on the legs.', totalTimePlanned: 2.5, tssPlanned: 150 },
+      { date: '2026-04-17', title: 'KEY 2 — Fartlek', workoutType: 3, description: `KEY 2 — FARTLEK  (find the gears)
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (2km)
+  • Easy jog 5:10/km | HR <150
+  • 4x 80m strides (build to tempo)
+
+MAIN SET  —  8x (90s HARD / 90s EASY)
+  • HARD: 4:00-4:10/km (threshold)
+     HR Z4 175-180bpm  |  RPE 8/10
+  • EASY: 5:15-5:30/km recovery jog
+     HR drop to Z2, ~155bpm  |  RPE 4/10
+  • Run by FEEL, not watch — road terrain permitting
+  • Total work: 12min | Total set: 24min
+
+COOL-DOWN  (2km)
+  • Easy 5:20/km + 2min walk
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~10km  |  TSS ~75
+PURPOSE: teach the body to switch gears without blowing up.`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 75 },
+      { date: '2026-04-18', title: 'Easy run pre-long', workoutType: 3, description: `EASY PRE-LONG
+━━━━━━━━━━━━━━━━━━━━━━━━
+MAIN  (6km)
+  • Easy 5:15-5:25/km | HR Z1-Z2, <140bpm | RPE 3/10
+  • Flush legs, stay loose, no surges
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 6km ~32min  |  TSS ~30
+Tomorrow is the long run — protect the tank.`, distancePlanned: 6000, totalTimePlanned: 0.52, tssPlanned: 30 },
+      { date: '2026-04-19', title: 'Long run — negative split', workoutType: 3, description: `LONG RUN — NEGATIVE SPLIT  (14km)
+━━━━━━━━━━━━━━━━━━━━━━━━
+SEGMENT 1  —  km 1-10  (PATIENCE)
+  • Pace: 5:00-5:05/km
+  • HR: Z2 <150bpm
+  • RPE 4/10 — feel held back
+  • If km 1-3 feel hard → you went too fast
+
+SEGMENT 2  —  km 11-12  (SHIFT)
+  • Pace: 4:45-4:50/km
+  • HR: Z2-Z3, 155-165bpm
+  • RPE 6/10
+
+SEGMENT 3  —  km 13-14  (CONTROLLED PUSH)
+  • Pace: 4:35-4:40/km
+  • HR: Z3, 165-172bpm
+  • RPE 7/10 — finish STRONG, not dead
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 14km ~70min  |  TSS ~90
+Last km should be your fastest.
+If Seg 3 feels desperate, Seg 1 was too hot.`, distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 90 },
+      { date: '2026-04-20', title: 'Long ride — aerobic builder', workoutType: 2, description: `LONG RIDE — Z2 AEROBIC (2.5hrs)
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (15min)
+  • Progressive Z1→Z2 | 130→180W | 85-90rpm
+
+MAIN  (2hrs 5min)
+  • Steady Z2 | 160-190W (65-75% FTP) | HR 130-150bpm
+  • Cadence 85-95rpm
+  • Natural Z3 bursts on climbs OK (210-225W, <2min)
+  • RPE 3-5/10 — full-sentence chat
+
+COOL-DOWN  (10min)
+  • Easy spin Z1 | <140W | 95rpm
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 2.5hrs  |  TSS ~150
+Bike = aerobic volume with ZERO impact on legs.
+Hydrate: 750ml/hr + electrolytes.`, totalTimePlanned: 2.5, tssPlanned: 150 },
 
       // ============ WEEK 2 (Apr 21-27) — Build intensity ============
-      { date: '2026-04-21', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 9km @ 5:05/km\n+ 6x100m strides at the end\n\nStrides: build to 90%, hold 30m, walk back recovery.\nShould feel sharp, not sprinting.', distancePlanned: 9000, totalTimePlanned: 0.79 },
-      { date: '2026-04-22', title: 'KEY 1 — Track speed endurance', workoutType: 3, description: 'Track — speed endurance\n\nWU: 2km easy + drills (A-skips, B-skips, butt kicks) + 3x80m accelerations\n\nMAIN: 6x400m @ 84-86sec (3:30-3:35/km pace)\n- 200m jog recovery (keep moving, ~90sec)\n- Smooth and controlled — don\'t tighten up\n- Focus: relaxed shoulders, quick feet\n\nCD: 2km easy\n\nTotal: ~10km. This is 5K pace territory. Should feel fast but NOT desperate.', distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80 },
+      { date: '2026-04-21', title: 'Easy run + strides', workoutType: 3, description: `EASY + STRIDES
+━━━━━━━━━━━━━━━━━━━━━━━━
+MAIN  (8km)
+  • Easy 5:00-5:10/km | HR Z1-Z2, <145bpm | RPE 3-4/10
+
+FINISHER — 6x 100m STRIDES
+  • Build to 90% over 60m, hold 30m, decel 10m
+  • Pace feel: ~3:20/km for the fast portion
+  • Recovery: full walk-back (60-90sec)
+  • Goal: sharp, relaxed, NOT sprinting
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 9km ~48min  |  TSS ~50
+Strides prime the nervous system for tomorrow's track.`, distancePlanned: 9000, totalTimePlanned: 0.79, tssPlanned: 50 },
+      { date: '2026-04-22', title: 'KEY 1 — Track 6x400m', workoutType: 3, description: `KEY 1 — TRACK SPEED ENDURANCE
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (2.5km, ~15min)
+  • 2km easy 5:10/km | HR <150
+  • Drills: A-skips, B-skips, butt kicks, high knees (5min)
+  • 3x 80m accelerations (tempo → 5K pace → cruise)
+
+MAIN SET  —  6x 400m
+  • Target: 84-86 sec per rep  (3:30-3:35/km)
+  • HR: Z4-Z5, 178-185bpm on last 100m
+  • RPE 8.5/10 — fast but NOT desperate
+  • Recovery: 200m jog, ~90sec, keep moving
+  • Form cues: relaxed shoulders, quick feet, tall chest
+
+COOL-DOWN  (2km)
+  • Easy 5:20/km + 2min walk + gentle stretch
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~10km  |  TSS ~80
+5K PACE TERRITORY.
+Targets: 84s=fast end | 86s=control end.
+Negative split the set (6th = fastest).`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80 },
       { date: '2026-04-23', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\nRecovery-focused flow between key sessions.\nFocus: hips, hamstrings, calves.', totalTimePlanned: 0.67 },
       { date: '2026-04-23', title: 'PM Strength', workoutType: 8, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
-      { date: '2026-04-24', title: 'KEY 2 — Tempo cruise', workoutType: 3, description: 'Tempo cruise — lock in the pace\n\nWU: 2km easy + 4x100m strides\n\nMAIN: 3x1.5km @ 4:15-4:25/km\n- 90sec jog recovery between reps\n- Smooth, metronomic pace\n- Breathing should be controlled, not gasping\n\nCD: 2km easy\n\nTotal: ~11km. First real tempo of the block.', distancePlanned: 11000, totalTimePlanned: 0.95, tssPlanned: 85 },
-      { date: '2026-04-25', title: 'Easy bike recovery', workoutType: 2, description: 'Easy recovery ride 60min Z1\n\nFlat route, low power, high cadence.\nRecovery before tomorrow\'s long run.\n\nChoose bike over run today — protect the legs.', totalTimePlanned: 1.0 },
-      { date: '2026-04-26', title: 'Long run — progressive', workoutType: 3, description: 'Long run 16km — progressive\n\nSeg 1: km 1-11 @ 5:00/km (patience — hold back)\nSeg 2: km 12-14 @ 4:45/km (shift gears)\nSeg 3: km 15-16 @ 4:30-4:35/km (controlled surge)\n\nLast km should be your fastest.\nThe last 5km teaches your body to run fast when tired.', distancePlanned: 16000, totalTimePlanned: 1.35, tssPlanned: 110 },
-      { date: '2026-04-27', title: 'Long ride + hills', workoutType: 2, description: 'Long ride 2.5-3hrs — endurance + hills\n\n- Outdoor: pick a route with 3-4 climbs\n- Or Zwift: hilly route (Innsbruck, Watopia hilly)\n- Z2 base, push Z3 on every climb\n- Stand on climbs for 30sec intervals\n\nHills on the bike = free strength work.', totalTimePlanned: 2.75, tssPlanned: 170 },
+      { date: '2026-04-24', title: 'KEY 2 — Tempo 3x1.5km', workoutType: 3, description: `KEY 2 — TEMPO CRUISE
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (2.5km)
+  • 2km easy 5:10/km
+  • 4x 100m strides
+
+MAIN SET  —  3x 1.5km
+  • Target: 4:15-4:25/km  (threshold)
+  • HR: Z4, 172-180bpm steady
+  • RPE 7.5/10 — comfortably hard, controlled breathing
+  • Recovery: 90sec easy jog (~5:40/km)
+  • Goal: METRONOMIC pacing — each rep within 3sec of target
+
+COOL-DOWN  (2km)
+  • Easy 5:20/km + walk
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~11km  |  TSS ~85
+First real tempo of the block.
+If HR drifts >182 mid-rep → ease back.`, distancePlanned: 11000, totalTimePlanned: 0.95, tssPlanned: 85 },
+      { date: '2026-04-25', title: 'Easy bike recovery', workoutType: 2, description: `RECOVERY RIDE  (60min)
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (5min)
+  • Spin-up Z1 | <140W | 90rpm
+
+MAIN  (50min)
+  • Easy Z1 | 120-160W (50-60% FTP)
+  • HR <125bpm | Cadence 90-95rpm
+  • RPE 2/10 — flushing, not training
+
+COOL-DOWN  (5min)
+  • Soft pedal | <120W
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 60min  |  TSS ~35
+Protect the legs for tomorrow's long run.
+Bike > run today. No exceptions.`, totalTimePlanned: 1.0, tssPlanned: 35 },
+      { date: '2026-04-26', title: 'Long run — progressive', workoutType: 3, description: `LONG RUN — PROGRESSIVE  (16km)
+━━━━━━━━━━━━━━━━━━━━━━━━
+SEGMENT 1  —  km 1-11  (HOLD BACK)
+  • Pace: 5:00-5:05/km
+  • HR: Z2, <150bpm
+  • RPE 4/10 — should feel EASY
+
+SEGMENT 2  —  km 12-14  (SHIFT)
+  • Pace: 4:45/km
+  • HR: Z3, 155-165bpm
+  • RPE 6/10
+
+SEGMENT 3  —  km 15-16  (CONTROLLED SURGE)
+  • Pace: 4:30-4:35/km
+  • HR: Z3-Z4, 165-172bpm
+  • RPE 7.5/10 — strong, not max
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 16km ~82min  |  TSS ~110
+Last 5km teaches the body to run fast when TIRED.
+Fueling: 30g carbs at km 9 if available.`, distancePlanned: 16000, totalTimePlanned: 1.35, tssPlanned: 110 },
+      { date: '2026-04-27', title: 'Long ride + hills', workoutType: 2, description: `LONG RIDE + HILLS  (2h45)
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (15min)
+  • Progressive Z1→Z2 | 130→180W | 90rpm
+
+MAIN  —  Endurance + Climbs
+  • Base: Z2 | 170-200W (70-80% FTP) | 85-90rpm
+  • CLIMBS (3-4 natural or Zwift):
+     Seated: Z3 | 210-230W | 80rpm
+     Standing surges: 30sec @ Z4 | 250W+ | every 2min
+  • HR: 130-160bpm base, 165-175 on climbs
+  • RPE 5-7/10 on climbs
+
+COOL-DOWN  (10min)
+  • Easy spin Z1 | 95rpm
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 2h45  |  TSS ~170
+Hills on the bike = free strength work for running.
+Stand on EVERY climb for at least 30sec.`, totalTimePlanned: 2.75, tssPlanned: 170 },
 
       // ============ WEEK 3 (Apr 28 - May 4) — Absorb + test ============
       { date: '2026-04-28', title: 'Easy bike Z2', workoutType: 2, description: 'Easy recovery ride 60-75min Z1-Z2\n\nFlat, easy, conversation pace.\nAbsorb week — back off running, let the body absorb 2 weeks of work.', totalTimePlanned: 1.25 },
-      { date: '2026-04-29', title: 'KEY lite — Hills + tempo', workoutType: 3, description: 'Hill sprints + tempo finish (absorb week)\n\nWU: 2km easy + drills\n\nMAIN SET 1: 10x10sec hill sprints\n- ALL-OUT effort, maximal power\n- Walk back to start (full recovery — 60-90sec)\n- These are neuromuscular, not cardio\n\nMAIN SET 2: 2km tempo @ 4:20-4:30/km\n- Smooth transition from hills to flat\n\nCD: 2km easy\n\nTotal: ~10km. Lighter than a full key session — absorb week.', distancePlanned: 10000, totalTimePlanned: 0.88, tssPlanned: 60 },
+      { date: '2026-04-29', title: 'KEY lite — Hill sprints + tempo', workoutType: 3, description: `KEY LITE — HILL SPRINTS + TEMPO
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (2km)
+  • Easy 5:10/km + drills (5min)
+  • 3x 60m accelerations
+
+SET 1  —  10x 10sec HILL SPRINTS
+  • Grade: 6-10%
+  • Effort: ALL-OUT, maximal power
+  • RPE 10/10 (neuromuscular, NOT cardio)
+  • Recovery: WALK back, full recovery 60-90sec
+  • HR not the target — POWER is
+  • Focus: explosive drive, knee lift
+
+TRANSITION  (400m easy)
+
+SET 2  —  2km TEMPO
+  • Pace: 4:20-4:30/km
+  • HR: Z3-Z4, 170-178bpm
+  • RPE 7/10 — flow state, not straining
+
+COOL-DOWN  (2km)
+  • Easy jog + walk
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~10km  |  TSS ~60
+Absorb-week key. Sharp nervous system, contained TSS.`, distancePlanned: 10000, totalTimePlanned: 0.88, tssPlanned: 60 },
       { date: '2026-04-30', title: 'AM Yoga deep stretch', workoutType: 100, description: 'Yoga 40min — deep stretch (absorb week)\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- IT band foam roll\n- Hip 90/90 rotations', totalTimePlanned: 0.67 },
       { date: '2026-04-30', title: 'PM Strength (lighter)', workoutType: 8, description: 'Strength 40min — absorb week, lighter loads\n\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n\nMaintain, don\'t overload. Body needs to absorb.', totalTimePlanned: 0.67 },
-      { date: '2026-05-01', title: 'Zwift race', workoutType: 2, description: 'Zwift race — B/C category (absorb week intensity on bike)\n\nPick a short B or C category race (20-30min).\n+ 15min warmup, 10min cooldown.\n\nThis replaces a run key session — recovery week = hard bike, easy running.\nIntensity stays, running impact drops.', totalTimePlanned: 0.92, tssPlanned: 60 },
-      { date: '2026-05-02', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 6km @ 5:15/km\n+ 4x100m strides\n\nPre-long run prep. Short, easy, stay loose.', distancePlanned: 6000, totalTimePlanned: 0.52 },
-      { date: '2026-05-03', title: 'Long run — THE TEST', workoutType: 3, description: 'Long run 18km — THE BLOCK TEST\n\nSeg 1: km 1-13 @ 5:00/km (PATIENCE)\nSeg 2: km 14-15 @ 4:40/km (shift)\nSeg 3: km 16-17 @ 4:25/km (push)\nSeg 4: km 18 @ 4:15/km (FAST)\n\nYour longest and most important run of the block.\nLast km = fastest km. This proves you\'re ready for speed block.\nIf you finish this strong → green light for Block 2.', distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 125 },
-      { date: '2026-05-04', title: 'Easy recovery ride', workoutType: 2, description: 'Easy recovery ride 60-90min Z1\n\nSpin out the long run.\nEasy, flat, no effort.\n\nBase block done. How did the 18km feel?\nBlock review → Speed block starts tomorrow.', totalTimePlanned: 1.25 },
+      { date: '2026-05-01', title: 'Zwift race', workoutType: 2, description: `ZWIFT RACE — B/C category
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (15min)
+  • Progressive Z1→Z3 | 130→210W | include 3x 30sec openers @ Z5 (280W+)
+
+RACE  (20-30min)
+  • Pick any B or C cat event
+  • Effort: RACE IT — sustained Z4-Z5
+  • Power: 90-110% FTP (225-275W)
+  • HR: 165-180bpm
+  • RPE 8-9/10
+
+COOL-DOWN  (10min)
+  • Easy Z1 | <150W | 95rpm
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~55min  |  TSS ~60
+Absorb-week intensity goes on the BIKE.
+Running stays easy — impact drops, aerobic stays up.`, totalTimePlanned: 0.92, tssPlanned: 60 },
+      { date: '2026-05-02', title: 'Easy run + strides', workoutType: 3, description: `EASY PRE-LONG
+━━━━━━━━━━━━━━━━━━━━━━━━
+MAIN  (6km)
+  • Easy 5:10-5:20/km | HR Z1-Z2, <140bpm | RPE 3/10
+
+FINISHER — 4x 100m strides
+  • Build to 90%, relaxed, walk back
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 6km ~32min  |  TSS ~30
+Tomorrow = THE block test. Protect the tank.`, distancePlanned: 6000, totalTimePlanned: 0.52, tssPlanned: 30 },
+      { date: '2026-05-03', title: 'Long run — THE BLOCK TEST', workoutType: 3, description: `LONG RUN — THE BLOCK TEST  (18km)
+━━━━━━━━━━━━━━━━━━━━━━━━
+SEGMENT 1  —  km 1-13  (PATIENCE)
+  • Pace: 5:00/km exact
+  • HR: Z2, <150bpm
+  • RPE 4/10 — FEEL HELD BACK
+
+SEGMENT 2  —  km 14-15  (SHIFT)
+  • Pace: 4:40/km
+  • HR: Z3, 160-168bpm
+  • RPE 6/10
+
+SEGMENT 3  —  km 16-17  (PUSH)
+  • Pace: 4:25/km
+  • HR: Z3-Z4, 168-175bpm
+  • RPE 8/10
+
+SEGMENT 4  —  km 18  (FAST)
+  • Pace: 4:15/km
+  • HR: Z4, 175-180bpm
+  • RPE 9/10 — controlled maximum
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 18km ~90min  |  TSS ~125
+THE BLOCK 1 EXAM.
+Finish strong → GREEN LIGHT for Block 2 (speed).
+Last km MUST be your fastest.
+Fuel: 30g carbs at km 9 + 30g at km 14.`, distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 125 },
+      { date: '2026-05-04', title: 'Easy recovery ride', workoutType: 2, description: `RECOVERY RIDE  (75min)
+━━━━━━━━━━━━━━━━━━━━━━━━
+MAIN
+  • Easy Z1 | 120-150W (50-60% FTP)
+  • HR <125 | Cadence 90-95rpm
+  • Flat route, zero surges
+  • RPE 2/10
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: 75min  |  TSS ~40
+Base block DONE.
+How did the 18km feel?
+Block review → Speed block (Hunt the 5K) starts tomorrow.`, totalTimePlanned: 1.25, tssPlanned: 40 },
     ],
   },
   {

@@ -55,16 +55,54 @@ export interface SessionFeedbackInput {
   upcomingPlanned?: TpWorkout[];
 }
 
+/** Build long-term trend stats from 60 days of completed workouts. */
+function buildHistoricalContext(workouts: TpWorkout[]): string {
+  if (workouts.length === 0) return '(no history)';
+
+  // Group by week (Mon-Sun)
+  const weeks = new Map<string, TpWorkout[]>();
+  for (const w of workouts) {
+    const d = new Date(w.workoutDay || '');
+    const day = d.getDay();
+    const diff = day === 0 ? -6 : 1 - day;
+    d.setDate(d.getDate() + diff);
+    const key = d.toISOString().slice(0, 10);
+    if (!weeks.has(key)) weeks.set(key, []);
+    weeks.get(key)!.push(w);
+  }
+
+  // Last 8 weeks
+  const weekKeys = Array.from(weeks.keys()).sort().slice(-8);
+  const lines: string[] = [];
+  for (const k of weekKeys) {
+    const ws = weeks.get(k)!;
+    const runs = ws.filter((w) => w.workoutTypeValueId === 3);
+    const bikes = ws.filter((w) => w.workoutTypeValueId === 2);
+    const runKm = runs.reduce((s, w) => s + (w.distance || 0) / 1000, 0);
+    const bikeHrs = bikes.reduce((s, w) => s + (w.totalTime || 0), 0);
+    const tss = ws.reduce((s, w) => s + (w.tssActual || 0), 0);
+    const hrs = runs.filter((r) => r.heartRateAverage).map((r) => r.heartRateAverage!);
+    const avgRunHr = hrs.length ? Math.round(hrs.reduce((s, x) => s + x, 0) / hrs.length) : null;
+    lines.push(`  Week of ${k}: ${runs.length} runs ${runKm.toFixed(0)}km${avgRunHr ? ` @${avgRunHr}bpm avg` : ''}, ${bikes.length} rides ${bikeHrs.toFixed(1)}hrs, total TSS ${tss.toFixed(0)}`);
+  }
+  return lines.join('\n');
+}
+
 /** Initial feedback on a newly-completed workout. Intelligent analysis using all available data. */
 export async function generateSessionFeedback(input: SessionFeedbackInput): Promise<string> {
   const { apiKey, workout, recent14d, upcomingPlanned } = input;
 
-  const runCount = recent14d.filter((w) => w.workoutTypeValueId === 3).length;
-  const bikeCount = recent14d.filter((w) => w.workoutTypeValueId === 2).length;
-  const recentSummary = recent14d
+  // recent14d is really 60-day context now (renamed for backwards compat)
+  const historical = recent14d;
+  const runCount = historical.filter((w) => w.workoutTypeValueId === 3).length;
+  const bikeCount = historical.filter((w) => w.workoutTypeValueId === 2).length;
+  const last14 = historical.slice(0, 14);
+  const recentSummary = last14
     .slice(0, 10)
     .map((w) => `  - ${formatWorkout(w)}`)
     .join('\n');
+
+  const weeklyTrends = buildHistoricalContext(historical);
 
   const upcoming = (upcomingPlanned || []).slice(0, 3);
   const upcomingSummary = upcoming.length > 0
@@ -155,7 +193,10 @@ WORKOUT DESCRIPTION / PLAN:
 ${workout.description?.slice(0, 500) ?? '(none)'}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-LAST 14 DAYS (${runCount} runs, ${bikeCount} rides):
+60-DAY WEEKLY TRENDS (long-term pattern):
+${weeklyTrends}
+
+LAST 14 DAYS — sessions (${runCount} runs, ${bikeCount} rides in full 60d window):
 ${recentSummary}
 
 UPCOMING PLANNED:

@@ -48,9 +48,9 @@ async function runLoop(env: Env) {
 
   const workouts = await listWorkouts(token, ATHLETE_ID, isoDate(start), isoDate(end));
 
-  // 28-day context for Claude
+  // 60-day context for Claude — George needs long-term pattern awareness
   const contextStart = new Date();
-  contextStart.setDate(contextStart.getDate() - 28);
+  contextStart.setDate(contextStart.getDate() - 60);
   const contextWorkouts = await listWorkouts(token, ATHLETE_ID, isoDate(contextStart), isoDate(end));
   const contextCompleted = completedOnly(contextWorkouts).sort((a, b) =>
     (b.workoutDay || '').localeCompare(a.workoutDay || '')

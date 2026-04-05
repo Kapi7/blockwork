@@ -2,8 +2,8 @@
  * GET/POST /api/george/weekly?token=...
  *
  * Generates a weekly review + next-week brief and posts it as a
- * CALENDAR NOTE on Monday (today) so it's visible at the top of the
- * week in TP. Runs via Monday cron.
+ * CALENDAR NOTE on SUNDAY (end of the training week) so it closes
+ * the week off and sets up the next one. Runs via Sunday evening cron.
  */
 
 import {
@@ -28,11 +28,11 @@ function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
-/** Get Monday of the current week (or today if today is Monday). */
-function mondayOfCurrentWeek(): string {
+/** Get Sunday of the current week (end of training week, Mon-Sun). */
+function sundayOfCurrentWeek(): string {
   const d = new Date();
-  const day = d.getDay();
-  const diff = day === 0 ? -6 : 1 - day; // Sunday rolls to last Mon
+  const day = d.getDay(); // 0 = Sun, 1 = Mon, ... 6 = Sat
+  const diff = day === 0 ? 0 : 7 - day; // already Sunday → stay; else go forward
   d.setDate(d.getDate() + diff);
   return isoDate(d);
 }
@@ -42,12 +42,14 @@ async function runWeekly(env: Env) {
 
   const today = new Date();
   const todayStr = isoDate(today);
-  const monday = mondayOfCurrentWeek();
+  const sunday = sundayOfCurrentWeek();
 
-  // Last 7 days
-  const weekStart = new Date();
-  weekStart.setDate(weekStart.getDate() - 7);
-  const weekWorkouts = await listWorkouts(token, ATHLETE_ID, isoDate(weekStart), todayStr);
+  // Look at the full Mon-Sun week we're closing out
+  const weekMonday = new Date(sunday + 'T00:00:00');
+  weekMonday.setDate(weekMonday.getDate() - 6);
+
+  // The Mon-Sun week we're closing
+  const weekWorkouts = await listWorkouts(token, ATHLETE_ID, isoDate(weekMonday), sunday);
   const weekCompleted = completedOnly(weekWorkouts).sort((a, b) =>
     (a.workoutDay || '').localeCompare(b.workoutDay || '')
   );
@@ -94,7 +96,7 @@ async function runWeekly(env: Env) {
 
   const result = await createCalendarNote(token, {
     athleteId: ATHLETE_ID,
-    noteDate: monday,
+    noteDate: sunday,
     title,
     description,
   });
@@ -102,7 +104,7 @@ async function runWeekly(env: Env) {
   return {
     posted: true,
     noteId: result.id,
-    noteDate: monday,
+    noteDate: sunday,
     block: block?.name || 'between blocks',
     weekSessionCount: weekCompleted.length,
     upcomingSessionCount: upcoming.length,
