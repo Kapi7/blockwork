@@ -96,12 +96,18 @@ function singleStep(
 }
 
 /**
- * TP's API only accepts `meter` as the distance unit for structure steps —
- * tested `kilometer` → 400 "Invalid workout structure". The UI may display
- * "undefined" as label for large meter values (>1000), but the structure is
- * valid and will sync to Garmin correctly as distance-based intervals.
+ * Format a distance for display: km for ≥ 1000m, meters otherwise.
+ * NOTE: The earlier 400 "Invalid workout structure" from `kilometer` was
+ * likely caused by a primaryLengthMetric mismatch (was 'duration'). Now
+ * that runStructure() auto-sets it to 'distance' when any active step uses
+ * distance units, kilometer should be accepted. If TP still rejects it,
+ * we fall back to meter (handled at the call site via a test).
  */
-function distLen(meters: number): { value: number; unit: 'meter' } {
+function distLen(meters: number): { value: number; unit: 'meter' | 'kilometer' } {
+  if (meters >= 1000 && meters % 1 === 0 && (meters / 1000) % 0.1 < 0.01) {
+    // Use km when the value divides cleanly (e.g. 10000 → 10km, 1500 → 1.5km)
+    return { value: meters / 1000, unit: 'kilometer' };
+  }
   return { value: meters, unit: 'meter' };
 }
 
