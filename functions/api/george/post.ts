@@ -30,6 +30,10 @@ interface Env {
 
 const ATHLETE_ID = 3030673;
 
+// George started on this date — don't post feedback on workouts BEFORE this.
+// We keep older sessions in the context window but never comment on them.
+const GEORGE_EPOCH = '2026-04-05';
+
 function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
@@ -37,10 +41,10 @@ function isoDate(d: Date): string {
 async function runLoop(env: Env) {
   const token = await getBearerToken(env.TP_AUTH_COOKIE);
 
-  // 14 days back to find recently-completed workouts
+  // 7 days back to find recently-completed workouts
   const end = new Date();
   const start = new Date();
-  start.setDate(start.getDate() - 14);
+  start.setDate(start.getDate() - 7);
 
   const workouts = await listWorkouts(token, ATHLETE_ID, isoDate(start), isoDate(end));
 
@@ -60,9 +64,10 @@ async function runLoop(env: Env) {
     (a.workoutDay || '').localeCompare(b.workoutDay || '')
   );
 
-  const candidates = completedOnly(workouts).sort((a, b) =>
-    (b.workoutDay || '').localeCompare(a.workoutDay || '')
-  );
+  // Only look at workouts on or after the George epoch — no backfilling old sessions.
+  const candidates = completedOnly(workouts)
+    .filter((w) => (w.workoutDay || '').slice(0, 10) >= GEORGE_EPOCH)
+    .sort((a, b) => (b.workoutDay || '').localeCompare(a.workoutDay || ''));
 
   const results: Array<{
     workoutId: number;

@@ -8,38 +8,45 @@
  */
 
 import type { TpWorkout } from './tp-client';
-import { formatWorkout, formatCommentThread, workoutTypeName } from './tp-client';
+import { formatWorkout, formatCommentThread } from './tp-client';
+import { ATHLETE_PROFILE, blockContextForPrompt } from './training-plan';
 
-const COACH_SYSTEM = `You are George, a pragmatic endurance coach for a competitive amateur runner/cyclist named Itay.
+function buildSystemPrompt(): string {
+  const block = blockContextForPrompt();
+  return `You are George, a pragmatic endurance coach for ${ATHLETE_PROFILE.name}.
 
-About Itay:
-- 6 years running, based in Cyprus
-- PBs: 5K 18:00 (2022), 10K 36:51 (2022), HM 1:21:43, Marathon 2:52:10
-- Just blew up at Limassol Marathon (3:02 vs 2:48 target)
-- Short-term goal: sub-17:30 5K
-- Long-term goal: sub-36 10K
-- Also wants to work on strength
+ATHLETE:
+- ${ATHLETE_PROFILE.experience}, based in ${ATHLETE_PROFILE.location}
+- PBs: 5K ${ATHLETE_PROFILE.pbs['5K']}, 10K ${ATHLETE_PROFILE.pbs['10K']}, HM ${ATHLETE_PROFILE.pbs['Half Marathon']}, Marathon ${ATHLETE_PROFILE.pbs['Marathon']}
+- Recent: ${ATHLETE_PROFILE.recentEvent}
+- Short-term goal: ${ATHLETE_PROFILE.shortTermGoal}
+- Long-term goal: ${ATHLETE_PROFILE.longTermGoal}
+- A-Race: ${ATHLETE_PROFILE.aRace}
+- Availability: ${ATHLETE_PROFILE.weeklyAvailability.runningHours}hrs run + ${ATHLETE_PROFILE.weeklyAvailability.cyclingHours}hrs bike per week
+- Max long run: ${ATHLETE_PROFILE.weeklyAvailability.maxLongRunKm}km, Max long ride: ${ATHLETE_PROFILE.weeklyAvailability.maxLongRideHours}hrs
+- Notes: ${ATHLETE_PROFILE.notes}
 
-Training setup (3 runs/week, bike does the volume):
-- Mon: Easy run or bike
-- Tue: KEY run 1 (track/hills/speed) on fresh legs
-- Wed: Easy bike + strength PM
-- Thu: KEY run 2 (tempo/threshold) OR bike threshold
-- Fri: Easy bike or yoga (pre-long run)
-- Sat: Long run
-- Sun: Long ride (2-3hrs)
+WEEKLY PATTERN:
+${ATHLETE_PROFILE.weeklyPattern.map((l) => '  ' + l).join('\n')}
 
-Philosophy: 80/20 polarized. Quality over quantity runs. Bike handles aerobic volume. Strength supports running.
+${block}
 
-Style:
-- Direct, warm, specific. Reference the numbers.
+COACHING PHILOSOPHY:
+- 80/20 polarized. Quality over quantity runs. Bike handles aerobic volume.
+- Strength supports running — never before a key session.
+- RESPECT THE BLOCK — do not prescribe intervals during recovery, no marathon-pace work during speed block, etc.
+- Recovery weeks exist for a reason. Don't undermine them.
+
+STYLE:
+- Direct, warm, specific. Reference actual numbers from the workout.
 - No fluff, no hedging. If he went too fast, say so.
 - Like a coach texting an athlete. Short. Punchy.
-- Always sign off with a clear next action.
-- Start every reply with "George: " (the system infrastructure strips it — you include it naturally).
+- Every reply starts with "George: " (naturally — include it in your text).
 - Max 120 words for session feedback.
 - Max 80 words for chat replies.
-- Max 300 words for weekly.`;
+- Max 350 words for weekly reviews.
+- End with ONE clear next action tied to the current block.`;
+}
 
 export interface SessionFeedbackInput {
   apiKey: string;
@@ -83,7 +90,21 @@ ${recentSummary}
 Upcoming planned sessions:
 ${upcomingSummary}
 
-Give Itay 80-120 words of feedback. Reference the actual numbers. End with one clear directive tied to his upcoming sessions.`;
+Write 80-120 words of feedback in a natural, conversational voice — no bullet points, no headers, no formulaic openings.
+
+AVOID these openings (they feel robotic):
+- "Solid session"
+- "Nice work"
+- "Good [noun]"
+- "[Distance]km at [pace]..."
+
+INSTEAD, open with an observation specific to THIS session vs his pattern. Examples:
+- "HR crept up in the last 20 minutes — you were fighting it, weren't you?"
+- "Three days in a row now hitting Z2 and holding it. That's the point."
+- "Compliance says 95% but your IF says otherwise — tell me about the last 15 minutes."
+- "Different from Tuesday's grind — this one looks smooth."
+
+Reference specific numbers from the workout. Tie feedback to his CURRENT BLOCK (respect the restrictions above). End with ONE clear next action matching the block phase — not random generic advice.`;
 
   return callClaude(apiKey, prompt, 500);
 }
@@ -100,6 +121,12 @@ export async function generateChatReply(input: ChatReplyInput): Promise<string> 
   const { apiKey, workout, recent14d, upcomingPlanned } = input;
   const thread = formatCommentThread(workout.workoutComments || []);
 
+  // Extract Itay's latest message (last non-George comment)
+  const comments = workout.workoutComments || [];
+  const sorted = [...comments].sort((a, b) => (b.commentDate || '').localeCompare(a.commentDate || ''));
+  const itaysLatest = sorted.find((c) => !(c.comment || '').trim().startsWith('George:'));
+  const itaysLatestText = itaysLatest ? (itaysLatest.comment || '').trim() : '';
+
   const recentSummary = recent14d
     .slice(0, 8)
     .map((w) => `  - ${formatWorkout(w)}`)
@@ -110,28 +137,39 @@ export async function generateChatReply(input: ChatReplyInput): Promise<string> 
     ? upcoming.map((w) => `  - ${formatWorkout(w)}`).join('\n')
     : '  (none planned)';
 
-  const prompt = `Itay commented on this workout — you need to reply.
+  const prompt = `Itay just messaged you on a workout. Reply like a text conversation.
 
-Workout: ${formatWorkout(workout)}
-Details: dist ${workout.distance ? (workout.distance / 1000).toFixed(2) + 'km' : '-'}, time ${workout.totalTime ? Math.round(workout.totalTime * 60) + 'min' : '-'}, HR avg ${workout.heartRateAverage ?? '-'}, TSS ${workout.tssActual?.toFixed(0) ?? '-'}, RPE ${workout.rpe ?? '-'}
+WORKOUT: ${formatWorkout(workout)}
+Key stats: dist ${workout.distance ? (workout.distance / 1000).toFixed(2) + 'km' : '-'} | time ${workout.totalTime ? Math.round(workout.totalTime * 60) + 'min' : '-'} | HR avg ${workout.heartRateAverage ?? '-'} | TSS ${workout.tssActual?.toFixed(0) ?? '-'} | RPE ${workout.rpe ?? '-'}
 
-Comment thread (chronological):
+FULL COMMENT THREAD (chronological):
 ${thread}
 
-Last 14 days context:
+⚡ ITAY'S LATEST MESSAGE (this is what you're replying to):
+"${itaysLatestText}"
+
+Recent training (context only — don't recap this back to him):
 ${recentSummary}
 
 Next planned:
 ${upcomingSummary}
 
-Itay's latest message is the last one in the thread. Reply to it directly — like texting. If he asks a question, answer it. If he reports how he felt, acknowledge it and give guidance. If he wants to adjust something, be direct: yes/no and why.
+REPLY RULES:
+- You are DIRECTLY answering his latest message. Stay on topic.
+- If he asked a question → answer it.
+- If he reported how he felt → acknowledge, adjust guidance if needed.
+- If he wants to change something → yes/no + why + what you'll adjust.
+- Do NOT repeat the workout stats back to him — he just did it.
+- Do NOT paste generic summaries — be a human in conversation.
+- If he said "great" or "felt good" — brief affirmation + what's next.
+- If he said something's off → dig in, ask the right question back.
 
-Max 80 words. Conversational but specific.`;
+Max 60 words. Natural texting tone. Don't use bullet points or headers.`;
 
-  return callClaude(apiKey, prompt, 400);
+  return callClaude(apiKey, prompt, 300);
 }
 
-/** Weekly summary. */
+/** Weekly summary + next week brief. Two clear sections in one message. */
 export async function generateWeeklyFeedback(
   apiKey: string,
   weekWorkouts: TpWorkout[],
@@ -142,28 +180,43 @@ export async function generateWeeklyFeedback(
   const totalRunKm = runs.reduce((s, w) => s + (w.distance || 0) / 1000, 0);
   const totalBikeHrs = bikes.reduce((s, w) => s + (w.totalTime || 0), 0);
   const totalTss = weekWorkouts.reduce((s, w) => s + (w.tssActual || 0), 0);
+  const totalRunHrs = runs.reduce((s, w) => s + (w.totalTime || 0), 0);
 
-  const prompt = `Weekly review. Last 7 days:
+  const prevRunKm = previousWeeks
+    .filter((w) => w.workoutTypeValueId === 3)
+    .reduce((s, w) => s + (w.distance || 0) / 1000, 0) / 3; // avg per previous week
+  const prevBikeHrs = previousWeeks
+    .filter((w) => w.workoutTypeValueId === 2)
+    .reduce((s, w) => s + (w.totalTime || 0), 0) / 3;
 
-Running: ${runs.length} sessions, ${totalRunKm.toFixed(1)}km total
-Cycling: ${bikes.length} sessions, ${totalBikeHrs.toFixed(1)}hrs total
-Combined TSS: ${totalTss.toFixed(0)}
+  const prompt = `Weekly review for Itay. Respect the current block restrictions (you know them from the system prompt).
 
-Sessions:
+THIS WEEK'S NUMBERS:
+- Running: ${runs.length} sessions, ${totalRunKm.toFixed(1)}km, ${totalRunHrs.toFixed(1)}hrs
+- Cycling: ${bikes.length} sessions, ${totalBikeHrs.toFixed(1)}hrs
+- Total TSS: ${totalTss.toFixed(0)}
+
+PREVIOUS 3-WEEK AVERAGES (for trend):
+- Run: ~${prevRunKm.toFixed(1)}km/wk
+- Bike: ~${prevBikeHrs.toFixed(1)}hrs/wk
+
+THIS WEEK'S SESSIONS (oldest first):
 ${weekWorkouts.map((w) => `  ${formatWorkout(w)}`).join('\n')}
 
-Previous 3 weeks (trend context):
-${previousWeeks.slice(0, 15).map((w) => `  ${formatWorkout(w)}`).join('\n')}
+PREVIOUS 3 WEEKS (context):
+${previousWeeks.slice(0, 18).map((w) => `  ${formatWorkout(w)}`).join('\n')}
 
-Write a 200-250 word weekly review covering:
-1. What went well (reference numbers)
-2. What needs adjustment
-3. Focus for next week (specific sessions)
-4. Red flags
+Write a weekly review with TWO CLEAR SECTIONS separated by a blank line:
 
-End with the #1 priority for the coming week.`;
+**Last 7 days**
+2-3 sentences. What actually happened vs what was supposed to happen. Reference specific sessions and numbers. Call out anything that deviated from the block plan. Don't just list what he did — analyze it.
 
-  return callClaude(apiKey, prompt, 700);
+**Next 7 days**
+2-3 sentences. Based on where he is in the block and how this week went, what are the 2-3 key sessions for next week? Be specific: day, session type, paces/times. Tie it directly to the current block's success metrics.
+
+Natural voice. No bullet points inside sections. No headers other than the two bolded ones above. Max 280 words total. Avoid formulaic openings like "Solid week" or "Great volume".`;
+
+  return callClaude(apiKey, prompt, 800);
 }
 
 /** Generate the next training block as structured JSON. */
