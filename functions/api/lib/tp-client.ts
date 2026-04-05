@@ -98,6 +98,35 @@ export async function listWorkouts(
   return res.json() as Promise<TpWorkout[]>;
 }
 
+/**
+ * Post a comment on a workout. This is the post-activity comment that
+ * shows in the workout detail panel.
+ *
+ * POST /fitness/v2/athletes/{athleteId}/workouts/{workoutId}/comments
+ * Body: { "value": "comment text" }
+ */
+export async function postWorkoutComment(
+  token: string,
+  athleteId: number,
+  workoutId: number,
+  comment: string,
+): Promise<void> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v2/athletes/${athleteId}/workouts/${workoutId}/comments`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Referer': 'https://app.trainingpeaks.com/',
+      'User-Agent': 'blockwork-bridge',
+    },
+    body: JSON.stringify({ value: comment }),
+  });
+  if (!res.ok) {
+    throw new Error(`postWorkoutComment failed: ${res.status} ${await res.text()}`);
+  }
+}
+
 /** Get full workout detail — HR zones, splits, attachments. */
 export async function getWorkoutDetails(
   token: string,
