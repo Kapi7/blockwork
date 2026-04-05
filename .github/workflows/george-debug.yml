@@ -7,9 +7,13 @@ on:
   workflow_dispatch:
     inputs:
       endpoint:
-        description: 'debug-zones | debug-structure'
+        description: 'debug-zones | debug-structure | debug-compute-zones | debug-proxy'
         required: true
         default: 'debug-zones'
+      path:
+        description: 'TP path for debug-proxy only (e.g. /fitness/v6/athletes/3030673/zones)'
+        required: false
+        default: ''
 
 jobs:
   run:
@@ -19,13 +23,25 @@ jobs:
         env:
           SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
           ENDPOINT: ${{ inputs.endpoint }}
+          TP_PATH: ${{ inputs.path }}
         run: |
           set -eu
-          # Allow-list validation — prevent command injection via crafted input
+          # Allow-list validation
           case "$ENDPOINT" in
-            debug-zones|debug-structure) ;;
+            debug-zones|debug-structure|debug-compute-zones|debug-proxy) ;;
             *) echo "Invalid endpoint: $ENDPOINT"; exit 1 ;;
           esac
-          URL="https://blockwork-91h.pages.dev/api/george/${ENDPOINT}?token=${SYNC_TOKEN}"
+          # Path is only meaningful for debug-proxy; validate it starts with /
+          EXTRA=""
+          if [ "$ENDPOINT" = "debug-proxy" ]; then
+            case "$TP_PATH" in
+              /*) ;;
+              *) echo "debug-proxy requires path starting with /"; exit 1 ;;
+            esac
+            # URL-encode path minimally (spaces to %20)
+            ENCODED=$(printf '%s' "$TP_PATH" | sed 's/ /%20/g')
+            EXTRA="&path=${ENCODED}"
+          fi
+          URL="https://blockwork-91h.pages.dev/api/george/${ENDPOINT}?token=${SYNC_TOKEN}${EXTRA}"
           curl -sS "$URL" | head -c 40000
           echo ""
