@@ -9,7 +9,7 @@
 
 import type { TpWorkout } from './tp-client';
 import { formatWorkout, formatCommentThread } from './tp-client';
-import { ATHLETE_PROFILE, blockContextForPrompt } from './training-plan';
+import { ATHLETE_PROFILE, blockContextForPrompt, zonesForPrompt } from './training-plan';
 
 function buildSystemPrompt(): string {
   const block = blockContextForPrompt();
@@ -30,6 +30,8 @@ WEEKLY PATTERN:
 ${ATHLETE_PROFILE.weeklyPattern.map((l) => '  ' + l).join('\n')}
 
 ${block}
+
+${zonesForPrompt()}
 
 COACHING PHILOSOPHY:
 - 80/20 polarized. Quality over quantity runs. Bike handles aerobic volume.
