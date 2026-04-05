@@ -1,42 +1,28 @@
 {
-  "generatedAt": "2026-04-04",
+  "generatedAt": "2026-04-05",
   "fitness": {
-    "volume7d": 29.6,
-    "volume28d": 169.4,
-    "runs7d": 4,
-    "runs28d": 21,
-    "avgPace28d": 306,
+    "volume7d": 21.8,
+    "volume28d": 162.6,
+    "runs7d": 3,
+    "runs28d": 20,
+    "avgPace28d": 305.1,
     "avgHr28d": 133,
     "lastRun": "2026-04-04",
-    "lastUpdated": "2026-04-04",
-    "trainingStatus": "balanced",
-    "atl": 37,
+    "lastUpdated": "2026-04-05",
+    "trainingStatus": "fresh",
+    "atl": 28,
     "ctl": 43,
-    "tsb": 6
+    "tsb": 15
   },
   "last14Days": {
-    "runCount": 7,
-    "runKm": 79.1,
-    "avgRunPace": 322.3,
-    "avgRunHr": 123,
+    "runCount": 5,
+    "runKm": 35.3,
+    "avgRunPace": 325.2,
+    "avgRunHr": 117,
     "bikeCount": 5,
     "bikeKm": 204.4,
-    "longestRun": 42.3,
+    "longestRun": 8.8,
     "sessions": [
-      {
-        "date": "2026-03-22",
-        "dist": 42.3,
-        "pace": 259.1,
-        "hr": 160.4,
-        "name": "Marathon Limassol 🏡💀"
-      },
-      {
-        "date": "2026-03-22",
-        "dist": 1.5,
-        "pace": 370.9,
-        "hr": 115.2,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-03-26",
         "dist": 5.7,
