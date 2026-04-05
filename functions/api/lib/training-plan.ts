@@ -17,6 +17,16 @@
  *   Sun: Long ride 2-3hrs
  */
 
+export interface BlockSession {
+  date: string;                    // YYYY-MM-DD
+  title: string;                   // short calendar title, max ~35 chars
+  workoutType: number;             // 1=swim, 2=bike, 3=run, 8=strength, 100=other
+  description: string;             // full structured session (WU/MAIN/CD)
+  distancePlanned?: number;        // meters
+  totalTimePlanned?: number;       // hours
+  tssPlanned?: number;
+}
+
 export interface TrainingBlock {
   id: string;
   number: number;
@@ -29,6 +39,7 @@ export interface TrainingBlock {
   successMetrics: string[];
   weekPattern: string;
   restrictions: string[];
+  sessions?: BlockSession[];       // optional detailed session list
 }
 
 export const ATHLETE_PROFILE = {
@@ -91,6 +102,17 @@ export const BLOCKS: TrainingBlock[] = [
       'HR cap: 140bpm on easy runs',
       'If anything hurts, stop and rest',
       'Strength must be light (bodyweight, no heavy loads)',
+    ],
+    sessions: [
+      // Week 1 (Mar 23 — Mar 29): full rest transitioning to easy movement
+      { date: '2026-04-06', title: 'Easy run', workoutType: 3, description: 'Easy run 6km @ 5:20/km\nHR cap 140bpm. If legs feel heavy, cut to 4km.', distancePlanned: 6000, totalTimePlanned: 0.53 },
+      { date: '2026-04-07', title: 'Easy bike + strength PM', workoutType: 2, description: 'AM: Easy spin 45min Z1-Z2, cadence 85-90rpm\nPM: Bodyweight strength 30min\n - Squats 3x10\n - Lunges 3x8\n - Glute bridges 3x12\n - Plank 3x30sec', totalTimePlanned: 1.25 },
+      { date: '2026-04-08', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 6km @ 5:15/km\n+ 4x100m strides (build to 90%, full recovery walk)\nStrides should feel fast but relaxed, NOT sprinting.', distancePlanned: 6000, totalTimePlanned: 0.58 },
+      { date: '2026-04-09', title: 'Bike endurance', workoutType: 2, description: 'Endurance ride 75-90min Z2\nOutdoor or Zwift. Steady effort, conversational pace.', totalTimePlanned: 1.25 },
+      { date: '2026-04-10', title: 'Yoga / Mobility', workoutType: 100, description: 'Yoga / Mobility 40min\n- Sun salutations 8min\n- Hip openers 10min\n- Runner lunges 8min\n- Foam roll quads, calves, glutes 10min\n- Savasana 4min', totalTimePlanned: 0.67 },
+      { date: '2026-04-11', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 7km @ 5:10/km\n+ 6x100m strides\nLast run of recovery block. Should feel smooth and controlled.', distancePlanned: 7000, totalTimePlanned: 0.63 },
+      { date: '2026-04-12', title: 'Long easy ride', workoutType: 2, description: 'Long easy ride 2-2.5hrs Z2\nLast 20min can push to Z3 if legs feel good.\nThis is the bridge to base block. Enjoy it.', totalTimePlanned: 2.25 },
+      { date: '2026-04-13', title: 'Rest / Block review', workoutType: 100, description: 'REST DAY\n\nBlock 0 ends today.\n\nBlock review self-check (rate 1-10):\n- Energy level: _\n- Any pain: _\n- Motivation to train hard: _\n\nBase block starts tomorrow.', totalTimePlanned: 0 },
     ],
   },
   {

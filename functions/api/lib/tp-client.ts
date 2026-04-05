@@ -127,6 +127,125 @@ export async function postWorkoutComment(
   }
 }
 
+/**
+ * Create a new workout on the athlete's calendar.
+ *
+ * POST /fitness/v6/athletes/{athleteId}/workouts
+ * Returns the created workout with workoutId.
+ */
+export interface CreateWorkoutInput {
+  athleteId: number;
+  workoutDay: string;            // YYYY-MM-DD (or ISO)
+  title: string;
+  workoutTypeValueId: number;    // 1=swim, 2=bike, 3=run, 8=strength, 100=other
+  description?: string;
+  distancePlanned?: number;       // meters
+  totalTimePlanned?: number;      // hours
+  tssPlanned?: number;
+  ifPlanned?: number;
+}
+
+export async function createWorkout(
+  token: string,
+  input: CreateWorkoutInput,
+): Promise<{ workoutId: number }> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${input.athleteId}/workouts`;
+  // Normalize date to ISO start-of-day
+  const workoutDay = input.workoutDay.length === 10 ? `${input.workoutDay}T00:00:00` : input.workoutDay;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Referer': 'https://app.trainingpeaks.com/',
+      'User-Agent': 'blockwork-bridge',
+    },
+    body: JSON.stringify({
+      athleteId: input.athleteId,
+      workoutDay,
+      title: input.title,
+      workoutTypeValueId: input.workoutTypeValueId,
+      description: input.description || '',
+      distancePlanned: input.distancePlanned,
+      totalTimePlanned: input.totalTimePlanned,
+      tssPlanned: input.tssPlanned,
+      ifPlanned: input.ifPlanned,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`createWorkout failed: ${res.status} ${await res.text()}`);
+  }
+  const data = (await res.json()) as any;
+  return { workoutId: data.workoutId };
+}
+
+/**
+ * Delete a workout.
+ * DELETE /fitness/v6/athletes/{athleteId}/workouts/{workoutId}
+ */
+export async function deleteWorkout(token: string, athleteId: number, workoutId: number): Promise<void> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${athleteId}/workouts/${workoutId}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}`, 'User-Agent': 'blockwork-bridge' },
+  });
+  if (!res.ok) throw new Error(`deleteWorkout failed: ${res.status}`);
+}
+
+/**
+ * Create a calendar note. These appear as day-level messages on the
+ * TP calendar, separate from workouts. Perfect for weekly reviews.
+ *
+ * POST /fitness/v1/athletes/{athleteId}/calendarNote
+ */
+export interface CreateCalendarNoteInput {
+  athleteId: number;
+  noteDate: string;   // YYYY-MM-DD
+  title: string;
+  description: string;
+}
+
+export async function createCalendarNote(
+  token: string,
+  input: CreateCalendarNoteInput,
+): Promise<{ id: number }> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v1/athletes/${input.athleteId}/calendarNote`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+      'Referer': 'https://app.trainingpeaks.com/',
+      'User-Agent': 'blockwork-bridge',
+    },
+    body: JSON.stringify({
+      athleteId: input.athleteId,
+      noteDate: input.noteDate,
+      title: input.title,
+      description: input.description,
+    }),
+  });
+  if (!res.ok) {
+    throw new Error(`createCalendarNote failed: ${res.status} ${await res.text()}`);
+  }
+  const data = (await res.json()) as any;
+  return { id: data.id };
+}
+
+/**
+ * Delete a calendar note.
+ * DELETE /fitness/v1/athletes/{athleteId}/calendarNote/{noteId}
+ */
+export async function deleteCalendarNote(token: string, athleteId: number, noteId: number): Promise<void> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v1/athletes/${athleteId}/calendarNote/${noteId}`;
+  const res = await fetch(url, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}`, 'User-Agent': 'blockwork-bridge' },
+  });
+  if (!res.ok) throw new Error(`deleteCalendarNote failed: ${res.status}`);
+}
+
 /** Get full workout detail — HR zones, splits, attachments. */
 export async function getWorkoutDetails(
   token: string,

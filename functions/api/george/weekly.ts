@@ -1,17 +1,9 @@
 /**
- * GET /api/george/weekly?token=...
+ * GET/POST /api/george/weekly?token=...
  *
- * Generates a weekly review + next-week brief and posts it as a single
- * comment on the most recent completed workout. Runs via Monday cron.
- *
- * The comment structure is:
- *   George — Weekly Review (Mon Apr 7 → Sun Apr 13)
- *
- *   [Last week recap — what went well, what didn't]
- *
- *   [This week focus — key sessions, priorities]
- *
- *   [Adjustment offer — reply if you want to change anything]
+ * Generates a weekly review + next-week brief and posts it as a
+ * CALENDAR NOTE on Monday (today) so it's visible at the top of the
+ * week in TP. Runs via Monday cron.
  */
 
 import {
@@ -19,7 +11,7 @@ import {
   listWorkouts,
   completedOnly,
   plannedOnly,
-  postWorkoutComment,
+  createCalendarNote,
 } from '../lib/tp-client';
 import { generateWeeklyFeedback } from '../lib/claude-coach';
 import { currentBlock, nextBlock, daysLeftInBlock } from '../lib/training-plan';
@@ -36,11 +28,21 @@ function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
 }
 
+/** Get Monday of the current week (or today if today is Monday). */
+function mondayOfCurrentWeek(): string {
+  const d = new Date();
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day; // Sunday rolls to last Mon
+  d.setDate(d.getDate() + diff);
+  return isoDate(d);
+}
+
 async function runWeekly(env: Env) {
   const token = await getBearerToken(env.TP_AUTH_COOKIE);
 
   const today = new Date();
   const todayStr = isoDate(today);
+  const monday = mondayOfCurrentWeek();
 
   // Last 7 days
   const weekStart = new Date();
@@ -77,36 +79,35 @@ async function runWeekly(env: Env) {
 
   // Block context header
   const block = currentBlock(todayStr);
-  const next = nextBlock(todayStr);
+  const daysLeft = block ? daysLeftInBlock(block, todayStr) : 0;
   const blockHeader = block
-    ? `Block ${block.number}: ${block.name} (${block.phase.toUpperCase()}) — ${daysLeftInBlock(block, todayStr)} days left`
+    ? `Block ${block.number}: ${block.name} (${block.phase.toUpperCase()}) — ${daysLeft} days left`
     : 'Between blocks';
 
-  let text = `George — Weekly Review\n${blockHeader}\n\n${feedbackText}`;
+  // Ensure description doesn't have "George:" prefix (title carries the identity)
+  const description = feedbackText
+    .replace(/^George:\s*/i, '')
+    .trim() +
+    '\n\n— Reply on any workout if you want to swap a session or flag something off.';
 
-  // Add adjustment-offer footer if not already present
-  if (!/adjust|change|swap/i.test(feedbackText)) {
-    text += `\n\n— Reply if you want to swap any session this week or flag something off.`;
-  }
+  const title = `George — Weekly Review (${blockHeader})`;
 
-  // Ensure prefix
-  if (!text.toLowerCase().startsWith('george')) {
-    text = `George: ${text}`;
-  }
-
-  // Post on the most recent completed workout (last of the week)
-  const targetWorkout = weekCompleted[weekCompleted.length - 1];
-  await postWorkoutComment(token, ATHLETE_ID, targetWorkout.workoutId, text);
+  const result = await createCalendarNote(token, {
+    athleteId: ATHLETE_ID,
+    noteDate: monday,
+    title,
+    description,
+  });
 
   return {
     posted: true,
-    workoutId: targetWorkout.workoutId,
-    workoutDate: targetWorkout.workoutDay.slice(0, 10),
-    workoutTitle: targetWorkout.title,
+    noteId: result.id,
+    noteDate: monday,
     block: block?.name || 'between blocks',
     weekSessionCount: weekCompleted.length,
     upcomingSessionCount: upcoming.length,
-    text,
+    title,
+    description,
   };
 }
 
