@@ -50,17 +50,26 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 
     // Try every plausible TP zone endpoint
     const candidates = [
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/zones`,
-      `https://tpapi.trainingpeaks.com/athlete/v1/athletes/${aid}/zones`,
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/settings/zones`,
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}`,
-      `https://tpapi.trainingpeaks.com/athlete/v1/athletes/${aid}`,
-      `https://tpapi.trainingpeaks.com/athlete/v1/athletes/${aid}/settings`,
-      `https://tpapi.trainingpeaks.com/athlete/v1/zones/athlete/${aid}`,
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/hrZones`,
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/powerZones`,
-      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/paceZones`,
-      `https://tpapi.trainingpeaks.com/users/v3/user`,
+      // workoutTypeSettings is what the TP web app uses
+      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/workoutTypeSettings`,
+      `https://tpapi.trainingpeaks.com/fitness/v6/workoutTypeSettings/${aid}`,
+      `https://tpapi.trainingpeaks.com/athlete/v1/athletes/${aid}/workoutTypeSettings`,
+      `https://tpapi.trainingpeaks.com/personworkouttypesettings/athlete/${aid}`,
+      `https://tpapi.trainingpeaks.com/fitness/v6/personworkouttypesettings/athlete/${aid}`,
+      `https://tpapi.trainingpeaks.com/fitness/v1/personworkouttypesettings/athlete/${aid}`,
+      // HR max / threshold fields
+      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/hrmax`,
+      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/ftp`,
+      // Settings variants
+      `https://tpapi.trainingpeaks.com/users/v3/user/settings`,
+      `https://tpapi.trainingpeaks.com/users/v3/user/${aid}/settings`,
+      `https://tpapi.trainingpeaks.com/users/v3/user/athletes/${aid}`,
+      // Athlete detail
+      `https://tpapi.trainingpeaks.com/fitness/v6/athlete/${aid}`,
+      `https://tpapi.trainingpeaks.com/fitness/v6/athlete/${aid}/detail`,
+      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/details`,
+      // Events detail that often includes zones
+      `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${aid}/events`,
     ];
 
     const results = [];
