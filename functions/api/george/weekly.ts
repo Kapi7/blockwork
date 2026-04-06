@@ -12,6 +12,8 @@ import {
   completedOnly,
   plannedOnly,
   createCalendarNote,
+  listCalendarNotes,
+  getAthleteSettings,
 } from '../lib/tp-client';
 import { generateWeeklyFeedback } from '../lib/claude-coach';
 import { currentBlock, nextBlock, daysLeftInBlock } from '../lib/training-plan';
@@ -44,6 +46,15 @@ async function runWeekly(env: Env) {
   const todayStr = isoDate(today);
   const sunday = sundayOfCurrentWeek();
 
+  // Dedup: skip if a George weekly note already exists on this Sunday
+  const existingNotes = await listCalendarNotes(token, ATHLETE_ID, sunday, sunday);
+  const alreadyPosted = existingNotes.some((n) =>
+    (n.title || '').includes('George') && (n.title || '').includes('Weekly')
+  );
+  if (alreadyPosted) {
+    return { posted: false, reason: 'George weekly note already exists for this Sunday', noteDate: sunday };
+  }
+
   // Look at the full Mon-Sun week we're closing out
   const weekMonday = new Date(sunday + 'T00:00:00');
   weekMonday.setDate(weekMonday.getDate() - 6);
@@ -72,11 +83,15 @@ async function runWeekly(env: Env) {
     return { posted: false, reason: 'No completed workouts in the last 7 days' };
   }
 
+  // Live zones from TP settings
+  const settings = await getAthleteSettings(token, ATHLETE_ID);
+
   // Generate the review
   const feedbackText = await generateWeeklyFeedback(
     env.ANTHROPIC_API_KEY,
     weekCompleted,
     prevCompleted,
+    settings,
   );
 
   // Block context header

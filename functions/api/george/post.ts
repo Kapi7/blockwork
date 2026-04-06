@@ -19,6 +19,7 @@ import {
   needsGeorgeReply,
   postWorkoutComment,
   formatWorkout,
+  getAthleteSettings,
 } from '../lib/tp-client';
 import { generateSessionFeedback, generateChatReply } from '../lib/claude-coach';
 
@@ -47,6 +48,9 @@ async function runLoop(env: Env) {
   start.setDate(start.getDate() - 7);
 
   const workouts = await listWorkouts(token, ATHLETE_ID, isoDate(start), isoDate(end));
+
+  // Live zones from TP settings
+  const settings = await getAthleteSettings(token, ATHLETE_ID);
 
   // 60-day context for Claude — George needs long-term pattern awareness
   const contextStart = new Date();
@@ -98,6 +102,7 @@ async function runLoop(env: Env) {
           workout: w,
           recent14d,
           upcomingPlanned: upcoming,
+          settings,
         });
       } else {
         feedback = await generateChatReply({
@@ -105,6 +110,7 @@ async function runLoop(env: Env) {
           workout: w,
           recent14d,
           upcomingPlanned: upcoming,
+          settings,
         });
       }
 

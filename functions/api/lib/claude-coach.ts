@@ -8,11 +8,13 @@
  */
 
 import type { TpWorkout } from './tp-client';
-import { formatWorkout, formatCommentThread } from './tp-client';
+import { formatWorkout, formatCommentThread, zonesFromSettings } from './tp-client';
+import type { TpAthleteSettings } from './tp-client';
 import { ATHLETE_PROFILE, blockContextForPrompt, zonesForPrompt } from './training-plan';
 
-function buildSystemPrompt(): string {
+function buildSystemPrompt(liveZones?: string): string {
   const block = blockContextForPrompt();
+  const zones = liveZones || zonesForPrompt(); // fallback to hardcoded
   return `You are George, a pragmatic endurance coach for ${ATHLETE_PROFILE.name}.
 
 ATHLETE:
@@ -31,7 +33,7 @@ ${ATHLETE_PROFILE.weeklyPattern.map((l) => '  ' + l).join('\n')}
 
 ${block}
 
-${zonesForPrompt()}
+${zones}
 
 COACHING PHILOSOPHY:
 - 80/20 polarized. Quality over quantity runs. Bike handles aerobic volume.
@@ -55,6 +57,7 @@ export interface SessionFeedbackInput {
   workout: TpWorkout;
   recent14d: TpWorkout[];
   upcomingPlanned?: TpWorkout[];
+  settings?: TpAthleteSettings;
 }
 
 /** Build long-term trend stats from 60 days of completed workouts. */
@@ -92,7 +95,8 @@ function buildHistoricalContext(workouts: TpWorkout[]): string {
 
 /** Initial feedback on a newly-completed workout. Intelligent analysis using all available data. */
 export async function generateSessionFeedback(input: SessionFeedbackInput): Promise<string> {
-  const { apiKey, workout, recent14d, upcomingPlanned } = input;
+  const { apiKey, workout, recent14d, upcomingPlanned, settings } = input;
+  const liveZones = settings ? zonesFromSettings(settings) : undefined;
 
   // recent14d is really 60-day context now (renamed for backwards compat)
   const historical = recent14d;
@@ -226,7 +230,7 @@ AVOID:
 - Generic advice like "keep it consistent"
 - Anything that would violate the current block's restrictions`;
 
-  return callClaude(apiKey, prompt, 600);
+  return callClaude(apiKey, prompt, 600, liveZones);
 }
 
 export interface ChatReplyInput {
@@ -234,11 +238,13 @@ export interface ChatReplyInput {
   workout: TpWorkout;
   recent14d: TpWorkout[];
   upcomingPlanned: TpWorkout[];
+  settings?: TpAthleteSettings;
 }
 
 /** Reply to athlete's latest comment on a workout (chat mode). */
 export async function generateChatReply(input: ChatReplyInput): Promise<string> {
-  const { apiKey, workout, recent14d, upcomingPlanned } = input;
+  const { apiKey, workout, recent14d, upcomingPlanned, settings } = input;
+  const liveZones = settings ? zonesFromSettings(settings) : undefined;
   const thread = formatCommentThread(workout.workoutComments || []);
 
   // Extract Itay's latest message (last non-George comment)
@@ -286,7 +292,7 @@ REPLY RULES:
 
 Max 60 words. Natural texting tone. Don't use bullet points or headers.`;
 
-  return callClaude(apiKey, prompt, 300);
+  return callClaude(apiKey, prompt, 300, liveZones);
 }
 
 /** Weekly summary + next week brief. Two clear sections in one message. */
@@ -294,7 +300,9 @@ export async function generateWeeklyFeedback(
   apiKey: string,
   weekWorkouts: TpWorkout[],
   previousWeeks: TpWorkout[],
+  settings?: TpAthleteSettings,
 ): Promise<string> {
+  const liveZones = settings ? zonesFromSettings(settings) : undefined;
   const runs = weekWorkouts.filter((w) => w.workoutTypeValueId === 3);
   const bikes = weekWorkouts.filter((w) => w.workoutTypeValueId === 2);
   const totalRunKm = runs.reduce((s, w) => s + (w.distance || 0) / 1000, 0);
@@ -336,7 +344,7 @@ Write a weekly review with TWO CLEAR SECTIONS separated by a blank line:
 
 Natural voice. No bullet points inside sections. No headers other than the two bolded ones above. Max 280 words total. Avoid formulaic openings like "Solid week" or "Great volume".`;
 
-  return callClaude(apiKey, prompt, 800);
+  return callClaude(apiKey, prompt, 800, liveZones);
 }
 
 /** Generate the next training block as structured JSON. */
@@ -419,7 +427,7 @@ Do NOT include markdown, explanations, or commentary. Just the JSON array.`;
   return sessions;
 }
 
-async function callClaude(apiKey: string, prompt: string, maxTokens = 500): Promise<string> {
+async function callClaude(apiKey: string, prompt: string, maxTokens = 500, liveZones?: string): Promise<string> {
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -430,7 +438,7 @@ async function callClaude(apiKey: string, prompt: string, maxTokens = 500): Prom
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: maxTokens,
-      system: buildSystemPrompt(),
+      system: buildSystemPrompt(liveZones),
       messages: [{ role: 'user', content: prompt }],
     }),
   });

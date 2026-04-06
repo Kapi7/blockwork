@@ -417,6 +417,132 @@ export function workoutTypeName(id: number): string {
   return WORKOUT_TYPES[id] || `Type${id}`;
 }
 
+// ────────────────────────────────────────────────────────────────────────
+// Athlete Settings — live zones from TP
+// ────────────────────────────────────────────────────────────────────────
+
+export interface TpZoneEntry { label: string; minimum: number; maximum: number }
+
+export interface TpHrZoneSet {
+  calculationMethod: number;
+  maximumHeartRate: number;
+  restingHeartRate: number;
+  threshold: number;           // LTHR
+  workoutTypeId: number;       // 0=default(bike), 3=run
+  zones: TpZoneEntry[];
+}
+
+export interface TpPowerZoneSet {
+  calculationMethod: number;
+  threshold: number;           // FTP
+  workoutTypeId: number;
+  zones: TpZoneEntry[];
+}
+
+export interface TpSpeedZoneSet {
+  calculationMethod: number;
+  threshold: number;           // m/s
+  workoutTypeId: number;
+  zones: TpZoneEntry[];
+}
+
+export interface TpAthleteSettings {
+  heartRateZones: TpHrZoneSet[];
+  powerZones: TpPowerZoneSet[];
+  speedZones: TpSpeedZoneSet[];
+}
+
+/**
+ * Fetch live athlete settings (HR, power, speed zones).
+ * GET /fitness/v1/athletes/{athleteId}/settings
+ */
+export async function getAthleteSettings(
+  token: string,
+  athleteId: number,
+): Promise<TpAthleteSettings> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v1/athletes/${athleteId}/settings`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      'User-Agent': 'blockwork-bridge',
+    },
+  });
+  if (!res.ok) throw new Error(`getAthleteSettings failed: ${res.status}`);
+  const data = (await res.json()) as any;
+  return {
+    heartRateZones: data.heartRateZones || [],
+    powerZones: data.powerZones || [],
+    speedZones: data.speedZones || [],
+  };
+}
+
+/**
+ * Extract zones for a specific workout type.
+ * workoutTypeId: 0 = default (bike/general), 3 = run, 1 = swim
+ * Falls back to type 0 if specific type not found.
+ */
+function findZoneSet<T extends { workoutTypeId: number }>(sets: T[], typeId: number): T | undefined {
+  return sets.find((s) => s.workoutTypeId === typeId) || sets.find((s) => s.workoutTypeId === 0);
+}
+
+/**
+ * Build a human-readable zone summary from live TP athlete settings.
+ * Used in Claude coach system prompts so George references real numbers.
+ */
+export function zonesFromSettings(settings: TpAthleteSettings): string {
+  // Run HR (workoutTypeId 3, fallback to default)
+  const runHr = findZoneSet(settings.heartRateZones, 3);
+  // Bike HR (default set, workoutTypeId 0)
+  const bikeHr = findZoneSet(settings.heartRateZones, 0);
+  // Bike power
+  const bikePower = findZoneSet(settings.powerZones, 0);
+  // Run speed (workoutTypeId 3)
+  const runSpeed = findZoneSet(settings.speedZones, 3);
+
+  const lines: string[] = ['LIVE TP ZONES (fetched from TP settings, use THESE exact numbers):'];
+
+  if (runHr) {
+    lines.push(`\nRUN HR (LTHR ${runHr.threshold} | MaxHR ${runHr.maximumHeartRate} | Resting ${runHr.restingHeartRate}):`);
+    for (const z of runHr.zones) lines.push(`  ${z.label}: ${z.minimum}-${z.maximum}`);
+  }
+
+  if (bikeHr && bikeHr !== runHr) {
+    lines.push(`\nBIKE HR (LTHR ${bikeHr.threshold} | MaxHR ${bikeHr.maximumHeartRate}):`);
+    for (const z of bikeHr.zones) lines.push(`  ${z.label}: ${z.minimum}-${z.maximum}`);
+  }
+
+  if (bikePower) {
+    lines.push(`\nBIKE POWER (FTP ${bikePower.threshold}W):`);
+    for (const z of bikePower.zones) lines.push(`  ${z.label}: ${z.minimum}-${z.maximum}W`);
+  }
+
+  if (runSpeed) {
+    // Convert m/s threshold to pace (mm:ss/km)
+    const thresholdPace = runSpeed.threshold > 0 ? formatPace(runSpeed.threshold) : '?';
+    lines.push(`\nRUN PACE (threshold ${thresholdPace}/km):`);
+    for (const z of runSpeed.zones) {
+      const lo = z.minimum > 0 ? formatPace(z.minimum) : '0:00';
+      const hi = z.maximum < 100 ? formatPace(z.maximum) : '∞';
+      lines.push(`  ${z.label}: ${hi}-${lo}/km`);
+    }
+  }
+
+  lines.push(`\nMARATHON-BLOWUP LESSON: he ran 2:52 goal pace (4:05/km) at HR 160 → Z3 Tempo and blew up.`);
+  lines.push(`Marathon sustainable is Z2. Long runs stay Z2. Threshold reps live in Z4. 5K pace = Z5a-b.`);
+
+  return lines.join('\n');
+}
+
+/** m/s → mm:ss pace string */
+function formatPace(mps: number): string {
+  if (mps <= 0) return '∞';
+  const secPerKm = 1000 / mps;
+  const min = Math.floor(secPerKm / 60);
+  const sec = Math.round(secPerKm % 60);
+  return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
 /** Format comment thread for Claude prompt. */
 export function formatCommentThread(comments: TpComment[]): string {
   if (!comments || comments.length === 0) return '(no comments)';
