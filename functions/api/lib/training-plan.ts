@@ -788,7 +788,7 @@ Last session before Block 2 starts. Finish feeling strong.`, totalTimePlanned: 2
     name: 'Build the Engine',
     phase: 'base',
     startDate: '2026-04-21',
-    endDate: '2026-05-10',
+    endDate: '2026-05-11',
     stimulus: 'Rebuild aerobic base with structure. Hill work for power. Bike threshold for aerobic ceiling. Strength 2x/week.',
     goals: [
       'Build running to 45-50km/week',
@@ -811,7 +811,7 @@ Last session before Block 2 starts. Finish feeling strong.`, totalTimePlanned: 2
     ],
     sessions: [
       // ============ WEEK 1 (Apr 13-19) Mon-Sun — Build introduction ============
-      { date: '2026-05-07', title: 'Easy bike — bridge from Block 0', workoutType: 2, description: `EASY BIKE — base aerobic bridge
+      { date: '2026-04-21', title: 'Easy bike — bridge from Block 0', workoutType: 2, description: `EASY BIKE — base aerobic bridge
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (10min)
   • Progressive Z1 | 140→180W | 90rpm
@@ -828,7 +828,7 @@ COOL-DOWN  (5min)
 TOTAL: 60min  |  TSS ~45
 FIRST DAY OF BASE BLOCK.
 Running starts tomorrow with KEY 1 hills — protect the legs today.`, totalTimePlanned: 1.0, tssPlanned: 45, structure: STRUCTURES.easyBike60 },
-      { date: '2026-05-08', title: 'KEY 1 — Hill repeats', workoutType: 3, description: `KEY 1 — HILL REPEATS (power)
+      { date: '2026-04-22', title: 'KEY 1 — Hill repeats', workoutType: 3, description: `KEY 1 — HILL REPEATS (power)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~15min)
   • 2km easy jog 5:10/km (Z1) | HR <156 (Z2 top)
@@ -850,9 +850,9 @@ COOL-DOWN  (2.5km)
 TOTAL: ~10km  |  TSS ~65
 PURPOSE: neuromuscular power + form under load.
 Hills are the foundation that 5K speed sits on.`, distancePlanned: 10000, totalTimePlanned: 0.92, tssPlanned: 65, structure: STRUCTURES.hillRepeats6x200 },
-      { date: '2026-05-09', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Sun salutations\n- Hip openers, runner\'s lunge sequence\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes, IT band\n\nRecovery-focused flow between key sessions.', totalTimePlanned: 0.67 },
-      { date: '2026-05-09', title: 'PM Strength', workoutType: 9, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
-      { date: '2026-05-10', title: 'KEY 2 — Fartlek', workoutType: 3, description: `KEY 2 — FARTLEK  (find the gears)
+      { date: '2026-04-23', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Sun salutations\n- Hip openers, runner\'s lunge sequence\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes, IT band\n\nRecovery-focused flow between key sessions.', totalTimePlanned: 0.67 },
+      { date: '2026-04-23', title: 'PM Strength', workoutType: 9, description: 'Strength 45min\n\n- Back squats 3x8\n- Walking lunges 3x10/leg\n- Single-leg RDL 3x8/leg\n- Box jumps 3x5\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nStrength AFTER track day = optimal. Moderate load, good form over heavy weight.', totalTimePlanned: 0.75 },
+      { date: '2026-04-24', title: 'KEY 2 — Fartlek', workoutType: 3, description: `KEY 2 — FARTLEK  (find the gears)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2km)
   • Easy jog 5:10/km (Z1) | HR <156 (Z2 top)
@@ -872,7 +872,7 @@ COOL-DOWN  (2km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~75
 PURPOSE: teach the body to switch gears without blowing up.`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 75, structure: STRUCTURES.fartlek8x90 },
-      { date: '2026-05-11', title: 'Easy bike / yoga pre-long', workoutType: 2, description: `EASY BIKE PRE-LONG  (60min)
+      { date: '2026-04-25', title: 'Easy bike / yoga pre-long', workoutType: 2, description: `EASY BIKE PRE-LONG  (60min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 MAIN  (60min)
   • Easy Z1 | 150-180W (Z1 Recovery, 50-60% of 300W FTP)
@@ -884,7 +884,7 @@ MAIN  (60min)
 TOTAL: 60min  |  TSS ~30
 Pre-long run flush. Bike > run today — protect the legs.
 Yoga 40min is an equal substitute if you prefer.`, totalTimePlanned: 1.0, tssPlanned: 30, structure: STRUCTURES.easyBike60 },
-      { date: '2026-05-04', title: 'Long run — negative split', workoutType: 3, description: `LONG RUN — NEGATIVE SPLIT  (14km)
+      { date: '2026-04-26', title: 'Long run — negative split', workoutType: 3, description: `LONG RUN — NEGATIVE SPLIT  (14km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-10  (PATIENCE)
   • Pace: 5:00-5:05/km (Z1 Recovery/low Z2)
@@ -906,7 +906,7 @@ SEGMENT 3  —  km 13-14  (CONTROLLED PUSH)
 TOTAL: 14km ~70min  |  TSS ~90
 Last km should be your fastest.
 If Seg 3 feels desperate, Seg 1 was too hot.`, distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 90, structure: STRUCTURES.longRun14kmProgressive },
-      { date: '2026-05-05', title: 'Long ride — aerobic builder', workoutType: 2, description: `LONG RIDE — Z2 AEROBIC (2.5hrs)
+      { date: '2026-04-27', title: 'Long ride — aerobic builder', workoutType: 2, description: `LONG RIDE — Z2 AEROBIC (2.5hrs)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
   • Progressive Z1→Z2 | 165→225W (Z1→Z2) | 85-90rpm
@@ -926,7 +926,7 @@ Bike = aerobic volume with ZERO impact on legs.
 Hydrate: 750ml/hr + electrolytes.`, totalTimePlanned: 2.5, tssPlanned: 150, structure: STRUCTURES.longRide150 },
 
       // ============ WEEK 2 (Apr 20-26) Mon-Sun — Build intensity ============
-      { date: '2026-05-06', title: 'Easy run + strides', workoutType: 3, description: `EASY + STRIDES
+      { date: '2026-04-28', title: 'Easy run + strides', workoutType: 3, description: `EASY + STRIDES
 ━━━━━━━━━━━━━━━━━━━━━━━━
 MAIN  (8km)
   • Easy 5:00-5:10/km (Z1) (Z1) | HR Z1-Z2 <156 (stay in Z1/Z2) | RPE 3-4/10
@@ -940,7 +940,7 @@ FINISHER — 6x 100m STRIDES
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 9km ~48min  |  TSS ~50
 Strides prime the nervous system for tomorrow's track.`, distancePlanned: 9000, totalTimePlanned: 0.79, tssPlanned: 50, structure: STRUCTURES.easyRunStrides9km },
-      { date: '2026-05-07', title: 'KEY 1 — Track 6x400m', workoutType: 3, description: `KEY 1 — TRACK SPEED ENDURANCE
+      { date: '2026-04-29', title: 'KEY 1 — Track 6x400m', workoutType: 3, description: `KEY 1 — TRACK SPEED ENDURANCE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~15min)
   • 2km easy 5:10/km (Z1) | HR <156 (Z2 top)
@@ -962,9 +962,9 @@ TOTAL: ~10km  |  TSS ~80
 5K PACE TERRITORY.
 Targets: 84s=fast end | 86s=control end.
 Negative split the set (6th = fastest).`, distancePlanned: 10000, totalTimePlanned: 0.95, tssPlanned: 80, structure: STRUCTURES.track6x400 },
-      { date: '2026-05-08', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\nRecovery-focused flow between key sessions.\nFocus: hips, hamstrings, calves.', totalTimePlanned: 0.67 },
-      { date: '2026-05-08', title: 'PM Strength', workoutType: 9, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
-      { date: '2026-05-09', title: 'KEY 2 — Tempo 3x1.5km', workoutType: 3, description: `KEY 2 — TEMPO CRUISE
+      { date: '2026-04-30', title: 'AM Yoga / Mobility', workoutType: 100, description: 'Yoga / mobility 40min\nRecovery-focused flow between key sessions.\nFocus: hips, hamstrings, calves.', totalTimePlanned: 0.67 },
+      { date: '2026-04-30', title: 'PM Strength', workoutType: 9, description: 'Strength 45min — progress the load\n\n- Front squats 3x6\n- Bulgarian split squats 3x8/leg\n- Hip thrusts 3x10\n- Box jumps 3x5 (higher box)\n- Core circuit: dead bugs, pallof press, side plank\n- Calf raises 3x15 (weighted, slow eccentric)\n\nHeavier than last week. Form first.', totalTimePlanned: 0.75 },
+      { date: '2026-05-01', title: 'KEY 2 — Tempo 3x1.5km', workoutType: 3, description: `KEY 2 — TEMPO CRUISE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km)
   • 2km easy 5:10/km (Z1)
@@ -984,7 +984,7 @@ COOL-DOWN  (2km)
 TOTAL: ~11km  |  TSS ~85
 First real tempo of the block.
 If HR drifts >185 (Z5b) mid-rep → ease back.`, distancePlanned: 11000, totalTimePlanned: 0.95, tssPlanned: 85, structure: STRUCTURES.tempo3x1500 },
-      { date: '2026-05-10', title: 'Easy bike recovery', workoutType: 2, description: `RECOVERY RIDE  (60min)
+      { date: '2026-05-02', title: 'Easy bike recovery', workoutType: 2, description: `RECOVERY RIDE  (60min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (5min)
   • Spin-up Z1 | <165W (Z1) | 90rpm
@@ -1001,7 +1001,7 @@ COOL-DOWN  (5min)
 TOTAL: 60min  |  TSS ~35
 Protect the legs for tomorrow's long run.
 Bike > run today. No exceptions.`, totalTimePlanned: 1.0, tssPlanned: 35, structure: STRUCTURES.recoveryRide60 },
-      { date: '2026-05-11', title: 'Long run — progressive', workoutType: 3, description: `LONG RUN — PROGRESSIVE  (16km)
+      { date: '2026-05-03', title: 'Long run — progressive', workoutType: 3, description: `LONG RUN — PROGRESSIVE  (16km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-11  (HOLD BACK)
   • Pace: 5:00-5:05/km (Z1 Recovery/low Z2)
