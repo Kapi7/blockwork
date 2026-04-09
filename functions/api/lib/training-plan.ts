@@ -539,6 +539,53 @@ export const STRUCTURES = {
     singleStep('Cool down', 300, 50, 60, 'coolDown'),
   ]),
 
+  // Bike tempo intervals — 60min, 3×8min Z3 / 4min Z1
+  bikeTempoIntervals: bikeStructure([
+    singleStep('Warm up', 600, 50, 65, 'warmUp'),
+    repeatSet(3, 480, 78, 85, 240, 45, 55),
+    singleStep('Cool down', 600, 50, 60, 'coolDown'),
+  ]),
+
+  // Bike sweet spot — 75min, 2×15min @ 88-93% FTP
+  bikeSweetSpot: bikeStructure([
+    singleStep('Warm up', 600, 50, 65, 'warmUp'),
+    singleStep('Sweet spot 1', 900, 88, 93, 'active'),
+    singleStep('Recovery', 300, 45, 55, 'rest'),
+    singleStep('Sweet spot 2', 900, 88, 93, 'active'),
+    singleStep('Z2 endurance', 1200, 65, 75, 'active'),
+    singleStep('Cool down', 600, 50, 60, 'coolDown'),
+  ]),
+
+  // Bike cadence drills — 60min Z2 with 4×3min high-cadence 100+ rpm
+  bikeCadenceDrills: bikeStructure([
+    singleStep('Warm up', 600, 50, 65, 'warmUp'),
+    repeatSet(4, 180, 60, 70, 300, 60, 70),
+    singleStep('Z2 steady', 600, 60, 70, 'active'),
+    singleStep('Cool down', 360, 50, 60, 'coolDown'),
+  ]),
+
+  // Bike endurance 75min Z2
+  bikeEndurance75: bikeStructure([
+    singleStep('Warm up', 600, 50, 65, 'warmUp'),
+    singleStep('Z2 endurance', 3600, 65, 75, 'active'),
+    singleStep('Cool down', 300, 50, 60, 'coolDown'),
+  ]),
+
+  // Bike over-under — 60min, 4×(3min Z4 / 2min Z2)
+  bikeOverUnder: bikeStructure([
+    singleStep('Warm up', 720, 50, 65, 'warmUp'),
+    repeatSet(4, 180, 91, 100, 120, 60, 70),
+    singleStep('Z2 endurance', 900, 65, 75, 'active'),
+    singleStep('Cool down', 360, 50, 60, 'coolDown'),
+  ]),
+
+  // Long ride 3hrs Z2
+  longRide180: bikeStructure([
+    singleStep('Warm up', 900, 50, 65, 'warmUp'),
+    singleStep('Z2 endurance', 9000, 65, 75, 'active'),
+    singleStep('Cool down', 600, 50, 60, 'coolDown'),
+  ]),
+
   // Key lite — 10x 10sec hill sprints + 2km tempo finish
   hillSprintsTempo: runStructure([
     singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
@@ -640,27 +687,27 @@ export const STRUCTURES = {
   // 3x2km tempo @ 10K pace
   tempo3x2km: runStructure([
     singleStep('Warm up', 720, 65, 75, 'warmUp'),
-    repeatSetDist(3, 2000, 90, 94, 400, 55, 65),
+    repeatSetDist(3, 2000, 100, 104, 400, 55, 65),
     singleStep('Cool down', 600, 65, 75, 'coolDown'),
   ]),
 
   // 4x2km tempo @ 10K race pace
   tempo4x2km: runStructure([
     singleStep('Warm up', 720, 65, 75, 'warmUp'),
-    repeatSetDist(4, 2000, 93, 97, 400, 55, 65),
+    repeatSetDist(4, 2000, 102, 105, 400, 55, 65),
     singleStep('Cool down', 600, 65, 75, 'coolDown'),
   ]),
 
   // 14km long run with last 4km @ 10K pace
   longRun14km10kFinish: runStructure([
     distStep('Easy', 10000, 70, 76, 'active'),
-    distStep('10K pace finish', 4000, 88, 94, 'active'),
+    distStep('10K pace finish', 4000, 98, 103, 'active'),
   ]),
 
   // 10K time trial
   tt10k: runStructure([
     singleStep('Warm up + openers', 900, 65, 85, 'warmUp'),
-    distStep('10K RACE', 10000, 93, 100, 'active'),
+    distStep('10K RACE', 10000, 103, 107, 'active'),
     singleStep('Cool down', 600, 55, 70, 'coolDown'),
   ]),
 };
@@ -854,7 +901,9 @@ export const BLOCKS: TrainingBlock[] = [
     ],
     sessions: [
       // ============ WEEK 1 (Apr 14-20) — Bridge intro ============
-      { date: '2026-04-13', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady Z2 195-225W (65-75% FTP). HR Z1-Z2 146-156.\nFirst day of base block. Protect legs for tomorrow.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-04-13', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Neuromuscular activation without load.
+Keep power in Z2, focus on smooth fast pedaling.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-04-14', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 7km @ 5:10/km\n+ 6x100m strides (build to 90%, walk back)\nStrides maintain turnover from Block 0. Relaxed, not sprinting.', distancePlanned: 7000, totalTimePlanned: 0.63, structure: STRUCTURES.easyRunStrides7km },
       { date: '2026-04-15', title: 'Gym — Strength (light)', workoutType: 9, description: 'Strength 45min (light)\n\n- Back squats 3x10\n- Walking lunges 3x8/leg\n- Single-leg RDL 3x8/leg\n- Glute bridges 3x12\n- Plank 3x45sec\n- Copenhagen plank 3x20sec/side\n\nModerate load. Build from Block 0 bodyweight base.', totalTimePlanned: 0.75 },
       { date: '2026-04-16', title: 'Bike 90s on/off', workoutType: 2, description: `BIKE — 90s ON/OFF (wake-up session)
@@ -892,7 +941,9 @@ TOTAL: 2hrs  |  TSS ~100
 Bridge ride. Finish feeling strong.`, totalTimePlanned: 2.0, tssPlanned: 100, structure: STRUCTURES.longRide120Bridge },
 
       // ============ WEEK 2 (Apr 21-27) — First KEY sessions ============
-      { date: '2026-04-20', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady 195-225W. Conversational pace.\nProtect legs for tomorrow\'s first KEY session.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-04-20', title: 'Bike endurance 75min', workoutType: 2, description: `Endurance ride 75min Z2
+65-75% FTP. Steady aerobic effort.
+Slightly longer than usual — building the base.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeEndurance75 },
       { date: '2026-04-21', title: 'KEY 1 — Hill repeats 6x200m', workoutType: 3, description: `KEY 1 — HILL REPEATS (power)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~15min)
@@ -976,7 +1027,9 @@ Bike = aerobic volume with ZERO impact on legs.
 Hydrate: 750ml/hr + electrolytes.`, totalTimePlanned: 2.5, tssPlanned: 150, structure: STRUCTURES.longRide150 },
 
       // ============ WEEK 3 (Apr 28 - May 4) — Push ============
-      { date: '2026-04-27', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady 195-225W. Conversation pace.\nRecovery from weekend. Protect legs for track tomorrow.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-04-27', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Recovery with neuromuscular purpose.
+Keep power easy, spin fast on the drills.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-04-28', title: 'KEY 1 — Track 6x400m', workoutType: 3, description: `KEY 1 — TRACK 6x400m (speed endurance)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (2.5km, ~18min)
@@ -1039,75 +1092,50 @@ SEGMENT 3  —  km 15-16 (CONTROLLED SURGE)
 TOTAL: 16km ~80min  |  TSS ~95
 Last 5km teaches the body to run fast when TIRED.
 Fueling: 30g carbs at km 9.`, distancePlanned: 16000, totalTimePlanned: 1.33, tssPlanned: 95, structure: STRUCTURES.longRun16kmProgressive },
-      { date: '2026-05-03', title: 'Long ride + hills 2.75hrs', workoutType: 2, description: `LONG RIDE + HILLS (2h45)
-━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • Progressive Z1-Z2 | 165-225W | 90rpm
-
-MAIN  —  Endurance + Climbs
-  • Base: Z2 210-240W | 85-90rpm
-  • CLIMBS (3-4 natural or Zwift):
-     Seated: Z3 245-265W | 80rpm
-     Standing surges: 30sec @ Z4 290W+
-  • HR: 130-160 base, 165-175 on climbs
-
-COOL-DOWN  (10min)
-  • Easy Z1 spin
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: 2h45  |  TSS ~170
-Hills on the bike = free strength work for running.`, totalTimePlanned: 2.75, tssPlanned: 170, structure: STRUCTURES.longRide165Hills },
+      { date: '2026-05-03', title: 'Long ride 3hrs Z2', workoutType: 2, description: `Long ride 3hrs Z2
+65-75% FTP. Peak base week — biggest ride of the season.
+Steady, patient, fueled. Practice eating on the bike.`, totalTimePlanned: 3.0, tssPlanned: 170, structure: STRUCTURES.longRide180 },
 
       // ============ WEEK 4 (May 5-11) — Recovery + block test ============
       { date: '2026-05-04', title: 'Easy bike Z1', workoutType: 2, description: 'Easy bike 45min Z1\nRecovery week. Flat, easy, conversation pace.\nLet the body absorb 3 weeks of work.', totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-05-05', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 7km @ 5:10/km\n+ 6x100m strides (build to 90%, walk back)\nRecovery week. Keep it smooth and relaxed.', distancePlanned: 7000, totalTimePlanned: 0.63, structure: STRUCTURES.easyRunStrides7km },
       { date: '2026-05-06', title: 'Gym — lighter', workoutType: 9, description: 'Strength 40min — recovery week, lighter loads\n\n- Deadlift 3x5\n- Hip thrusts 3x10\n- Single-leg calf raises 3x12\n- Core: plank variations, pallof press\n\nMaintain, don\'t overload. Body needs to absorb.', totalTimePlanned: 0.67 },
-      { date: '2026-05-07', title: 'Bike 90s on/off', workoutType: 2, description: `BIKE — 90s ON/OFF
+      { date: '2026-05-07', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Recovery week — no intervals. Cadence drills keep legs fresh.
+Pre-race week. Easy does it.`, totalTimePlanned: 0.92, tssPlanned: 55, structure: STRUCTURES.bikeCadenceDrills },
+      { date: '2026-05-08', title: 'Yoga / mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes\n\nPre-block-test recovery. Protect the tank.', totalTimePlanned: 0.67 },
+      { date: '2026-05-09', title: 'Pre-race shakeout', workoutType: 3, description: `PRE-RACE SHAKEOUT
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (10min)
-  • Progressive Z1-Z2 | 90rpm
+Easy run 4km @ 5:15-5:25/km (Z1)
++ 2× 200m at 10K pace (3:36/km — just a taste)
 
-MAIN SET  —  8x (90s ON / 90s OFF)
-  • ON: 85-95% FTP (255-285W)
-  • OFF: 50-60% FTP (150-180W)
-  • RPE 7/10 — keep it fun
+━━━━━━━━━━━━━━━━━━━━━━━━
+TOTAL: ~5km  |  25min
+Short and smooth. Legs should feel SPRINGY.
+Hydrate well. Early dinner. Sleep 8hrs.
+Tomorrow: Parekklisia 10K — the real block test.`, distancePlanned: 5000, totalTimePlanned: 0.42, structure: STRUCTURES.raceWeekOpener },
+      { date: '2026-05-10', title: 'RACE — Parekklisia 10K', workoutType: 3, description: `PAREKKLISIA 10K — BLOCK 1 TEST
+━━━━━━━━━━━━━━━━━━━━━━━━
+WARM-UP  (15min)
+  • 2km easy jog + drills
+  • 3× 100m at 10K pace (openers)
+
+RACE  —  10km
+  • This is a BASELINE race, not peak fitness
+  • Target: 37:00-38:00 (3:42-3:48/km)
+  • Km 1-2: 3:48-3:50 — CONTROLLED start
+  • Km 3-7: 3:42-3:45 — settle into threshold
+  • Km 8-9: 3:38-3:42 — push if feeling strong
+  • Km 10: 3:35 or faster — finish hard
 
 COOL-DOWN  (10min)
-  • Easy Z1 spin
+  • Easy jog + walk
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: 55min  |  TSS ~55
-Recovery-week intensity on the bike, not the legs.`, totalTimePlanned: 0.92, tssPlanned: 55, structure: STRUCTURES.bikeOnOff90 },
-      { date: '2026-05-08', title: 'Yoga / mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes\n\nPre-block-test recovery. Protect the tank.', totalTimePlanned: 0.67 },
-      { date: '2026-05-09', title: 'Long run 18km — THE BLOCK TEST', workoutType: 3, description: `LONG RUN — THE BLOCK TEST (18km)
-━━━━━━━━━━━━━━━━━━━━━━━━
-SEGMENT 1  —  km 1-13 (PATIENCE)
-  • Pace: 5:00/km (low Z2) exact
-  • HR: Z2 146-156
-  • RPE 4/10 — FEEL HELD BACK
-
-SEGMENT 2  —  km 14-15 (SHIFT)
-  • Pace: 4:40/km (Z2 top)
-  • HR: Z3 160-168
-  • RPE 6/10
-
-SEGMENT 3  —  km 16-17 (PUSH)
-  • Pace: 4:25/km (Z3 Tempo)
-  • HR: Z3-Z4 168-175
-  • RPE 8/10
-
-SEGMENT 4  —  km 18 (FAST)
-  • Pace: 4:15/km
-  • HR: Z5a 175-180
-  • RPE 9/10 — controlled maximum
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: 18km ~90min  |  TSS ~110
-THE BLOCK 1 EXAM.
-Finish strong = GREEN LIGHT for Block 2 (speed).
-Last km MUST be your fastest.
-Fuel: 30g carbs at km 9 + 30g at km 14.`, distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 110, structure: STRUCTURES.longRun18kmTest },
-      { date: '2026-05-10', title: 'Easy recovery ride', workoutType: 2, description: 'Recovery ride 75min Z1\nEasy Z1 150-180W. Flat, zero surges. RPE 2/10.\nBase block DONE. How did the 18km feel?\nSpeed block starts tomorrow.', totalTimePlanned: 1.25, structure: STRUCTURES.recoveryRide60 },
+TOTAL: ~14km  |  TSS ~80
+BLOCK 1 EXAM. This establishes the 10K baseline.
+Jul 25 is the target race. Run smart — this is base fitness, NOT peak.
+Expect 37:xx. Anything faster is a bonus.`, distancePlanned: 10000, totalTimePlanned: 0.63, tssPlanned: 80, structure: STRUCTURES.tt10k },
     ],
   },
   // ═══════════════ BLOCK 2: Hunt the 5K (May 12 - Jun 8) ═══════════════
@@ -1140,7 +1168,9 @@ Fuel: 30g carbs at km 9 + 30g at km 14.`, distancePlanned: 18000, totalTimePlann
     ],
     sessions: [
       // ============ WEEK 5 (May 12-18) — Introduce race pace ============
-      { date: '2026-05-11', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nRecovery from Block 1 test. Spin the legs out.\nConversational pace, flat terrain.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-05-11', title: 'Bike endurance 75min', workoutType: 2, description: `Endurance ride 75min Z2
+First day of speed block. Steady aerobic.
+65-75% FTP, cadence 85-90rpm.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeEndurance75 },
       { date: '2026-05-12', title: 'KEY 1 — Track 5x1km', workoutType: 3, description: `KEY 1 — TRACK 5x1km @ 5K PACE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1197,7 +1227,9 @@ Finish strong. If tempo feels hard, you're too tired — easy is fine.`, distanc
       { date: '2026-05-17', title: 'Long ride Z2 2.5hrs', workoutType: 2, description: 'Long ride 2.5hrs Z2\nAerobic maintenance. Steady effort.\nKeep HR in Z2, cadence 85-90rpm.', totalTimePlanned: 2.5, structure: STRUCTURES.longRide150 },
 
       // ============ WEEK 6 (May 19-25) — Sharpen ============
-      { date: '2026-05-18', title: 'Easy bike recovery', workoutType: 2, description: 'Recovery ride 60min Z1\nFlat, easy spin. Active recovery from the weekend.', totalTimePlanned: 1.0, structure: STRUCTURES.recoveryRide60 },
+      { date: '2026-05-18', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Recovery ride with neuromuscular purpose.
+Easy power, fast pedaling on drills.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-05-19', title: 'KEY 1 — Track 6x800m', workoutType: 3, description: `KEY 1 — TRACK 6x800m (FASTER THAN RACE PACE)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1248,10 +1280,16 @@ MAIN  (12km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 12km  |  TSS ~80
 Race-pace legs on tired legs. Key rehearsal.`, distancePlanned: 12000, totalTimePlanned: 1.0, tssPlanned: 80, structure: STRUCTURES.longRun12km5kFinish },
-      { date: '2026-05-24', title: 'Easy ride 90min Z2', workoutType: 2, description: 'Easy ride 90min Z2\nSteady aerobic effort, nothing hard.\nCadence 85-90rpm.', totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance90 },
+      { date: '2026-05-24', title: 'Bike sweet spot', workoutType: 2, description: `Bike sweet spot 75min
+2×15min @ 88-93% FTP (264-279W) with 5min recovery.
+Sub-threshold FTP maintenance during speed block.
+Should feel hard but sustainable — NOT a threshold test.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
 
       // ============ WEEK 7 (May 26 - Jun 1) — Peak ============
-      { date: '2026-05-25', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady aerobic maintenance.\nKeep legs fresh for Tuesday\'s sharpener.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-05-25', title: 'Bike tempo intervals', workoutType: 2, description: `Bike tempo intervals 60min
+3×8min Z3 (78-85% FTP, 234-255W) / 4min Z1.
+Maintain aerobic ceiling while speed block focuses on running.
+Controlled, not maximal.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
       { date: '2026-05-26', title: 'KEY 1 — 3x1km sharpener', workoutType: 3, description: `KEY 1 — SHARPENER 3x1km
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1309,7 +1347,9 @@ Peak week long run. Finish strong.`, distancePlanned: 14000, totalTimePlanned: 1
       { date: '2026-06-04', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 6km @ 5:15/km\n+ 4x100m strides (relaxed speed)\nKeep the legs turning over. Nothing hard.', distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRunStrides6km },
       { date: '2026-06-05', title: 'Easy bike', workoutType: 2, description: 'Easy bike 45min Z1\nGentle spin. Active recovery only.', totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-06', title: 'Easy run 8km', workoutType: 3, description: 'Easy run 8km @ 5:10-5:20/km\nZ1-Z2 only. Longest run of recovery week.\nShould feel refreshed and ready to sharpen.', distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
-      { date: '2026-06-07', title: 'Easy ride 90min Z2', workoutType: 2, description: 'Easy ride 90min Z2\nSteady aerobic maintenance.\nBlock 2 complete. Ready for the blade.', totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance90 },
+      { date: '2026-06-07', title: 'Bike endurance 75min', workoutType: 2, description: `Endurance ride 75min Z2
+End of recovery week. Moderate duration, easy effort.
+65-75% FTP. Transition into sharpening block.`, totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance75 },
     ],
   },
   // ═══════════════ BLOCK 3: Sharpen the Blade (Jun 9 - Jul 6) ═══════════════
@@ -1342,7 +1382,10 @@ Peak week long run. Finish strong.`, distancePlanned: 14000, totalTimePlanned: 1
     ],
     sessions: [
       // ============ WEEK 9 (Jun 9-15) — Overspeed ============
-      { date: '2026-06-08', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady 195-225W. Fresh start to the sharpening block.\nLegs should feel recharged after recovery week.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-06-08', title: 'Bike tempo intervals', workoutType: 2, description: `Bike tempo intervals 60min
+3×8min Z3 (78-85% FTP) / 4min Z1.
+First day of sharpening block. Bike intensity maintains aerobic ceiling.
+Complement to run speed work — not competing with it.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
       { date: '2026-06-09', title: 'KEY 1 — 6x800m overspeed', workoutType: 3, description: `KEY 1 — TRACK 6x800m (OVERSPEED)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1392,10 +1435,15 @@ MAIN  (12km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 12km  |  TSS ~80
 Key rehearsal for the 5K TT in 3 weeks.`, distancePlanned: 12000, totalTimePlanned: 1.0, tssPlanned: 80, structure: STRUCTURES.longRun12km5kFinish },
-      { date: '2026-06-14', title: 'Long ride Z2 2hrs', workoutType: 2, description: 'Long ride 2hrs Z2\nSteady aerobic base. Z2 195-225W.\nCadence 85-90rpm.', totalTimePlanned: 2.0, structure: STRUCTURES.longRide120Bridge },
+      { date: '2026-06-14', title: 'Bike sweet spot', workoutType: 2, description: `Bike sweet spot 75min
+2×15min @ 88-93% FTP with 5min recovery.
+FTP maintenance in less time than a 2hr Z2 ride.
+Save recovery for run sharpening.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
 
       // ============ WEEK 10 (Jun 16-22) — Race simulation ============
-      { date: '2026-06-15', title: 'Easy bike recovery', workoutType: 2, description: 'Recovery ride 60min Z1\nFlat, easy spin. Active recovery from the weekend.', totalTimePlanned: 1.0, structure: STRUCTURES.recoveryRide60 },
+      { date: '2026-06-15', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Recovery with neuromuscular purpose.
+Easy, spinny, flush the legs.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-06-16', title: 'KEY 1 — 3km time trial', workoutType: 3, description: `KEY 1 — 3km TIME TRIAL (race simulation)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1444,7 +1492,10 @@ MAIN  (10km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 10km  |  TSS ~70
 This is the dress rehearsal. Execute the finish.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 70, structure: STRUCTURES.longRun10km5kFinish },
-      { date: '2026-06-21', title: 'Easy ride 90min Z2', workoutType: 2, description: 'Easy ride 90min Z2\nSteady aerobic maintenance.\nLast big ride before taper.', totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance90 },
+      { date: '2026-06-21', title: 'Bike over-under', workoutType: 2, description: `Bike over-under 60min
+4×(3min Z4 @ 91-100% FTP / 2min Z2 @ 60-70% FTP).
+Lactate clearance training — teaches the body to recover while still pushing.
+Peak sharpening week. Last hard bike before taper.`, totalTimePlanned: 1.5, structure: STRUCTURES.bikeOverUnder },
 
       // ============ WEEK 11 (Jun 23-29) — Final sharpening ============
       { date: '2026-06-22', title: 'Easy bike Z1', workoutType: 2, description: 'Easy bike 45min Z1\nTaper begins. Less volume, maintain sharpness.\nFlat, easy, short.', totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
@@ -1565,14 +1616,17 @@ Trust the block. Execute the plan.`, distancePlanned: 5000, totalTimePlanned: 0.
       // ============ WEEK 13 (Jul 7-13) — Recovery + rebuild ============
       { date: '2026-07-06', title: 'Rest', workoutType: 100, description: 'REST DAY\n\nPost-5K TT recovery. Full rest.\nHydrate. Reflect on the race. Plan the 10K block.', totalTimePlanned: 0 },
       { date: '2026-07-07', title: 'Easy run + strides', workoutType: 3, description: 'Easy run 7km @ 5:10/km\n+ 6x100m strides (build to 90%, walk back)\nFirst run after the 5K TT. Easy and smooth.\nLegs may feel heavy — that\'s normal.', distancePlanned: 7000, totalTimePlanned: 0.63, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-07-08', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady 195-225W. Aerobic maintenance.\nTransition day into 10K training.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-07-08', title: 'Bike tempo intervals', workoutType: 2, description: `Bike tempo intervals 60min
+3×8min Z3 (78-85% FTP) / 4min Z1.
+10K block — maintain aerobic ceiling on the bike.
+Controlled effort between key run sessions.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
       { date: '2026-07-09', title: 'KEY 2 — 3x2km @ 10K pace', workoutType: 3, description: `KEY 2 — TEMPO 3x2km @ 10K PACE
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (12min)
   • 2km easy jog + drills + strides
 
 MAIN SET  —  3x 2km
-  • Target: 3:36/km (10K goal pace, ~90-94% threshold)
+  • Target: threshold to 10K pace (3:45-3:36/km)
   • Recovery: 400m easy jog between reps
   • HR: Z3-Z4, should settle into rhythm by rep 2
   • RPE 7/10 — strong but sustainable for 10km
@@ -1588,16 +1642,21 @@ First 10K-specific session. Find the new race pace.`, distancePlanned: 10000, to
 ━━━━━━━━━━━━━━━━━━━━━━━━
 MAIN  (14km)
   • Km 1-10: Easy Z1-Z2, 4:50-5:10/km
-  • Km 11-14: Push to 3:33-3:36/km (10K race pace)
+  • Km 11-14: Push to 3:50-3:38/km (progressive, build into it)
   • Last 4km = 10K race rehearsal on tired legs
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 14km  |  TSS ~85
 The 10K finish test. If this feels manageable, sub-36 is on.`, distancePlanned: 14000, totalTimePlanned: 1.17, tssPlanned: 85, structure: STRUCTURES.longRun14km10kFinish },
-      { date: '2026-07-12', title: 'Long ride Z2 2hrs', workoutType: 2, description: 'Long ride 2hrs Z2\nSteady aerobic base. Z2 195-225W.\nLast big ride of the season.', totalTimePlanned: 2.0, structure: STRUCTURES.longRide120Bridge },
+      { date: '2026-07-12', title: 'Bike sweet spot', workoutType: 2, description: `Bike sweet spot 75min
+2×15min @ 88-93% FTP with 5min recovery.
+Last quality bike session of the season.
+Maintain FTP, don't build — save energy for 10K.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
 
       // ============ WEEK 14 (Jul 14-20) — 10K specific ============
-      { date: '2026-07-13', title: 'Easy bike Z2', workoutType: 2, description: 'Easy bike 60min Z2\nSteady aerobic maintenance.\nProtect legs for track tomorrow.', totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
+      { date: '2026-07-13', title: 'Bike cadence drills', workoutType: 2, description: `Easy bike 60min Z2 with 4×3min high-cadence (100+ rpm)
+Pre-track-day activation. Fast pedaling wakes up neuromuscular system.
+Keep power easy.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-07-14', title: 'KEY 1 — 5x1km @ 3:30-3:33', workoutType: 3, description: `KEY 1 — TRACK 5x1km (maintain 5K sharpness)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 WARM-UP  (15min)
@@ -1622,7 +1681,7 @@ WARM-UP  (12min)
   • 2km easy jog + drills + strides
 
 MAIN SET  —  4x 2km
-  • Target: 3:33-3:36/km (10K race pace)
+  • Target: 3:41-3:34/km (at and slightly faster than 10K race pace)
   • Recovery: 400m easy jog between reps
   • HR: Z3-Z4 — the 10K engine
   • RPE 7.5/10 — strong but you could do a 5th rep
@@ -1655,7 +1714,9 @@ SEGMENT 3  —  km 15-16 (SURGE)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km ~80min  |  TSS ~95
 Last long run before the 10K TT.`, distancePlanned: 16000, totalTimePlanned: 1.33, tssPlanned: 95, structure: STRUCTURES.longRun16kmProgressive },
-      { date: '2026-07-19', title: 'Long ride Z2 2hrs', workoutType: 2, description: 'Long ride 2hrs Z2\nSteady aerobic base. Last long ride before taper.\nCadence 85-90rpm.', totalTimePlanned: 2.0, structure: STRUCTURES.longRide120Bridge },
+      { date: '2026-07-19', title: 'Bike endurance 75min', workoutType: 2, description: `Endurance ride 75min Z2
+65-75% FTP. Taper approaching — moderate duration, easy effort.
+Last weekend long ride. Enjoy it.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
 
       // ============ WEEK 15 (Jul 21-26) — Taper + 10K TT ============
       { date: '2026-07-20', title: 'Easy bike Z1', workoutType: 2, description: 'Easy bike 45min Z1\nTaper week. Flat, easy, short.\nLess is more. Trust the training.', totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
