@@ -202,6 +202,62 @@ Stays exactly as-is. 9 sessions in the final week (Apr 6-13).
 
 ---
 
+## Block 4 — 10K Campaign (Jul 7 - Jul 26) — 3 weeks
+
+**Phase:** 5K → 10K transition. Build on 5K fitness, add endurance reps and race-pace tempo.
+**Stimulus:** 5K speed is banked. Now extend it. Longer reps at 10K pace (3:36/km for sub-36). Tempo work at threshold. One tempo long run.
+**2 weeks build + 1 week race taper with 10K TT.**
+
+### Week 13 (Jul 7-13) — Recovery + rebuild from 5K
+
+| Date | Day | Session | Type | Dist | Time | Structure |
+|------|-----|---------|------|------|------|-----------|
+| Jul 7 Mon | Rest | Other | - | 0 | — |
+| Jul 8 Tue | Easy run + strides | Run | 7km | 38min | easyRunStrides7km |
+| Jul 9 Wed | Easy bike Z2 | Bike | - | 60min | easyBike60 |
+| Jul 10 Thu | **KEY 2 — 3×2km @ 3:45-3:50/km (10K threshold)** | Run | ~10km | 50min | — (new: tempo3x2km) |
+| Jul 11 Fri | Easy bike / yoga | Bike | - | 60min | easyBike60 |
+| Jul 12 Sat | **Long run 14km — last 4km @ 3:50/km** | Run | 14km | 70min | — (new: longRun14km10kFinish) |
+| Jul 13 Sun | Long ride Z2 2hrs | Bike | - | 2hrs | longRide120Bridge |
+
+**Week 13 notes:** Easy start. Only 2 quality sessions. Legs recover from 5K TT. Thu tempo is at 10K pace not 5K — feels easy after weeks of 3:25-3:30. Sat long run previews the 10K race finish.
+
+### Week 14 (Jul 14-20) — 10K specific
+
+| Date | Day | Session | Type | Dist | Time | Structure |
+|------|-----|---------|------|------|------|-----------|
+| Jul 14 Mon | Easy bike Z2 | Bike | - | 60min | easyBike60 |
+| Jul 15 Tue | **KEY 1 — 5×1km @ 3:30-3:33 (5K pace refresh)** | Run | ~10km | 50min | track5x1km |
+| Jul 16 Wed | Gym (light) | Strength | - | 30min | — |
+| Jul 17 Thu | **KEY 2 — 4×2km @ 3:36-3:40 (10K race pace)** | Run | ~12km | 55min | — (new: tempo4x2km) |
+| Jul 18 Fri | Easy bike | Bike | - | 45min | easyBike45 |
+| Jul 19 Sat | **Long run 16km — last 5km @ 3:45/km** | Run | 16km | 80min | longRun16kmProgressive |
+| Jul 20 Sun | Long ride Z2 2hrs | Bike | - | 2hrs | longRide120Bridge |
+
+**Week 14 notes:** Tue keeps 5K speed alive. Thu is THE 10K session — 8km of work at target race pace. Sat long run builds confidence for going long at tempo. Biggest week volume-wise.
+
+### Week 15 (Jul 21-26) — Taper + 10K TT
+
+| Date | Day | Session | Type | Dist | Time | Structure |
+|------|-----|---------|------|------|------|-----------|
+| Jul 21 Mon | Easy bike Z1 | Bike | - | 45min | easyBike45 |
+| Jul 22 Tue | **Sharpener — 3×1km @ 3:28-3:30** | Run | ~8km | 40min | sharpener3x1km |
+| Jul 23 Wed | Yoga only | Other | - | 30min | — |
+| Jul 24 Thu | Easy run 5km + 4×100m strides | Run | 5km | 28min | easyRunStrides6km |
+| Jul 25 Fri | Rest | Other | - | 0 | — |
+| **Jul 26 Sat** | **10K TIME TRIAL — sub-36:00** | **Run** | **10km** | **~35:30-36:00** | **— (new: tt10k)** |
+
+**Race plan 10K (3:36/km target, 35:60):**
+- Km 1-2: 3:38-3:40 — conservative, settle in
+- Km 3-5: 3:35-3:37 — lock into rhythm
+- Km 6-8: 3:35 — the grind. Hold form. Don't fade.
+- Km 9: 3:33 — start pushing
+- Km 10: 3:28 or faster — everything left
+
+**Block 4 notes:** 3 weeks total. Wk13 is half-recovery half-build. Wk14 is the peak 10K-specific week. Wk15 tapers hard into race day Jul 26. The 5K speed (3:25-3:30) is still fresh — running 3:36 for 10K should feel manageable after 12 weeks of base + speed.
+
+---
+
 ## Summary
 
 | Block | Weeks | Dates | KEY focus | Test/Race |
@@ -210,11 +266,16 @@ Stays exactly as-is. 9 sessions in the final week (Apr 6-13).
 | 1 | 3 build + 1 recovery | Apr 14 - May 11 | Hills, fartlek, tempo | 18km block test (May 10) |
 | 2 | 3 build + 1 recovery | May 12 - Jun 8 | 5×1km, 6×800m, tempo combos | — |
 | 3 | 3 build + 1 race | Jun 9 - Jul 6 | Overspeed, race sim, sharpeners | **5K TT Jul 5** |
+| 4 | 2 build + 1 race | Jul 7 - Jul 26 | 10K pace reps, tempo long runs | **10K TT Jul 26** |
 
-**Total: 15 weeks from Block 0 start to race day.**
+**Total: 18 weeks from Block 0 start to final race.**
 
 ## New structures needed
 - 3km time trial (race sim)
 - 10km long run with 3km @ 5K pace finish
 - Short race-week opener (4km + 2×200m)
 - 4×400m + 4×200m speed combo
+- 3×2km tempo @ 10K pace
+- 4×2km tempo @ 10K pace
+- 14km long run with 4km @ 10K pace finish
+- 10K time trial structure
