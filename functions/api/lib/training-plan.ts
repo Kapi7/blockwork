@@ -342,6 +342,37 @@ function bikeStructure(groups: TpStructureGroup[]): TpWorkoutStructure {
   };
 }
 
+/**
+ * KEY-session long warm-up (shared across every KEY run):
+ *   1) 2km easy jog (distance-based)
+ *   2) Drills + walk break (5min drills described in session text, represented here
+ *      as a 300s rest/warm block so the total timing lines up in TP)
+ *   3) 4× 100m progressive strides with 90s walk back
+ *   4) Short settle (2min walk) before main set
+ *
+ * Returns the groups that go BEFORE the main set in runStructure([...]).
+ */
+function keyWarmup(): TpStructureGroup[] {
+  return [
+    distStep('Easy jog warm up', 2000, 65, 75, 'warmUp'),
+    singleStep('Drills + walk break', 300, 30, 50, 'rest'),
+    {
+      type: 'repetition',
+      length: { value: 4, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'warmUp', openDuration: false },
+        { type: 'step', name: 'Walk back',   length: { value: 90,  unit: 'second' }, targets: [{ minValue: 40,  maxValue: 55 }],  intensityClass: 'rest',   openDuration: false },
+      ],
+    },
+    singleStep('Settle', 120, 30, 50, 'rest'),
+  ];
+}
+
+/** Standard KEY cool-down jog (10min easy). */
+function keyCooldown(): TpStructureGroup {
+  return singleStep('Cool down jog', 600, 65, 75, 'coolDown');
+}
+
 // Pre-built structures keyed to Itay's real TP zones.
 //   Run pace %: 100% = 3:45/km LTP. Faster pace = higher %.
 //   Bike power %: 100% = 300W FTP.
@@ -378,8 +409,8 @@ export const STRUCTURES = {
       type: 'repetition',
       length: { value: 6, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m',   length: { value: 100, unit: 'meter' },  targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back 2min', length: { value: 120, unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
     distStep('Cool down', 400, 60, 70, 'coolDown'),
@@ -393,23 +424,24 @@ export const STRUCTURES = {
       type: 'repetition',
       length: { value: 4, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m',   length: { value: 100, unit: 'meter' },  targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back 2min', length: { value: 120, unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
     distStep('Cool down', 400, 60, 70, 'coolDown'),
   ]),
 
-  // Easy 7km + 6x100m strides (Block 0 peak, end-of-recovery)
+  // Easy 7km + 4x100m strides (Wed time-constrained, Block 0 peak, end-of-recovery)
+  // 7km total = 1km WU + 5km main + 4×100m strides + 400m CD
   easyRunStrides7km: runStructure([
     distStep('Warm up',   1000, 65, 75, 'warmUp'),
     distStep('Easy main', 5000, 72, 80, 'active'),
     {
       type: 'repetition',
-      length: { value: 6, unit: 'repetition' },
+      length: { value: 4, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m',   length: { value: 100, unit: 'meter' },  targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back 2min', length: { value: 120, unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
     distStep('Cool down', 400, 60, 70, 'coolDown'),
@@ -423,8 +455,8 @@ export const STRUCTURES = {
       type: 'repetition',
       length: { value: 6, unit: 'repetition' },
       steps: [
-        { type: 'step', name: 'Stride 100m', length: { value: 100, unit: 'meter' }, targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
-        { type: 'step', name: 'Walk back',   length: { value: 60,  unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
+        { type: 'step', name: 'Stride 100m',   length: { value: 100, unit: 'meter' },  targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back 2min', length: { value: 120, unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
       ],
     },
     distStep('Cool down', 400, 60, 70, 'coolDown'),
@@ -432,7 +464,7 @@ export const STRUCTURES = {
 
   // 6x 200m uphill (distance-based) — 3:30-3:45/km (100-107% LTP), walk-back rest
   hillRepeats6x200: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),   // 15min WU
+    ...keyWarmup(),
     {
       type: 'repetition',
       length: { value: 6, unit: 'repetition' },
@@ -441,28 +473,28 @@ export const STRUCTURES = {
         { type: 'step', name: 'Walk down',   length: { value: 90,  unit: 'second' }, targets: [{ minValue: 50, maxValue: 60 }],   intensityClass: 'rest',   openDuration: false },
       ],
     },
-    singleStep('Cool down + 4× 100m strides', 720, 70, 80, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // Fartlek 8x (90s hard / 90s easy) — time-based by design (find-the-gears session)
   fartlek8x90: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSet(8, 90, 90, 100, 90, 65, 75),
-    singleStep('Cool down', 720, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 6x 400m (DISTANCE) @ 3:30-3:35/km (Z5b 5K pace), 200m jog recovery
   track6x400: runStructure([
-    singleStep('Warm up + drills', 1080, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(6, 400, 105, 110, 200, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 3x 1.5km (DISTANCE) tempo @ 4:15/km (88% threshold), 400m jog recovery
   tempo3x1500: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(3, 1500, 86, 92, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // Progressive long run 14km — DISTANCE segments
@@ -604,10 +636,10 @@ export const STRUCTURES = {
 
   // Key lite — 10x 10sec hill sprints + 2km tempo finish
   hillSprintsTempo: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSet(10, 10, 120, 140, 80, 50, 60),  // 10 × (10s ALL-OUT / 80s walk-back)
     singleStep('Tempo 2km', 540, 86, 92, 'active'),  // ~9min tempo
-    singleStep('Cool down', 540, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // ═══════════════ BLOCK 3: 5K SPEED ═══════════════
@@ -618,43 +650,43 @@ export const STRUCTURES = {
   // 5K goal pace. Calibrated to athlete's real ability (historical best 1km: 3:34).
   // Builds confidence before sharpener week. 400m jog recovery.
   track5x1km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(5, 1000, 103, 105, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 6×800m @ 3:25-3:30/km (107-110%) — realistic overspeed, slightly faster than
   // 5K goal pace. Matches his historical 600-800m cruise ability. 400m jog.
   track6x800m: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(6, 800, 107, 110, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // Tempo 3km @ 3:55/km (96%) + 4×200m sharpeners @ 3:15/km (115%)
   tempoAndSharpeners: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     distStep('Tempo 3km', 3000, 94, 98, 'active'),
     singleStep('Recovery jog', 180, 55, 65, 'rest'),
     repeatSetDist(4, 200, 113, 118, 200, 50, 60),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 2km tempo @ 3:50/km (98%) + 6×400m @ 3:15-3:20/km (112-115%)
   tempoAnd400s: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     distStep('Tempo 2km', 2000, 96, 100, 'active'),
     singleStep('Recovery jog', 180, 55, 65, 'rest'),
     repeatSetDist(6, 400, 112, 115, 200, 50, 60),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 3×1km sharpener (taper week) @ 3:28-3:32/km (105-108%) — polish AT 5K goal
   // pace with low volume. Sharpens CNS without fatiguing for race week.
   sharpener3x1km: runStructure([
-    singleStep('Warm up + openers', 900, 65, 80, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(3, 1000, 105, 108, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // Long run 14km with 3km tempo finish @ 4:00-4:10/km (90-94%)
@@ -697,25 +729,25 @@ export const STRUCTURES = {
 
   // Speed combo: 4x400m + 4x200m
   speedCombo400200: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(4, 400, 112, 118, 200, 50, 60),
     singleStep('Recovery jog', 180, 55, 65, 'rest'),
     repeatSetDist(4, 200, 115, 125, 200, 45, 55),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 3x2km tempo @ 10K pace
   tempo3x2km: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(3, 2000, 100, 104, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 4x2km tempo @ 10K race pace
   tempo4x2km: runStructure([
-    singleStep('Warm up', 720, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(4, 2000, 102, 105, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 14km long run with last 4km @ 10K pace
@@ -737,37 +769,37 @@ export const STRUCTURES = {
 
   // 4×1km sub-threshold @ 95-98% (3:50-3:56/km), 60s jog — intro version
   subThreshold4x1km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(4, 1000, 95, 98, 200, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 5×1km sub-threshold @ 96-99%, 60s jog
   subThreshold5x1km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(5, 1000, 96, 99, 200, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 6×1km sub-threshold @ 96-99%, 60s jog (Bakken classic)
   subThreshold6x1km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(6, 1000, 96, 99, 200, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 4×2km sub-threshold @ 95-98%, 90s jog
   subThreshold4x2km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(4, 2000, 95, 98, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 3×3km sub-threshold @ 95-97%, 2min jog (long reps, deep in block)
   subThreshold3x3km: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(3, 3000, 95, 97, 400, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // ═══════════════ 5K PACE ON-RAMP (NEW TRAINING STIMULUS) ═══════════════
@@ -775,32 +807,32 @@ export const STRUCTURES = {
 
   // 10×200m @ 3:25-3:30/km (107-110%), 200m jog — first introduction
   reps10x200m: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(10, 200, 112, 118, 200, 50, 60),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 10×400m @ 3:22-3:28/km (108-112%), 200m jog — less aggressive than before,
   // matches realistic short-rep speed (historical 400m cruise ~80-82s).
   reps10x400m: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(10, 400, 108, 112, 200, 50, 60),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 8×600m @ 3:25-3:30/km (107-110%) — closer to realistic 5K pace target,
   // bridges to 1km reps without overshooting.
   reps8x600m: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(8, 600, 107, 110, 200, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // 6×800m @ 3:28-3:32/km (105-108%), 300m jog — bridges into 1km reps
   reps6x800m: runStructure([
-    singleStep('Warm up + drills', 900, 65, 75, 'warmUp'),
+    ...keyWarmup(),
     repeatSetDist(6, 800, 105, 108, 300, 55, 65),
-    singleStep('Cool down', 600, 65, 75, 'coolDown'),
+    keyCooldown(),
   ]),
 
   // ═══════════════ SPECIFIC LONG RUNS (Canova inserts) ═══════════════
@@ -1063,9 +1095,11 @@ Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Not a KEY session — just building the running back.
 Strides build to ~90% (smooth, not max). Walk-back rest.
 Should feel easy. If legs feel heavy, cut to 6km.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
-      { date: '2026-04-15', title: 'Easy run 8km', workoutType: 3, description: `Easy run 8km
+      { date: '2026-04-15', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
-Aerobic volume day. Maintains frequency.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
+Keeps leg turnover fresh between Tue KEY and Fri shake.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
       { date: '2026-04-16', title: 'Gym (light bodyweight + mobility)', workoutType: 9, description: `Gym 30min — LIGHT bodyweight + mobility
 
 - Bodyweight squats 3x12
@@ -1091,11 +1125,7 @@ MAIN  (14km)
 TOTAL: 14km ~73min  |  TSS ~75
 First 14km long run of the block. Pure aerobic. No fast finish.
 If HR drifts above 155, SLOW DOWN.`, distancePlanned: 14000, totalTimePlanned: 1.22, tssPlanned: 75, structure: STRUCTURES.easyRun14km },
-      { date: '2026-04-19', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week — builds aerobic volume without CNS stress.
-Should feel smooth. If legs feel heavy, cut to 5km. PM bike follows.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-04-19', title: 'PM Easy bike 75min Z2', workoutType: 2, description: `PM Endurance ride 75min Z2
+      { date: '2026-04-19', title: 'Easy bike 75min Z2', workoutType: 2, description: `Endurance ride 75min Z2
 168-227W | HR 146-156 | 85-90rpm
 Aerobic volume, no impact. Keep it easy after this morning's run.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
 
@@ -1106,10 +1136,12 @@ Neuromuscular activation for tomorrow's KEY run.
 Keep power Z2 (168-227W), spin fast on the drills.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-04-21', title: 'KEY — Sub-threshold 4×1km', workoutType: 3, description: `KEY — SUB-THRESHOLD 4×1km (Norwegian Singles intro)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog 5:10/km (Z1) | HR <156
-  • Drills: leg swings, A-skips, B-skips (5min)
-  • 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  4× 1km SUB-THRESHOLD
   • Target: 3:50-3:55/km (95-98% of 3:45 threshold)
@@ -1119,7 +1151,8 @@ MAIN SET  —  4× 1km SUB-THRESHOLD
   • Form cues: relaxed shoulders, tall posture, quick turnover
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~9km  |  TSS ~55
@@ -1128,9 +1161,16 @@ FIRST KEY of the block. The Norwegian rule: sub-threshold, not threshold.
 BAILOUT: If HR drifts above 174 mid-rep OR pace slows by 3+ sec/km,
 STOP — call it a day. Quality over quantity. This is how we avoid the
 marathon blow-up pattern.`, distancePlanned: 9000, totalTimePlanned: 0.75, tssPlanned: 55, structure: STRUCTURES.subThreshold4x1km },
-      { date: '2026-04-22', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
+      { date: '2026-04-22', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
-Maintains frequency between KEY and long run. Strides wake the legs up.`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
+Maintains frequency between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-04-23', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-04-23', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Heavy legs + plyometric
 
 - Back squats 3x5 (heavy, ~80% 1RM)
@@ -1160,13 +1200,9 @@ SEGMENT 2  —  km 13-16 (SUB-THRESHOLD INSERT)
 TOTAL: 16km  |  TSS ~100
 Canova insert style — long run becomes the 2nd quality day.
 The sub-T finish on tired aerobic legs IS the training stimulus.`, distancePlanned: 16000, totalTimePlanned: 1.38, tssPlanned: 100, structure: STRUCTURES.longRun16kmSubThreshold },
-      { date: '2026-04-26', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week — aerobic volume, no CNS stress.
-Smooth and relaxed. PM bike follows.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-04-26', title: 'PM Easy bike 90min Z2', workoutType: 2, description: `PM Endurance ride 90min Z2
+      { date: '2026-04-26', title: 'Easy bike 90min Z2', workoutType: 2, description: `Endurance ride 90min Z2
 168-227W | HR 146-156 | 85-90rpm
-Aerobic volume. Controlled Z2 only after this morning's run.`, totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance90 },
+Aerobic volume. Controlled Z2 only. Sunday = bike-only day.`, totalTimePlanned: 1.5, structure: STRUCTURES.bikeEndurance90 },
 
       // ============ WEEK 3 (Apr 27 - May 3) — Build the volume ============
       { date: '2026-04-27', title: 'Easy bike 60min Z2', workoutType: 2, description: `Easy bike 60min Z2
@@ -1174,9 +1210,12 @@ Aerobic volume. Controlled Z2 only after this morning's run.`, totalTimePlanned:
 Recovery day before Tuesday's KEY.`, totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
       { date: '2026-04-28', title: 'KEY — Sub-threshold 5×1km', workoutType: 3, description: `KEY — SUB-THRESHOLD 5×1km
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog 5:10/km (Z1) | HR <156
-  • Drills 5min + 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  5× 1km SUB-THRESHOLD
   • Target: 3:50-3:55/km (96-99% of 3:45 threshold)
@@ -1186,7 +1225,8 @@ MAIN SET  —  5× 1km SUB-THRESHOLD
   • Negative split the set — rep 5 should match rep 1
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~65
@@ -1194,9 +1234,16 @@ One rep more than last week. Same pace, same control.
 
 BAILOUT: If HR drifts above 174 mid-rep OR pace slows by 3+ sec/km,
 STOP — call it a day. Quality over quantity.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 65, structure: STRUCTURES.subThreshold5x1km },
-      { date: '2026-04-29', title: 'Easy run 10km', workoutType: 3, description: `Easy run 10km + 6×100m strides
+      { date: '2026-04-29', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
-Frequency day, longer aerobic. Strides = smooth 90% effort, walk back.`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
+Frequency day between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-04-30', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-04-30', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Progress the load
 
 - Front squats 3x5 (add 2.5-5kg vs last week)
@@ -1226,13 +1273,9 @@ SEGMENT 2  —  km 15-18 (SUB-THRESHOLD INSERT)
 TOTAL: 18km  |  TSS ~115
 Biggest long run of the block. 4km sub-T insert on tired legs.
 If HR creeps above 174 in the finish, BACK OFF — don't grind.`, distancePlanned: 18000, totalTimePlanned: 1.55, tssPlanned: 115, structure: STRUCTURES.longRun18kmSubThreshold },
-      { date: '2026-05-03', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Keep it very easy — big bike this afternoon.
-If yesterday's 18km long run left legs fried, make this 5km or skip.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-05-03', title: 'PM Long ride 2hrs Z2', workoutType: 2, description: `PM Long ride 2hrs Z2
+      { date: '2026-05-03', title: 'Long ride 2hrs Z2', workoutType: 2, description: `Long ride 2hrs Z2
 168-227W | HR 146-156 | 85-95rpm
-Aerobic volume. Peak bike day of the block.
+Aerobic volume. Peak bike day of the block. Sunday = bike-only day.
 Natural Z3 surges on climbs OK, but <2min each.`, totalTimePlanned: 2.0, tssPlanned: 110, structure: STRUCTURES.longRide120Bridge },
 
       // ============ WEEK 4 (May 4-10) — Recovery + block test ============
@@ -1334,10 +1377,12 @@ First day of Block 2. Steady aerobic.`, totalTimePlanned: 1.0, structure: STRUCT
 Short reps FAST — plays to your speed strength. 200m is short enough
 to land fast without grinding.
 
-WARM-UP  (15min)
-  • 2km easy jog 5:10/km (Z1) | HR <156
-  • Drills 5min (A-skips, B-skips, leg swings)
-  • 4× 80m accelerations building toward target
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  10× 200m
   • Target: 39-42 sec per 200m (3:15-3:22/km, 112-118%)
@@ -1348,7 +1393,8 @@ MAIN SET  —  10× 200m
   • Form cues: quick feet, arms drive, breathe out hard
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~9km  |  TSS ~50
@@ -1357,9 +1403,16 @@ is faster than 3:30/km — lean into it.
 
 BAILOUT: If HR drifts above 182 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. Quality over quantity.`, distancePlanned: 9000, totalTimePlanned: 0.77, tssPlanned: 50, structure: STRUCTURES.reps10x200m },
-      { date: '2026-05-13', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
+      { date: '2026-05-13', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
-Frequency day. Strides stay smooth (~90% effort).`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
+Frequency day between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-05-14', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-05-14', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Strength
 
 - Back squats 3x5 (heavy, good form)
@@ -1386,13 +1439,9 @@ SEGMENT 2  —  km 13-16 (SUB-THRESHOLD)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km  |  TSS ~100
 Long run as 2nd quality day (Canova insert).`, distancePlanned: 16000, totalTimePlanned: 1.38, tssPlanned: 100, structure: STRUCTURES.longRun16kmSubThreshold },
-      { date: '2026-05-17', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Easy, conversational. PM long ride follows —
-fuel properly between sessions.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-05-17', title: 'PM Long ride 2hrs Z2', workoutType: 2, description: `PM Long ride 2hrs Z2
+      { date: '2026-05-17', title: 'Long ride 2hrs Z2', workoutType: 2, description: `Long ride 2hrs Z2
 168-227W | HR 146-156 | 85-90rpm
-Aerobic volume. Steady, patient, fueled.`, totalTimePlanned: 2.0, tssPlanned: 120, structure: STRUCTURES.longRide150 },
+Aerobic volume. Steady, patient, fueled. Sunday = bike-only day.`, totalTimePlanned: 2.0, tssPlanned: 120, structure: STRUCTURES.longRide150 },
 
       // ============ WEEK 6 (May 18-24) — 400m reps ============
       { date: '2026-05-18', title: 'Bike cadence drills', workoutType: 2, description: `Bike cadence drills 60min
@@ -1400,8 +1449,12 @@ Z2 base with 4×3min at 100+ rpm.
 Neuromuscular activation for tomorrow's KEY.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-05-19', title: 'KEY — 10×400m overspeed', workoutType: 3, description: `KEY — 10× 400m OVERSPEED
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog + drills + 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  10× 400m
   • Target: 81-84 sec per 400m (3:22-3:28/km, 108-112%)
@@ -1411,7 +1464,8 @@ MAIN SET  —  10× 400m
   • Negative split the set (last 3 should match first 3)
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~65
@@ -1421,8 +1475,15 @@ his historical short-rep ceiling.
 
 BAILOUT: If HR drifts above 182 mid-rep OR pace slows by 3+ sec/km on
 consecutive reps, STOP — call it a day. Quality over quantity.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 65, structure: STRUCTURES.reps10x400m },
-      { date: '2026-05-20', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+      { date: '2026-05-20', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-05-21', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-05-21', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Progress the load
 
 - Front squats 3x5
@@ -1449,20 +1510,21 @@ SEGMENT 2  —  km 15-18 (SUB-THRESHOLD)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 18km  |  TSS ~115
 Canova long run. 4km of sub-T on tired legs.`, distancePlanned: 18000, totalTimePlanned: 1.55, tssPlanned: 115, structure: STRUCTURES.longRun18kmSubThreshold },
-      { date: '2026-05-24', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Keep it easy — PM bike is sweet spot (hard).`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-05-24', title: 'PM Bike sweet spot 75min', workoutType: 2, description: `PM Bike sweet spot 75min
+      { date: '2026-05-24', title: 'Bike sweet spot 75min', workoutType: 2, description: `Bike sweet spot 75min
 2×15min @ 88-93% FTP (264-279W) with 5min recovery.
-Sub-threshold FTP maintenance. Sustainable hard.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
+Sub-threshold FTP maintenance. Sustainable hard. Sunday = bike-only day.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
 
       // ============ WEEK 7 (May 25-31) — 600m reps ============
       { date: '2026-05-25', title: 'Easy bike 60min Z2', workoutType: 2, description: `Easy bike 60min Z2
 168-227W | HR 146-156 | Steady aerobic spin.`, totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
       { date: '2026-05-26', title: 'KEY — 8×600m @ 5K pace', workoutType: 3, description: `KEY — 8× 600m @ 5K GOAL PACE
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog + drills + 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  8× 600m
   • Target: 2:03-2:06 per 600m (3:25-3:30/km, 107-110%)
@@ -1472,7 +1534,8 @@ MAIN SET  —  8× 600m
   • Total pace work: 4.8km
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~70
@@ -1481,9 +1544,15 @@ short enough to land the target pace without falling apart.
 
 BAILOUT: If HR drifts above 182 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. Quality over quantity.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 70, structure: STRUCTURES.reps8x600m },
-      { date: '2026-05-27', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 6×100m strides
+      { date: '2026-05-27', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
-Longer easy day — building aerobic base.`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-05-28', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-05-28', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Maintain strength
 
 - Front squats 3x5
@@ -1507,12 +1576,9 @@ SEGMENT 2  —  km 13-16 (SUB-THRESHOLD)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km  |  TSS ~100`, distancePlanned: 16000, totalTimePlanned: 1.38, tssPlanned: 100, structure: STRUCTURES.longRun16kmSubThreshold },
-      { date: '2026-05-31', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Last Sunday easy run of Block 2 build.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-05-31', title: 'PM Long ride 2hrs Z2', workoutType: 2, description: `PM Long ride 2hrs Z2
+      { date: '2026-05-31', title: 'Long ride 2hrs Z2', workoutType: 2, description: `Long ride 2hrs Z2
 168-227W | HR 146-156
-Last big bike before recovery week.`, totalTimePlanned: 2.0, tssPlanned: 110, structure: STRUCTURES.longRide120Bridge },
+Last big bike before recovery week. Sunday = bike-only day.`, totalTimePlanned: 2.0, tssPlanned: 110, structure: STRUCTURES.longRide120Bridge },
 
       // ============ WEEK 8 (Jun 1-7) — Recovery ============
       { date: '2026-06-01', title: 'Easy bike 45min Z1', workoutType: 2, description: `Easy bike 45min Z1
@@ -1588,10 +1654,12 @@ End of recovery week. Transition into Block 3 tomorrow.`, totalTimePlanned: 1.5,
 Maintain aerobic ceiling — complements run sharpening.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
       { date: '2026-06-09', title: 'KEY — 5×1km (first full 1km reps)', workoutType: 3, description: `KEY — 5× 1km (FIRST FULL 1km REPS)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog 5:10/km (Z1)
-  • Drills 5min
-  • 3× 80m accelerations
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  5× 1km
   • Target: 3:32-3:36/km (103-105%) — SLIGHTLY SLOWER than 5K goal pace.
@@ -1603,7 +1671,8 @@ MAIN SET  —  5× 1km
   • Negative split: last km should match first km
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~75
@@ -1612,8 +1681,15 @@ The headline session of Block 3. Confidence > heroics.
 BAILOUT: If HR drifts above 182 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. Quality over quantity.
 This is exactly the pattern that caused the marathon blow-up.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 75, structure: STRUCTURES.track5x1km },
-      { date: '2026-06-10', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+      { date: '2026-06-10', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-06-11', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-06-11', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 40min — Maintain strength
 
 - Front squats 3x5
@@ -1641,19 +1717,21 @@ TOTAL: 14km  |  TSS ~85
 Canova insert long run — supports the speed work.
 BAILOUT: If sub-T segment HR drifts above 174, BACK OFF to 4:10/km
 and finish the run. Do NOT grind.`, distancePlanned: 14000, totalTimePlanned: 1.22, tssPlanned: 85, structure: STRUCTURES.longRun14kmSubThreshold },
-      { date: '2026-06-14', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Aerobic volume without CNS stress.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-06-14', title: 'PM Easy bike 75min Z2', workoutType: 2, description: `PM Endurance ride 75min Z2
-168-227W | HR 146-156 | 85-90rpm`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
+      { date: '2026-06-14', title: 'Easy bike 75min Z2', workoutType: 2, description: `Endurance ride 75min Z2
+168-227W | HR 146-156 | 85-90rpm
+Sunday = bike-only day.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
 
       // ============ WEEK 10 (Jun 15-21) — Overspeed 6×800m ============
       { date: '2026-06-15', title: 'Recovery ride 60min', workoutType: 2, description: `Easy recovery ride 60min Z1
 <167W | HR <145 | Flat, easy spin.`, totalTimePlanned: 1.0, structure: STRUCTURES.recoveryRide60 },
       { date: '2026-06-16', title: 'KEY — 6×800m overspeed', workoutType: 3, description: `KEY — 6× 800m OVERSPEED
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy + drills + 3× 80m accelerations
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  6× 800m
   • Target: 2:44-2:48 per 800m (3:25-3:30/km, 107-110%)
@@ -1664,7 +1742,8 @@ MAIN SET  —  6× 800m
   • RPE 8.5/10 — fast but smooth, not desperate
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~75
@@ -1673,8 +1752,15 @@ enough to stress the aerobic-anaerobic transition without grinding.
 
 BAILOUT: If HR drifts above 185 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. Quality over quantity.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 75, structure: STRUCTURES.track6x800m },
-      { date: '2026-06-17', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+      { date: '2026-06-17', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-06-18', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-06-18', title: 'Gym (power focus) + easy bike 45min', workoutType: 9, description: `Gym 40min — Power focus
 
 - Front squats 3x3 (heavy, explosive concentric)
@@ -1698,20 +1784,21 @@ SEGMENT 2  —  km 13-16 (SUB-THRESHOLD)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km  |  TSS ~100`, distancePlanned: 16000, totalTimePlanned: 1.38, tssPlanned: 100, structure: STRUCTURES.longRun16kmSubThreshold },
-      { date: '2026-06-21', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Last Sunday easy run before sharpener week.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-06-21', title: 'PM Bike sweet spot 75min', workoutType: 2, description: `PM Bike sweet spot 75min
+      { date: '2026-06-21', title: 'Bike sweet spot 75min', workoutType: 2, description: `Bike sweet spot 75min
 2×15min @ 88-93% FTP (264-279W) with 5min recovery.
-Last hard bike before race-week prep.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
+Last hard bike before race-week prep. Sunday = bike-only day.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
 
       // ============ WEEK 11 (Jun 22-28) — Sharpener week ============
       { date: '2026-06-22', title: 'Easy bike 60min Z2', workoutType: 2, description: `Easy bike 60min Z2
 168-227W | HR 146-156 | Recovery week begins.`, totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
       { date: '2026-06-23', title: 'KEY — 3×1km sharpener @ 5K pace', workoutType: 3, description: `KEY — 3× 1km SHARPENER @ 5K GOAL PACE
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy + drills + 3× 100m openers at race pace
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  3× 1km
   • Target: 3:28-3:32/km (105-108%) — AT 5K goal pace
@@ -1721,7 +1808,8 @@ MAIN SET  —  3× 1km
   • Only 3 reps. Leave feeling FAST.
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~8km  |  TSS ~55
@@ -1730,8 +1818,11 @@ volume. Sharp, not tired. If rep 3 feels like flying, you're ready.
 
 BAILOUT: If HR drifts above 182 mid-rep OR pace slows by 3+ sec/km,
 STOP — call it a day. Race week comes next — do NOT dig a hole here.`, distancePlanned: 8000, totalTimePlanned: 0.67, tssPlanned: 55, structure: STRUCTURES.sharpener3x1km },
-      { date: '2026-06-24', title: 'Easy run 8km + strides', workoutType: 3, description: `Easy run 8km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-06-24', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
+Sharpener-week Wed — keep it smooth.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
       { date: '2026-06-25', title: 'Gym LIGHT + easy bike 45min', workoutType: 9, description: `Gym 25min — VERY LIGHT
 
 - Bodyweight squats 2x10
@@ -1883,8 +1974,12 @@ TOTAL: 14km  |  TSS ~75`, distancePlanned: 14000, totalTimePlanned: 1.22, tssPla
 168-227W | HR 146-156`, totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
       { date: '2026-07-14', title: 'KEY — 3×2km @ 10K pace', workoutType: 3, description: `KEY — 3× 2km @ 10K RACE PACE
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog + drills + 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  3× 2km
   • Target: 3:36-3:40/km (100-104%) — 10K race pace
@@ -1894,7 +1989,8 @@ MAIN SET  —  3× 2km
   • Metronomic pacing — each rep within 3 sec of target
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~10km  |  TSS ~65
@@ -1903,8 +1999,15 @@ First 10K-specific session. Find the new race pace.
 BAILOUT: If HR drifts above 180 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. You're pivoting from 5K
 speed back to 10K endurance — let the body adapt, don't force it.`, distancePlanned: 10000, totalTimePlanned: 0.83, tssPlanned: 65, structure: STRUCTURES.tempo3x2km },
-      { date: '2026-07-15', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+      { date: '2026-07-15', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-07-16', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-07-16', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 40min — Maintain strength
 
 - Front squats 3x5
@@ -1930,12 +2033,9 @@ SEGMENT 2  —  km 13-16 (10K PACE)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 16km  |  TSS ~105
 The 10K finish test on bigger legs. If this feels manageable, sub-36 is on.`, distancePlanned: 16000, totalTimePlanned: 1.38, tssPlanned: 105, structure: STRUCTURES.longRun16km10kFinish },
-      { date: '2026-07-19', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Aerobic volume. PM long ride follows.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-07-19', title: 'PM Long ride 2hrs Z2', workoutType: 2, description: `PM Long ride 2hrs Z2
+      { date: '2026-07-19', title: 'Long ride 2hrs Z2', workoutType: 2, description: `Long ride 2hrs Z2
 168-227W | HR 146-156
-Aerobic volume — supports 10K work.`, totalTimePlanned: 2.0, tssPlanned: 110, structure: STRUCTURES.longRide120Bridge },
+Aerobic volume — supports 10K work. Sunday = bike-only day.`, totalTimePlanned: 2.0, tssPlanned: 110, structure: STRUCTURES.longRide120Bridge },
 
       // ============ WEEK 15 (Jul 20-26) — Peak 10K specific ============
       { date: '2026-07-20', title: 'Bike tempo intervals', workoutType: 2, description: `Bike tempo intervals 60min
@@ -1945,8 +2045,12 @@ Complement the run speed work.`, totalTimePlanned: 1.0, structure: STRUCTURES.bi
 ━━━━━━━━━━━━━━━━━━━━━━━━
 BIG 10K session. 8km of pace work — the peak specific workout.
 
-WARM-UP  (15min)
-  • 2km easy + drills + 3× 80m strides
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  4× 2km
   • Target: 3:36-3:40/km (102-105%) — 10K race pace
@@ -1956,7 +2060,8 @@ MAIN SET  —  4× 2km
   • Metronomic pacing — each rep within 3 sec of target
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~12km  |  TSS ~80
@@ -1966,8 +2071,15 @@ If pacing is metronomic and HR stays under 178, race is READY.
 BAILOUT: If HR drifts above 180 mid-rep OR pace slows by 3+ sec/km
 on consecutive reps, STOP — call it a day. Better to rest with legs
 intact than grind into the TT ten days later fried.`, distancePlanned: 12000, totalTimePlanned: 0.92, tssPlanned: 80, structure: STRUCTURES.tempo4x2km },
-      { date: '2026-07-22', title: 'Easy run 10km + strides', workoutType: 3, description: `Easy run 10km + 4×100m strides
-Pace: 5:00-5:15/km (Z1-Z2) | HR <150`, distancePlanned: 10000, totalTimePlanned: 0.87, structure: STRUCTURES.easyRun10km },
+      { date: '2026-07-22', title: 'Wed 7km + strides (40min)', workoutType: 3, description: `WED TIME-CAPPED RUN — 7km + 4×100m strides
+Pace: 5:00-5:15/km (Z1-Z2) | HR <150
+Only 40-42min available in the AM. 7km is the cap.
+Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
+      { date: '2026-07-23', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
+Easy 6km @ 5:10-5:25/km (Z1)
+HR <145
+Opens legs between KEYs. Shake out any stiffness.
+Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
       { date: '2026-07-23', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 35min — Last strength session
 
 - Front squats 3x5
@@ -1993,12 +2105,9 @@ SEGMENT 2  —  km 11-14 (10K PACE)
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: 14km  |  TSS ~90
 Last long run with pace work. 4km at 10K pace = dress rehearsal.`, distancePlanned: 14000, totalTimePlanned: 1.22, tssPlanned: 90, structure: STRUCTURES.longRun14km10kFinish },
-      { date: '2026-07-26', title: 'Sun AM easy run 7km', workoutType: 3, description: `AM EASY RUN — 7km
-Pace: 5:10-5:25/km (Z1) | HR <150
-5th run of the week. Last Sunday easy before race-week taper.`, distancePlanned: 7000, totalTimePlanned: 0.60, structure: STRUCTURES.easyRun7km },
-      { date: '2026-07-26', title: 'PM Easy bike 75min Z2', workoutType: 2, description: `PM Endurance ride 75min Z2
+      { date: '2026-07-26', title: 'Easy bike 75min Z2', workoutType: 2, description: `Endurance ride 75min Z2
 168-227W | HR 146-156
-Last big bike of the season.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
+Last big bike of the season. Sunday = bike-only day.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeEndurance75 },
 
       // ============ WEEK 16 (Jul 27 - Aug 1) — TAPER + 10K TT ============
       { date: '2026-07-27', title: 'Easy bike 45min Z1', workoutType: 2, description: `Easy bike 45min Z1
@@ -2006,8 +2115,12 @@ Last big bike of the season.`, totalTimePlanned: 1.25, structure: STRUCTURES.bik
 Taper week. Less is more.`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-07-28', title: 'Sharpener 3×1km', workoutType: 3, description: `SHARPENER — 3× 1km (race week)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy + drills + 3× 100m openers
+WARM-UP  (18-20min)
+  • 2km easy jog 5:30-6:00/km (HR <145)
+  • Dynamic drills 5min: leg swings, A-skips, B-skips, high knees, butt kicks, carioca
+  • 2min walk break
+  • 4× 100m strides @ 3:30-3:45/km (90sec walk back between)
+  • 2min walk before starting main set
 
 MAIN SET  —  3× 1km
   • Target: 3:28-3:32/km (105-108%) — slightly faster than 10K pace,
@@ -2018,7 +2131,8 @@ MAIN SET  —  3× 1km
   • Only 3 reps. Short and sharp.
 
 COOL-DOWN  (10min)
-  • Easy 5:20/km jog (Z1)
+  • Easy jog 5:30+/km
+  • Gentle stretching
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 TOTAL: ~8km  |  TSS ~50
