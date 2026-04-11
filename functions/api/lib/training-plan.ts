@@ -1104,38 +1104,23 @@ Steady, patient, fueled. Practice eating on the bike.`, totalTimePlanned: 3.0, t
 Recovery week — no intervals. Cadence drills keep legs fresh.
 Pre-race week. Easy does it.`, totalTimePlanned: 0.92, tssPlanned: 55, structure: STRUCTURES.bikeCadenceDrills },
       { date: '2026-05-08', title: 'Yoga / mobility', workoutType: 100, description: 'Yoga / mobility 40min\n- Long hold pigeon pose 3min/side\n- Deep squat hold 2min\n- Hamstring PNF stretching\n- Foam roll quads, calves, glutes\n\nPre-block-test recovery. Protect the tank.', totalTimePlanned: 0.67 },
-      { date: '2026-05-09', title: 'Pre-race shakeout', workoutType: 3, description: `PRE-RACE SHAKEOUT
+      { date: '2026-05-09', title: 'Long run 18km — THE BLOCK TEST', workoutType: 3, description: `LONG RUN — THE BLOCK TEST  (18km)
 ━━━━━━━━━━━━━━━━━━━━━━━━
-Easy run 4km @ 5:15-5:25/km (Z1)
-+ 2× 200m at 10K pace (3:36/km — just a taste)
+WARM-UP
+  • 1km easy jog to loosen up
+
+MAIN SET  —  18km progressive
+  • Km 1-13: Easy Z2, 4:50-5:00/km (HR <156)
+  • Km 14-16: Tempo Z3, 4:25-4:35/km (HR 157-165)
+  • Km 17: Strong Z4, 4:00-4:15/km (HR 166-174)
+  • Km 18: HARD — fastest km, 3:50-4:00/km (Z5a, HR 175+)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: ~5km  |  25min
-Short and smooth. Legs should feel SPRINGY.
-Hydrate well. Early dinner. Sleep 8hrs.
-Tomorrow: Parekklisia 10K — the real block test.`, distancePlanned: 5000, totalTimePlanned: 0.42, structure: STRUCTURES.raceWeekOpener },
-      { date: '2026-05-10', title: 'RACE — Parekklisia 10K', workoutType: 3, description: `PAREKKLISIA 10K — BLOCK 1 TEST
-━━━━━━━━━━━━━━━━━━━━━━━━
-WARM-UP  (15min)
-  • 2km easy jog + drills
-  • 3× 100m at 10K pace (openers)
-
-RACE  —  10km
-  • This is a BASELINE race, not peak fitness
-  • Target: 37:00-38:00 (3:42-3:48/km)
-  • Km 1-2: 3:48-3:50 — CONTROLLED start
-  • Km 3-7: 3:42-3:45 — settle into threshold
-  • Km 8-9: 3:38-3:42 — push if feeling strong
-  • Km 10: 3:35 or faster — finish hard
-
-COOL-DOWN  (10min)
-  • Easy jog + walk
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-TOTAL: ~14km  |  TSS ~80
-BLOCK 1 EXAM. This establishes the 10K baseline.
-Jul 25 is the target race. Run smart — this is base fitness, NOT peak.
-Expect 37:xx. Anything faster is a bonus.`, distancePlanned: 10000, totalTimePlanned: 0.63, tssPlanned: 80, structure: STRUCTURES.tt10k },
+TOTAL: 18km  |  TSS ~110
+BLOCK 1 EXAM. Tests whether the base + hill + tempo work built real fitness.
+Negative split is mandatory. Finish feeling strong, not wrecked.
+If km 18 is fast and controlled → base block WORKED.`, distancePlanned: 18000, totalTimePlanned: 1.5, tssPlanned: 110, structure: STRUCTURES.longRun18kmTest },
+      { date: '2026-05-10', title: 'Easy recovery ride', workoutType: 2, description: 'Easy recovery ride 75min Z1\n150-180W. Flat, zero surges. RPE 2/10.\nBase block DONE. How did the 18km feel?\nSpeed block starts tomorrow.', totalTimePlanned: 1.25, structure: STRUCTURES.recoveryRide60 },
     ],
   },
   // ═══════════════ BLOCK 2: Hunt the 5K (May 12 - Jun 8) ═══════════════
