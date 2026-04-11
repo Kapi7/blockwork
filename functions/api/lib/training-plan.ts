@@ -462,6 +462,21 @@ export const STRUCTURES = {
     distStep('Cool down', 400, 60, 70, 'coolDown'),
   ]),
 
+  // Easy 10km + 6x100m strides (build-week Friday shake bumped volume)
+  easyRunStrides10km: runStructure([
+    distStep('Warm up',   1000, 65, 75, 'warmUp'),
+    distStep('Easy main', 8000, 72, 80, 'active'),
+    {
+      type: 'repetition',
+      length: { value: 6, unit: 'repetition' },
+      steps: [
+        { type: 'step', name: 'Stride 100m',   length: { value: 100, unit: 'meter' },  targets: [{ minValue: 115, maxValue: 130 }], intensityClass: 'active', openDuration: false },
+        { type: 'step', name: 'Walk back 2min', length: { value: 120, unit: 'second' }, targets: [{ minValue: 45,  maxValue: 60 }],  intensityClass: 'rest',   openDuration: false },
+      ],
+    },
+    distStep('Cool down', 400, 60, 70, 'coolDown'),
+  ]),
+
   // 6x 200m uphill (distance-based) — 3:30-3:45/km (100-107% LTP), walk-back rest
   hillRepeats6x200: runStructure([
     ...keyWarmup(),
@@ -1166,24 +1181,25 @@ Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
 Maintains frequency between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-04-23', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-04-23', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-04-23', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Heavy legs + plyometric
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-04-23', title: 'Gym — Strength', workoutType: 9, description: `Gym 45min — Heavy legs + plyometric
 
 - Back squats 3x5 (heavy, ~80% 1RM)
 - Single-leg RDL 3x6/leg
 - Bounding 3x6 (short, explosive)
 - Box jumps 3x5
 - Plank 3x45sec
-- Copenhagen plank 3x20sec/side
-
-Then: Easy bike 45min Z1-Z2 as active recovery after lifting.`, totalTimePlanned: 1.25 },
-      { date: '2026-04-24', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Copenhagen plank 3x20sec/side`, totalTimePlanned: 0.75 },
+      { date: '2026-04-23', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-04-24', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-04-25', title: 'Long run 16km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 16km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-12 (EASY Z2)
@@ -1239,24 +1255,25 @@ Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
 Frequency day between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-04-30', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-04-30', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-04-30', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Progress the load
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-04-30', title: 'Gym — Strength', workoutType: 9, description: `Gym 45min — Progress the load
 
 - Front squats 3x5 (add 2.5-5kg vs last week)
 - Single-leg RDL 3x6/leg (heavier)
 - Depth jumps 3x5 (plyometric)
 - Box jumps 3x5
 - Dead bug 3x10/side
-- Side plank 3x30sec/side
-
-Then: Easy bike 45min Z1-Z2 as active recovery.`, totalTimePlanned: 1.25 },
-      { date: '2026-05-01', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Side plank 3x30sec/side`, totalTimePlanned: 0.75 },
+      { date: '2026-04-30', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-05-01', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-05-02', title: 'Long run 18km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 18km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-14 (EASY Z2)
@@ -1294,7 +1311,7 @@ Strides stay smooth, never max.`, distancePlanned: 8000, totalTimePlanned: 0.7, 
 - Savasana 4min
 
 Recovery week. Protect the tank before Saturday's block test.`, totalTimePlanned: 0.67 },
-      { date: '2026-05-07', title: 'Gym LIGHTER + easy bike 45min', workoutType: 9, description: `Gym 30min — MAINTENANCE only
+      { date: '2026-05-07', title: 'Gym — Maintenance (light)', workoutType: 9, description: `Gym 30min — MAINTENANCE only
 
 - Bodyweight squats 2x10
 - Glute bridges 2x12
@@ -1302,9 +1319,10 @@ Recovery week. Protect the tank before Saturday's block test.`, totalTimePlanned
 - Plank 2x40sec
 - Dead bug 2x8/side
 
-Very light. No DOMS.
-
-Then: Easy bike 45min Z1 (150-168W, HR <145).`, totalTimePlanned: 1.25 },
+Very light. No DOMS.`, totalTimePlanned: 0.5 },
+      { date: '2026-05-07', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1
+150-168W | HR <145
+Recovery-week spin. Flat, easy, conversational.`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-05-08', title: 'Easy bike 45min OR rest', workoutType: 2, description: `Easy bike 45min Z1 OR rest day
 If legs feel good: easy spin 150-168W, HR <145.
 If legs feel heavy: take it as a full rest day.
@@ -1408,24 +1426,25 @@ Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
 Frequency day between Tue KEY and Sat long run.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-05-14', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-05-14', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-05-14', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Strength
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-05-14', title: 'Gym — Strength', workoutType: 9, description: `Gym 45min — Strength
 
 - Back squats 3x5 (heavy, good form)
 - Single-leg RDL 3x6/leg
 - Box jumps 3x5
 - Bounding 3x6
 - Plank 3x45sec
-- Copenhagen plank 3x20sec/side
-
-Then: Easy bike 45min Z1-Z2 as active recovery.`, totalTimePlanned: 1.25 },
-      { date: '2026-05-15', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Copenhagen plank 3x20sec/side`, totalTimePlanned: 0.75 },
+      { date: '2026-05-14', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-05-15', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-05-16', title: 'Long run 16km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 16km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-12 (EASY Z2)
@@ -1479,24 +1498,25 @@ consecutive reps, STOP — call it a day. Quality over quantity.`, distancePlann
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-05-21', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-05-21', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-05-21', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Progress the load
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-05-21', title: 'Gym — Strength', workoutType: 9, description: `Gym 45min — Progress the load
 
 - Front squats 3x5
 - Single-leg RDL 3x6/leg
 - Depth jumps 3x5
 - Box jumps 3x5
 - Plank 3x45sec
-- Dead bug 3x10/side
-
-Then: Easy bike 45min Z1-Z2.`, totalTimePlanned: 1.25 },
-      { date: '2026-05-22', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Dead bug 3x10/side`, totalTimePlanned: 0.75 },
+      { date: '2026-05-21', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-05-22', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-05-23', title: 'Long run 18km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 18km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-14 (EASY Z2)
@@ -1548,23 +1568,24 @@ on consecutive reps, STOP — call it a day. Quality over quantity.`, distancePl
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-05-28', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-05-28', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-05-28', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 45min — Maintain strength
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-05-28', title: 'Gym — Strength', workoutType: 9, description: `Gym 45min — Maintain strength
 
 - Front squats 3x5
 - Hip thrusts 3x8
 - Single-leg calf raises 3x12 (slow eccentric)
 - Plank 3x45sec
-- Pallof press 3x10/side
-
-Then: Easy bike 45min Z1-Z2.`, totalTimePlanned: 1.25 },
-      { date: '2026-05-29', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Pallof press 3x10/side`, totalTimePlanned: 0.75 },
+      { date: '2026-05-28', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-05-29', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-05-30', title: 'Long run 16km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 16km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-12 (EASY Z2)
@@ -1596,16 +1617,17 @@ Strides stay smooth. Keep legs turning over, no more.`, distancePlanned: 8000, t
 - Savasana 4min
 
 Recovery week. Trust the absorption.`, totalTimePlanned: 0.67 },
-      { date: '2026-06-04', title: 'Gym LIGHTER + easy bike 45min', workoutType: 9, description: `Gym 30min — MAINTENANCE only
+      { date: '2026-06-04', title: 'Gym — Maintenance (light)', workoutType: 9, description: `Gym 30min — MAINTENANCE only
 
 - Bodyweight squats 2x10
 - Glute bridges 2x12
 - Single-leg calf raises 2x12
 - Plank 2x40sec
 
-Very light. No DOMS.
-
-Then: Easy bike 45min Z1 (<167W, HR <145).`, totalTimePlanned: 1.25 },
+Very light. No DOMS.`, totalTimePlanned: 0.5 },
+      { date: '2026-06-04', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1
+<167W | HR <145
+Recovery-week spin. Flat, easy, conversational.`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-05', title: 'Easy bike 45min OR rest', workoutType: 2, description: `Easy bike 45min Z1 OR full rest
 Whatever protects tomorrow's long run.`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-06', title: 'Easy long run 12km', workoutType: 3, description: `EASY LONG RUN — 12km
@@ -1685,23 +1707,24 @@ This is exactly the pattern that caused the marathon blow-up.`, distancePlanned:
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-06-11', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-06-11', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-06-11', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 40min — Maintain strength
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-06-11', title: 'Gym — Strength', workoutType: 9, description: `Gym 40min — Maintain strength
 
 - Front squats 3x5
 - Hip thrusts 3x8
 - Single-leg calf raises 3x12
 - Plank 3x45sec
-- Pallof press 3x10/side
-
-Then: Easy bike 45min Z1-Z2.`, totalTimePlanned: 1.25 },
-      { date: '2026-06-12', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Pallof press 3x10/side`, totalTimePlanned: 0.67 },
+      { date: '2026-06-11', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-06-12', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-06-13', title: 'Long run 14km + 3km sub-T finish', workoutType: 3, description: `LONG RUN — 14km WITH 3km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-11 (EASY Z2)
@@ -1756,23 +1779,24 @@ on consecutive reps, STOP — call it a day. Quality over quantity.`, distancePl
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-06-18', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-06-18', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-06-18', title: 'Gym (power focus) + easy bike 45min', workoutType: 9, description: `Gym 40min — Power focus
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-06-18', title: 'Gym — Power', workoutType: 9, description: `Gym 40min — Power focus
 
 - Front squats 3x3 (heavy, explosive concentric)
 - Trap bar deadlift 3x5
 - Depth jumps 3x5
 - Broad jumps 3x5
-- Plank 3x45sec
-
-Then: Easy bike 45min Z1-Z2.`, totalTimePlanned: 1.25 },
-      { date: '2026-06-19', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Plank 3x45sec`, totalTimePlanned: 0.67 },
+      { date: '2026-06-18', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-06-19', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-06-20', title: 'Long run 16km + 4km sub-T finish', workoutType: 3, description: `LONG RUN — 16km WITH 4km SUB-THRESHOLD FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-12 (EASY Z2)
@@ -1823,16 +1847,17 @@ Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.
 Sharpener-week Wed — keep it smooth.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-06-25', title: 'Gym LIGHT + easy bike 45min', workoutType: 9, description: `Gym 25min — VERY LIGHT
+      { date: '2026-06-25', title: 'Gym — Maintenance (light)', workoutType: 9, description: `Gym 25min — VERY LIGHT
 
 - Bodyweight squats 2x10
 - Glute bridges 2x12
 - Plank 2x40sec
 - Dead bug 2x8/side
 
-Maintenance only. No DOMS.
-
-Then: Easy bike 45min Z1.`, totalTimePlanned: 1.17 },
+Maintenance only. No DOMS.`, totalTimePlanned: 0.42 },
+      { date: '2026-06-25', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1
+<167W | HR <145
+Sharpener-week spin. Flat, easy, gentle.`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-26', title: 'Easy run 7km shake', workoutType: 3, description: `Easy run 7km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.6, structure: STRUCTURES.easyRunStrides7km },
       { date: '2026-06-27', title: 'Long run 12km easy', workoutType: 3, description: `LONG RUN — 12km EASY (sharpener week)
@@ -1951,14 +1976,15 @@ Legs may feel heavy — that's normal. Keep it smooth.`, distancePlanned: 8000, 
       { date: '2026-07-08', title: 'Easy bike 60min Z1', workoutType: 2, description: `Easy bike 60min Z1
 <167W | HR <145 | Gentle spin.
 Active recovery only.`, totalTimePlanned: 1.0, structure: STRUCTURES.easyBike60 },
-      { date: '2026-07-09', title: 'Gym LIGHT + yoga', workoutType: 9, description: `Gym 25min — VERY LIGHT
+      { date: '2026-07-09', title: 'Gym — Maintenance (light)', workoutType: 9, description: `Gym 25min — VERY LIGHT
 
 - Bodyweight squats 2x10
 - Glute bridges 2x12
 - Plank 2x40sec
 
-Then: Yoga 20min — hips + hamstrings.
-Recovery week vibe. No load.`, totalTimePlanned: 0.75 },
+Recovery week vibe. No load.`, totalTimePlanned: 0.42 },
+      { date: '2026-07-09', title: 'Yoga 20min', workoutType: 100, description: `Yoga 20min — hips + hamstrings
+Gentle stretch. Recovery-week restoration.`, totalTimePlanned: 0.33 },
       { date: '2026-07-10', title: 'Easy run 7km', workoutType: 3, description: `Easy run 7km
 Pace: 5:10-5:25/km (Z1) | HR <150
 Pre-long-run flush.`, distancePlanned: 7000, totalTimePlanned: 0.6, structure: STRUCTURES.easyRun7km },
@@ -2003,23 +2029,24 @@ speed back to 10K endurance — let the body adapt, don't force it.`, distancePl
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-07-16', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-07-16', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-07-16', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 40min — Maintain strength
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-07-16', title: 'Gym — Strength', workoutType: 9, description: `Gym 40min — Maintain strength
 
 - Front squats 3x5
 - Hip thrusts 3x8
 - Single-leg calf raises 3x12
 - Plank 3x45sec
-- Pallof press 3x10/side
-
-Then: Easy bike 45min Z1-Z2.`, totalTimePlanned: 1.25 },
-      { date: '2026-07-17', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+- Pallof press 3x10/side`, totalTimePlanned: 0.67 },
+      { date: '2026-07-16', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-07-17', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-07-18', title: 'Long run 16km + 4km @ 10K pace', workoutType: 3, description: `LONG RUN — 16km WITH 4km @ 10K PACE FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-12 (EASY Z2)
@@ -2075,23 +2102,25 @@ intact than grind into the TT ten days later fried.`, distancePlanned: 12000, to
 Pace: 5:00-5:15/km (Z1-Z2) | HR <150
 Only 40-42min available in the AM. 7km is the cap.
 Strides: 4×100m @ 3:30-3:45/km with 2min walk-back recovery.`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-07-23', title: 'AM Easy shake 6km', workoutType: 3, description: `AM EASY SHAKE  (6km)
-Easy 6km @ 5:10-5:25/km (Z1)
+      { date: '2026-07-23', title: 'AM Easy shake 8km', workoutType: 3, description: `AM EASY SHAKE  (8km)
+Easy 8km @ 5:10-5:25/km (Z1)
 HR <145
 Opens legs between KEYs. Shake out any stiffness.
-Gym PM.`, distancePlanned: 6000, totalTimePlanned: 0.53, structure: STRUCTURES.easyRun6km },
-      { date: '2026-07-23', title: 'Gym + easy bike 45min', workoutType: 9, description: `Gym 35min — Last strength session
+Gym PM.`, distancePlanned: 8000, totalTimePlanned: 0.7, structure: STRUCTURES.easyRun8km },
+      { date: '2026-07-23', title: 'Gym — Last strength', workoutType: 9, description: `Gym 35min — Last strength session
 
 - Front squats 3x5
 - Hip thrusts 3x8
 - Single-leg calf raises 3x12
 - Plank 3x45sec
 
-Then: Easy bike 45min Z1-Z2.
-Last gym session before taper.`, totalTimePlanned: 1.25 },
-      { date: '2026-07-24', title: 'Easy run 8km shake', workoutType: 3, description: `Easy run 8km + 6×100m strides (shake-out)
+Last gym session before taper.`, totalTimePlanned: 0.58 },
+      { date: '2026-07-23', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2
+Active recovery after lifting. Keep it smooth.
+150-200W | HR <150 | Cadence 85-90rpm`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
+      { date: '2026-07-24', title: 'Easy run 10km shake', workoutType: 3, description: `Easy run 10km + 6×100m strides (shake-out)
 Pace: 5:10-5:25/km (Z1) | HR <150
-Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 8000, totalTimePlanned: 0.68, structure: STRUCTURES.easyRunStrides8km },
+Pre-long-run flush. Strides stay smooth, walk-back recovery.`, distancePlanned: 10000, totalTimePlanned: 0.85, structure: STRUCTURES.easyRunStrides10km },
       { date: '2026-07-25', title: 'Long run 14km + 4km @ 10K pace', workoutType: 3, description: `LONG RUN — 14km WITH 4km @ 10K PACE FINISH
 ━━━━━━━━━━━━━━━━━━━━━━━━
 SEGMENT 1  —  km 1-10 (EASY Z2)
