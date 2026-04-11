@@ -58,6 +58,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const results: any[] = [];
     let opCount = 0;
     const sessions = block.sessions.slice(offset); // start from offset
+    // Track workout IDs already claimed by earlier sessions in THIS call so
+    // we don't let multiple plan sessions (e.g. split KEY into WU/MAIN/CD
+    // which all share first-word "KEY") all match the same existing workout.
+    const claimedIds = new Set<number>();
 
     for (const session of sessions) {
       // Budget: each update = 2 subrequests, each create = 1. Keep headroom.
@@ -66,7 +70,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         continue;
       }
 
-      const dayWorkouts = byDate.get(session.date) || [];
+      // Filter out any dayWorkouts already claimed by earlier sessions in this call.
+      const dayWorkouts = (byDate.get(session.date) || []).filter(
+        (w) => !claimedIds.has(w.workoutId),
+      );
       // Match by (title similarity) first — title is more stable than workoutType
       // because the type can change (e.g. strength 8 → 9). Prefer exact title
       // match, then startsWith, then first-word match, finally same-type-fallback.
@@ -105,6 +112,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         for (const dup of staleDupes) {
           try {
             await deleteWorkout(token, ATHLETE_ID, dup.workoutId);
+            claimedIds.add(dup.workoutId);
             opCount += 1;
           } catch {}
         }
@@ -119,6 +127,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             structure: session.structure,
           });
           opCount += 2; // GET + PUT
+          claimedIds.add(match.workoutId);
           results.push({
             date: session.date,
             title: session.title,
@@ -148,6 +157,15 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
             structure: session.structure,
           });
           opCount += 1;
+          claimedIds.add(created.workoutId);
+          // Also push into byDate so later sessions in this same call can see it
+          if (!byDate.has(session.date)) byDate.set(session.date, []);
+          byDate.get(session.date)!.push({
+            workoutId: created.workoutId,
+            title: session.title,
+            workoutTypeValueId: session.workoutType,
+            workoutDay: session.date,
+          });
           results.push({
             date: session.date,
             title: session.title,
@@ -169,7 +187,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     // matched by any session in this block plan. Safe: never touches completed.
     const deletedUnmatched: any[] = [];
     if (deleteUnmatched && opCount + 5 < 50) {
-      const claimedIds = new Set<number>();
+      // claimedIds already populated above with every workoutId we touched
       for (const r of results) {
         if (r.workoutId) claimedIds.add(r.workoutId);
       }
