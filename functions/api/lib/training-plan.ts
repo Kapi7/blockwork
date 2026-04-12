@@ -956,11 +956,11 @@ export const STRUCTURES = {
   mainReps10x200m: runStructure([
     repeatSetDist(10, 200, 112, 118, 200, 50, 60),
   ]),
-  mainReps10x400m: runStructure([
-    repeatSetDist(10, 400, 108, 112, 200, 50, 60),
+  mainReps12x400m: runStructure([
+    repeatSetDist(12, 400, 108, 112, 200, 50, 60),
   ]),
-  mainReps8x600m: runStructure([
-    repeatSetDist(8, 600, 107, 110, 200, 55, 65),
+  mainReps10x600m: runStructure([
+    repeatSetDist(10, 600, 107, 110, 200, 55, 65),
   ]),
 
   // ─────── Track MAIN sets (no WU/CD) ───────
@@ -1646,18 +1646,18 @@ Neuromuscular activation for tomorrow's KEY.`, totalTimePlanned: 1.0, structure:
   • 2min settle before main set
 
 Road shoes. Easy jog to the track/warm-up area.`, distancePlanned: 3500, totalTimePlanned: 0.3, structure: STRUCTURES.keyWarmup },
-      { date: '2026-05-19', title: 'KEY 1 — MAIN: 10×400m @ 3:22-3:28/km', workoutType: 3, description: `MAIN SET  —  10× 400m overspeed (5K-pace on-ramp)
+      { date: '2026-05-19', title: 'KEY 1 — MAIN: 12×400m @ 3:22-3:28/km', workoutType: 3, description: `MAIN SET  —  12× 400m overspeed (5K-pace on-ramp)
 ━━━━━━━━━━━━━━━━━━━━━━━━
   • Target pace: 3:22-3:28/km (108-112%) — 81-84 sec per 400m
-  • HR target: 175-182 bpm (Z5a-Z5b) by rep 4-10
+  • HR target: 175-182 bpm (Z5a-Z5b) by rep 5-12
   • Recovery: 200m easy jog (~75-90 sec) between reps
   • Effort: 8/10 — strong, controlled, not desperate
-  • Negative split the set (last 3 should match first 3)
-  • Still learning this pace. 10 reps is appropriate. Total quality: 4km at pace.
+  • Negative split the set (last 4 should match first 4)
+  • 12 reps. Total quality: 4.8km. Your engine handles this — just keep the pace honest.
 
-BAILOUT: If HR drifts above 182 OR pace slows by 3+ sec/km on consecutive reps, STOP the session and jog home easy. Quality over quantity.
+BAILOUT: If HR drifts above 185 OR pace slows by 3+ sec/km on 2 consecutive reps, STOP. Quality over quantity.
 
-Track shoes/racing flats. Measure each rep manually for track accuracy.`, distancePlanned: 4000, totalTimePlanned: 0.35, tssPlanned: 65, structure: STRUCTURES.mainReps10x400m },
+Track shoes/racing flats. Measure each rep manually for track accuracy.`, distancePlanned: 4800, totalTimePlanned: 0.4, tssPlanned: 70, structure: STRUCTURES.mainReps12x400m },
       { date: '2026-05-19', title: 'KEY 1 — Cool-down', workoutType: 3, description: `COOL-DOWN  (10-15min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
   • 2km easy jog 5:30+/km
@@ -1715,17 +1715,17 @@ Sub-threshold FTP maintenance. Sustainable hard. Sunday = bike-only day.`, total
   • 2min settle before main set
 
 Road shoes. Easy jog to the track/warm-up area.`, distancePlanned: 3500, totalTimePlanned: 0.3, structure: STRUCTURES.keyWarmup },
-      { date: '2026-05-26', title: 'KEY 1 — MAIN: 8×600m @ 3:25-3:30/km', workoutType: 3, description: `MAIN SET  —  8× 600m @ 5K goal pace
+      { date: '2026-05-26', title: 'KEY 1 — MAIN: 10×600m @ 3:25-3:30/km', workoutType: 3, description: `MAIN SET  —  10× 600m @ 5K goal pace
 ━━━━━━━━━━━━━━━━━━━━━━━━
   • Target pace: 3:25-3:30/km (107-110%) — 2:03-2:06 per 600m
-  • HR target: 172-178 bpm (Z5a) by rep 3-8
+  • HR target: 172-178 bpm (Z5a) by rep 4-10
   • Recovery: 200m easy jog (~85-100 sec) between reps
   • Effort: 8/10 — strong but you could do one more rep
-  • Longer rep, appropriate volume. Total quality: 4.8km at pace. Bridges into 1km reps in Block 3.
+  • 10 reps. Total quality: 6km at pace. Bridges into 1km reps in Block 3.
 
-BAILOUT: If HR drifts above 182 OR pace slows by 3+ sec/km on consecutive reps, STOP the session and jog home easy. Quality over quantity.
+BAILOUT: If HR drifts above 185 OR pace slows by 3+ sec/km on 2 consecutive reps, STOP. Quality over quantity.
 
-Track shoes/racing flats. Measure each rep manually for track accuracy.`, distancePlanned: 4800, totalTimePlanned: 0.35, tssPlanned: 65, structure: STRUCTURES.mainReps8x600m },
+Track shoes/racing flats. Measure each rep manually for track accuracy.`, distancePlanned: 6000, totalTimePlanned: 0.42, tssPlanned: 75, structure: STRUCTURES.mainReps10x600m },
       { date: '2026-05-26', title: 'KEY 1 — Cool-down', workoutType: 3, description: `COOL-DOWN  (10-15min)
 ━━━━━━━━━━━━━━━━━━━━━━━━
   • 2km easy jog 5:30+/km
