@@ -1,5 +1,5 @@
 /**
- * Itay's DEFINITIVE 19-week training plan — Sang track + Thursday bike intensity.
+ * Itay's DEFINITIVE 19-week training plan — Sang track + Thursday bike/fartlek.
  * The source of truth George coaches from.
  *
  * Five sequential blocks leading to 5K TT Jul 25, then 10K TT Aug 22:
@@ -14,12 +14,12 @@
  *   Tue AM: TRACK session (3 TP entries: WU / MAIN / CD)
  *   Tue PM: Gym (strength + plyos)
  *   Wed: Easy run 7km + strides, max 40min
- *   Thu: BIKE INTENSITY (sweet spot, tempo, on/off)
+ *   Thu: BIKE INTENSITY (wk1-4) then alternating FARTLEK / BIKE from wk5
  *   Fri: Yoga 40min + easy bike 45min (2 entries)
  *   Sat: LONG RUN
  *   Sun: LONG RIDE 2-2.5hrs Z2
  *
- * Recovery weeks: Tue track = shorter, Thu bike = easy Z2, Sat long = shorter.
+ * Recovery weeks: Tue track = shorter, Thu = easy bike (no fartlek), Sat long = shorter.
  * Race weeks: Tue = opener, Thu = yoga only, Sat = RACE.
  */
 
@@ -1601,8 +1601,8 @@ export const BLOCKS: TrainingBlock[] = [
     restrictions: [
       'Week 4 is recovery — lighter track, Thu bike = easy Z2, shorter long run',
       'Track sessions ALWAYS split into 3 TP entries (WU/MAIN/CD)',
-      'NO fartlek on any day — all run intensity on Tuesday track',
-      'Thursday is ALWAYS bike (intensity on build, easy on recovery)',
+      'NO fartlek in Block 1 — all run intensity on Tuesday track, bike carries Thursday intensity',
+      'Thursday is ALWAYS bike in Block 1 (intensity on build, easy on recovery)',
       'HR cap on long run easy portion: 160',
     ],
     sessions: [
@@ -1680,11 +1680,11 @@ export const BLOCKS: TrainingBlock[] = [
       'Long run 22km completed at Z2 with fast finish',
       'Bike over-under held cleanly',
     ],
-    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu BIKE INTENSITY | Fri yoga+bike | Sat long run | Sun long ride',
+    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu FARTLEK or BIKE (alternating) | Fri yoga+bike | Sat long run | Sun long ride',
     restrictions: [
       'Week 8 is recovery — lighter track, easy bike Thu, shorter long run',
-      'NO fartlek on any day',
-      'Thursday is ALWAYS bike',
+      'Thursday alternates: wk5 fartlek, wk6 bike, wk7 fartlek, wk8 easy bike (recovery)',
+      'Fartlek = continuous run, NO stopping between reps',
     ],
     sessions: [
       // ============ WEEK 5 (May 11-17) — 1km reps begin ============
@@ -1694,7 +1694,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-05-12', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-05-12', title: 'PM Gym', workoutType: 9, description: `Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Back squats 3x5 (heavy)\n  * Romanian deadlifts 3x8\n  * Bounding 3x6\n  * Box jumps 3x5\n  * Plank 3x45sec\n  * Copenhagen plank 3x20sec/side`, totalTimePlanned: 0.75 },
       { date: '2026-05-13', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150 | Max 40min`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-05-14', title: 'Bike sweet spot 75min', workoutType: 2, description: `Bike sweet spot -- 75min (2x15min @ 88-93% FTP)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 10min warm-up @ 50-65% FTP\n  * 15min @ 88-93% FTP (264-279W) / 5min recovery\n  * 15min @ 88-93% FTP / Z2 cruise\n  * 10min cool-down\n  * Longer sweet spot efforts than Block 1.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
+      { date: '2026-05-14', title: 'Fartlek intro 10km (6-8x1min)', workoutType: 3, description: `FARTLEK INTRO -- 10km continuous\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * 6-8× (1min hard @ 3:40/km / 2min easy @ 5:00/km)\n    — Hard = 8/10 effort, feels like "tempo surge"\n    — HR target: 170-178 on hard portions\n    — Easy = full recovery jog\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~10km | ~50min\nFirst fartlek! Continuous running — do NOT stop between reps.\nStart with 6 reps. If feeling great, do 8.\n\nBAILOUT: If HR >180 or legs feel heavy after 4 reps, stop the hard portions and jog home.`, distancePlanned: 10000, totalTimePlanned: 0.83, structure: STRUCTURES.fartlek8x1min },
       { date: '2026-05-15', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling\n  * Focus on hip mobility post-bike intensity.`, totalTimePlanned: 0.67 },
       { date: '2026-05-15', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-05-16', title: 'Long run 20km', workoutType: 3, description: `LONG RUN -- 20km EASY\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Pace: 4:40-4:50/km (Z2)\n  * HR: <160\n  * No fast finish. Back to 20km after recovery.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~1h35`, distancePlanned: 20000, totalTimePlanned: 1.58, tssPlanned: 100, structure: STRUCTURES.longRun20kmEasy },
@@ -1720,7 +1720,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-05-26', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-05-26', title: 'PM Gym (heavy + plyo)', workoutType: 9, description: `Gym 50min -- Heavy strength + plyometrics\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Front squats 4x4 (heaviest of block)\n  * Hip thrusts 3x8\n  * Depth jumps 3x5\n  * Broad jumps 3x5\n  * Plank 3x50sec\n  * Dead bug 3x12/side\n\nPeak gym session of Block 2.`, totalTimePlanned: 0.83 },
       { date: '2026-05-27', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-05-28', title: 'Bike tempo intervals 60min', workoutType: 2, description: `Bike tempo intervals -- 60min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 10min warm-up\n  * 3x 8min @ Z3 78-85% FTP (234-255W) / 4min recovery\n  * 10min cool-down\n  * Honest aerobic intensity on the bike.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
+      { date: '2026-05-28', title: 'Fartlek 12km (8x3min)', workoutType: 3, description: `FARTLEK -- 12km continuous (8x3min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * 8× (3min @ 3:42/km / 1min easy @ 5:00/km)\n    — Hard = honest sub-threshold, feels like "strong but controlled"\n    — HR target: 170-178 on hard portions\n    — Easy = 1min recovery jog (NOT walking)\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~12km | ~55min\nContinuous running — do NOT stop between reps.\nLonger surges than Week 5. Build rhythm.\n\nBAILOUT: If HR >180 or pace collapses for 2 consecutive reps, jog home.`, distancePlanned: 12000, totalTimePlanned: 0.92, structure: STRUCTURES.fartlek8x3min },
       { date: '2026-05-29', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling\n  * Recovery prep before peak long run.`, totalTimePlanned: 0.67 },
       { date: '2026-05-29', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-05-30', title: 'Long run 22km + fast finish', workoutType: 3, description: `LONG RUN -- 22km WITH 4km FAST FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\nSEGMENT 1 -- km 1-18 (EASY)\n  * Pace: 4:35/km (Z2) | HR: <160\n\nSEGMENT 2 -- km 19-22 (FAST FINISH)\n  * Pace: 4:05/km (~90-95%) | HR: 158-168\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 22km | ~1h47\nBiggest long run of Block 2. Last 4km strong.`, distancePlanned: 22000, totalTimePlanned: 1.78, tssPlanned: 125, structure: STRUCTURES.longRun22kmFastFinish4 },
@@ -1761,11 +1761,11 @@ export const BLOCKS: TrainingBlock[] = [
       '3x1km assessment feeling smooth at 3:28-3:30',
       'Long run 24km completed with strong finish',
     ],
-    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu BIKE INTENSITY | Fri yoga+bike | Sat long run | Sun long ride',
+    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu FARTLEK or BIKE (alternating) | Fri yoga+bike | Sat long run | Sun long ride',
     restrictions: [
       'Week 12 is recovery/assessment -- lighter everything',
-      'NO fartlek on any day',
-      'Thursday is ALWAYS bike',
+      'Thursday alternates: wk9 fartlek (Canova), wk10 bike (easy after 20x400), wk11 fartlek (5K rhythm), wk12 easy bike (recovery)',
+      'Fartlek = continuous run, NO stopping between reps',
     ],
     sessions: [
       // ============ WEEK 9 (Jun 8-14) — 4x1200m + 4x400m ============
@@ -1775,7 +1775,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-06-09', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-06-09', title: 'PM Gym', workoutType: 9, description: `Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Front squats 3x5\n  * Hip thrusts 3x8\n  * Depth jumps 3x5\n  * Box jumps 3x5\n  * Plank 3x45sec\n  * Pallof press 3x10/side`, totalTimePlanned: 0.75 },
       { date: '2026-06-10', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-06-11', title: 'Bike sweet spot 75min', workoutType: 2, description: `Bike sweet spot -- 75min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2x 15min @ 88-93% FTP (264-279W)\n  * Recovery between\n  * Strong aerobic stimulus without running impact.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
+      { date: '2026-06-11', title: 'Fartlek 12km (Canova multi-pace)', workoutType: 3, description: `FARTLEK -- 12km continuous (Canova multi-pace)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * CONTINUOUS (no stops):\n    — 2km @ 3:50/km (threshold effort, HR 168-175)\n    — 1km @ 3:30/km (5K pace, HR 175-180)\n    — 2km @ 3:50/km (back to threshold)\n    — 1km @ 3:30/km (5K pace again)\n    — 1km @ 3:45/km (settle, controlled)\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~12km | ~52min\nCanova-style continuous variation. No recovery jogs — pace changes only.\nTeaches gear-shifting at race-relevant efforts.\n\nBAILOUT: If HR >182 or you can't hold 3:50 on the threshold portions, slow to 4:00 and finish the distance easy.`, distancePlanned: 12000, totalTimePlanned: 0.87, structure: STRUCTURES.fartlekCanovaMultiPace },
       { date: '2026-06-12', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling`, totalTimePlanned: 0.67 },
       { date: '2026-06-12', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-13', title: 'Long run 22km + inserts', workoutType: 3, description: `LONG RUN -- 22km WITH TEMPO INSERTS\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 6km easy → 2km tempo (4:10) → 4km easy → 2km tempo → 4km easy → 2km strong (4:05) → 2km easy\n  * HR: <160 easy, 160-168 on inserts\n  * Canova-style: inserts within the long run\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 22km | ~1h45`, distancePlanned: 22000, totalTimePlanned: 1.75, tssPlanned: 120, structure: STRUCTURES.longRun22kmInserts },
@@ -1801,7 +1801,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-06-23', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-06-23', title: 'PM Gym', workoutType: 9, description: `Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Front squats 3x5\n  * Hip thrusts 3x8\n  * Depth jumps 3x5\n  * Box jumps 3x5\n  * Plank 3x45sec\n  * Pallof press 3x10/side`, totalTimePlanned: 0.75 },
       { date: '2026-06-24', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-06-25', title: 'Bike over-under 60min', workoutType: 2, description: `Bike over-under -- 60min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 4x (3min Z4 @ 91-100% FTP / 2min Z2 @ 60-70% FTP)\n  * Teaches lactate clearance at power.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeOverUnder },
+      { date: '2026-06-25', title: 'Fartlek 12km (5K rhythm)', workoutType: 3, description: `FARTLEK -- 12km continuous (5K rhythm)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * 10× (2min @ 3:30/km / 1min @ 4:30/km)\n    — Hard = 5K race pace, feels like "racing effort"\n    — HR target: 175-182 on hard portions\n    — Easy = 1min jog (NOT walking, NOT stopping)\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~12km | ~53min\n20min of quality at 5K pace in 2min chunks.\nContinuous running — do NOT stop between reps.\n\nBAILOUT: If HR >184 or pace >3:35 for 2 consecutive reps, jog the remaining distance.`, distancePlanned: 12000, totalTimePlanned: 0.88, structure: STRUCTURES.fartlek5kRhythm },
       { date: '2026-06-26', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling`, totalTimePlanned: 0.67 },
       { date: '2026-06-26', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-06-27', title: 'Long run 24km PEAK', workoutType: 3, description: `LONG RUN -- 24km WITH 4km STRONG FINISH (PEAK)\n━━━━━━━━━━━━━━━━━━━━━━━━\nSEGMENT 1 -- km 1-20 (EASY)\n  * Pace: 4:35/km (Z2) | HR: <160\n\nSEGMENT 2 -- km 21-24 (STRONG FINISH)\n  * Pace: 4:00/km (~93-97%) | HR: 160-170\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 24km | ~1h55\nPEAK LONG RUN. Respect the distance.`, distancePlanned: 24000, totalTimePlanned: 1.92, tssPlanned: 140, structure: STRUCTURES.longRun24kmPeak },
@@ -1842,7 +1842,7 @@ export const BLOCKS: TrainingBlock[] = [
       '5x2km metronomic at 7:00-7:10',
       '10K TT sub-36:00 (3:34x8 + 3:32 + 3:28 = 35:52)',
     ],
-    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu BIKE INTENSITY | Fri yoga+bike | Sat long run/RACE | Sun long ride',
+    weekPattern: 'Mon easy bike | Tue AM TRACK (WU/MAIN/CD) + PM Gym | Wed easy 7km+strides | Thu FARTLEK or BIKE (alternating) | Fri yoga+bike | Sat long run/RACE | Sun long ride',
     restrictions: [
       'Week 15 is 5K RACE WEEK -- Tue = opener, Thu = yoga only, Sat = RACE',
       'Week 19 is 10K RACE WEEK -- Tue = opener, Thu = yoga only, Sat = RACE',
@@ -1857,7 +1857,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-07-07', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-07-07', title: 'PM Gym', workoutType: 9, description: `Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Front squats 3x5\n  * Hip thrusts 3x8\n  * Box jumps 3x5\n  * Depth jumps 3x5\n  * Plank 3x45sec\n  * Dead bug 3x10/side`, totalTimePlanned: 0.75 },
       { date: '2026-07-08', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-07-09', title: 'Bike tempo intervals 60min', workoutType: 2, description: `Bike tempo intervals -- 60min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3x 8min @ Z3 78-85% FTP / 4min recovery\n  * Honest aerobic work on the bike.`, totalTimePlanned: 1.0, structure: STRUCTURES.bikeTempoIntervals },
+      { date: '2026-07-09', title: 'Fartlek 12km (10K specific)', workoutType: 3, description: `FARTLEK -- 12km continuous (10K specific)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * 2× (5min @ 3:36/km / 2min easy @ 5:00/km)\n    — 10K pace effort, controlled and metronomic\n    — HR target: 172-178\n  * 8× (45sec @ 3:15/km / 75sec easy @ 5:00/km)\n    — Sharp surges, feels like "top-end kick"\n    — HR target: 178-184\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~12km | ~54min\n10K pace blocks + 5K overspeed surges. Race-model fartlek.\nContinuous running — do NOT stop between reps.\n\nBAILOUT: If HR >185 or legs lock up on the 45sec surges, drop to 10K pace and finish the distance.`, distancePlanned: 12000, totalTimePlanned: 0.9, structure: STRUCTURES.fartlek10kSpecific },
       { date: '2026-07-10', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling`, totalTimePlanned: 0.67 },
       { date: '2026-07-10', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-07-11', title: 'Long run 20km + fast finish', workoutType: 3, description: `LONG RUN -- 20km WITH 4km FAST FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * km 1-16 easy @ 4:35/km | HR <160\n  * km 17-20 @ 4:05/km | HR 158-168\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~1h35`, distancePlanned: 20000, totalTimePlanned: 1.58, tssPlanned: 115, structure: STRUCTURES.longRun20kmFastFinish4_05 },
@@ -1908,7 +1908,7 @@ export const BLOCKS: TrainingBlock[] = [
       { date: '2026-08-04', title: 'TRACK CD', workoutType: 3, description: `COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2km easy jog 5:30+/km\n  * 3min walk + stretch`, distancePlanned: 2000, totalTimePlanned: 0.2, structure: STRUCTURES.keyCooldown },
       { date: '2026-08-04', title: 'PM Gym', workoutType: 9, description: `Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Front squats 3x5\n  * Hip thrusts 3x8\n  * Box jumps 3x5\n  * Plank 3x45sec\n  * Dead bug 3x10/side`, totalTimePlanned: 0.75 },
       { date: '2026-08-05', title: 'Easy 7km + strides', workoutType: 3, description: `Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150`, distancePlanned: 7000, totalTimePlanned: 0.65, structure: STRUCTURES.easyRunStrides7km },
-      { date: '2026-08-06', title: 'Bike sweet spot 75min', workoutType: 2, description: `Bike sweet spot -- 75min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 2x 15min @ 88-93% FTP (264-279W)\n  * Strong aerobic stimulus.`, totalTimePlanned: 1.25, structure: STRUCTURES.bikeSweetSpot },
+      { date: '2026-08-06', title: 'Fartlek 13km (10K rhythm)', workoutType: 3, description: `FARTLEK -- 13km continuous (10K rhythm)\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * 3km warm-up @ 5:00/km (HR <150)\n  * 6× (3min @ 3:33/km / 2min easy @ 5:00/km)\n    — 10K race pace, feels like "strong cruise"\n    — HR target: 172-178 on hard portions\n  * 4× (1min @ 3:20/km / 1min easy @ 5:00/km)\n    — Sharp overspeed kicks\n    — HR target: 178-184\n  * 2km cool-down @ 5:10/km\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: ~13km | ~58min\n18min at 10K pace + 4min overspeed. THE 10K fartlek.\nContinuous running — do NOT stop between reps.\n\nBAILOUT: If HR >185 or pace collapses, drop the 1min kicks and jog home.`, distancePlanned: 13000, totalTimePlanned: 0.97, structure: STRUCTURES.fartlek10kRhythm },
       { date: '2026-08-07', title: 'Yoga 40min', workoutType: 100, description: `Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * Hip openers, hamstrings, foam rolling`, totalTimePlanned: 0.67 },
       { date: '2026-08-07', title: 'Easy bike 45min', workoutType: 2, description: `Easy bike 45min Z1-Z2\n150-200W | HR <150`, totalTimePlanned: 0.75, structure: STRUCTURES.easyBike45 },
       { date: '2026-08-08', title: 'Long run 20km + strong finish', workoutType: 3, description: `LONG RUN -- 20km WITH 5km STRONG FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\n  * km 1-15 easy @ 4:35/km | HR <160\n  * km 16-20 @ 4:00/km | HR 160-170\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~1h33\n5km of 10K rhythm on tired legs.`, distancePlanned: 20000, totalTimePlanned: 1.55, tssPlanned: 120, structure: STRUCTURES.longRun20km10kFinish },
