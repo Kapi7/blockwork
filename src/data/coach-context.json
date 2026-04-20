@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-04-19",
+  "generatedAt": "2026-04-20",
   "fitness": {
     "volume7d": 39.9,
-    "volume28d": 141.1,
+    "volume28d": 97.3,
     "runs7d": 5,
-    "runs28d": 15,
+    "runs28d": 13,
     "avgPace28d": 315.3,
-    "avgHr28d": 133,
-    "lastRun": "2026-04-18",
-    "lastUpdated": "2026-04-19",
-    "trainingStatus": "balanced",
-    "atl": 41,
-    "ctl": 39,
-    "tsb": -2
+    "avgHr28d": 132,
+    "lastRun": "2026-04-20",
+    "lastUpdated": "2026-04-20",
+    "trainingStatus": "tired",
+    "atl": 55,
+    "ctl": 42,
+    "tsb": -13
   },
   "last14Days": {
-    "runCount": 8,
-    "runKm": 62,
-    "avgRunPace": 309.2,
+    "runCount": 7,
+    "runKm": 56,
+    "avgRunPace": 310.5,
     "avgRunHr": 141,
-    "bikeCount": 6,
-    "bikeKm": 222.5,
+    "bikeCount": 8,
+    "bikeKm": 328.1,
     "longestRun": 13.5,
     "sessions": [
-      {
-        "date": "2026-04-06",
-        "dist": 6,
-        "pace": 299.7,
-        "hr": 139.7,
-        "name": "Afternoon Run"
-      },
       {
         "date": "2026-04-08",
         "dist": 7.5,
