@@ -7,10 +7,192 @@
  * - block:   generates next training block (array of workouts)
  */
 
-import type { TpWorkout } from './tp-client';
+import type { TpWorkout, TpDetailData, TpLapStat } from './tp-client';
 import { formatWorkout, formatCommentThread, zonesFromSettings } from './tp-client';
 import type { TpAthleteSettings } from './tp-client';
 import { ATHLETE_PROFILE, blockContextForPrompt, zonesForPrompt } from './training-plan';
+
+// ─── Lap-level analysis helpers ────────────────────────────────────────────────
+// Without these, George reads the session AVERAGE and misses interval structure.
+// E.g. "30 min @ IF 0.91 inside a 1h41 ride" → session avg IF 0.75, looks like Z2.
+
+function fmtPace(secsPerKm: number): string {
+  if (!isFinite(secsPerKm) || secsPerKm <= 0) return '-';
+  const m = Math.floor(secsPerKm / 60);
+  const s = Math.round(secsPerKm % 60);
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function speedToPace(ms: number | null | undefined): string {
+  if (!ms || ms <= 0) return '-';
+  return fmtPace(1000 / ms);
+}
+
+/** True for sessions where lap data tells you something average can't. */
+export function shouldFetchDetail(w: TpWorkout): boolean {
+  const t = (w.title || '').toLowerCase();
+  const d = (w.description || '').toLowerCase();
+  const haystack = `${t} ${d}`;
+  if (/track|fartlek|tempo|threshold|intervals?|on.?off|sweet.?spot|race|hills?|repeats|surge/i.test(haystack)) return true;
+  // Anything with IF >= 0.7 has likely structure worth seeing
+  if ((w.if || 0) >= 0.7) return true;
+  // Long efforts (> 90 min) — terrain matters
+  if ((w.totalTime || 0) >= 1.5) return true;
+  return false;
+}
+
+/** Detect when the plan offers options ("X or Y") — George should pick the matching branch from data. */
+export function detectOptionLanguage(w: TpWorkout): { hasOptions: boolean; branches: string[] } {
+  const text = `${w.title || ''} ${w.description || ''}`;
+  const branches: string[] = [];
+  // Look for "X or Y" patterns in title or description
+  const titleParts = (w.title || '').split(/\s+or\s+/i);
+  if (titleParts.length > 1) branches.push(...titleParts.map((p) => p.trim()));
+  // "Option A: ... Option B: ..." pattern
+  const optionMatches = text.match(/Option\s+[A-Z][:.]\s+([^\n]+)/gi);
+  if (optionMatches) branches.push(...optionMatches.map((m) => m.trim()));
+  return { hasOptions: branches.length > 1, branches };
+}
+
+interface LapDistKm {
+  distKm: number;
+  secs: number;
+  paceSecPerKm: number;
+  hrAvg: number | null;
+  hrMax: number | null;
+  ifVal: number | null;
+  power: number | null;
+  cadence: number | null;
+  name: string;
+}
+
+function normalizeLap(lap: TpLapStat): LapDistKm {
+  const distKm = (lap.distance || 0) / 1000;
+  const secs = (lap.elapsedTime || 0) / 1000;
+  return {
+    distKm,
+    secs,
+    paceSecPerKm: distKm > 0.005 ? secs / distKm : 0,
+    hrAvg: lap.averageHeartRate ?? null,
+    hrMax: lap.maximumHeartRate ?? null,
+    ifVal: lap.intensityFactorActual ?? null,
+    power: lap.averagePower ?? null,
+    cadence: lap.averageCadence ?? null,
+    name: lap.name || '',
+  };
+}
+
+/** Detect the shape of a session from the lap structure. */
+export function detectSessionShape(laps: LapDistKm[]): {
+  shape: 'single-block' | 'race-simulation' | 'intervals' | 'continuous-hard' | 'mixed-terrain' | 'unknown';
+  highIfLap: { idx: number; lap: LapDistKm } | null;
+  workReps: LapDistKm[];
+} {
+  const work = laps.filter((l) => l.secs > 30);
+  if (work.length === 0) return { shape: 'unknown', highIfLap: null, workReps: [] };
+  if (work.length === 1) return { shape: 'single-block', highIfLap: { idx: 0, lap: work[0] }, workReps: [] };
+
+  // Find the highest-IF lap
+  const ifs = work.map((l, i) => ({ idx: i, ifv: l.ifVal || 0, lap: l }));
+  ifs.sort((a, b) => b.ifv - a.ifv);
+  const highIf = ifs[0];
+  const highIfLap = { idx: highIf.idx, lap: highIf.lap };
+
+  // Race simulation: one big high-IF block in the middle, surrounded by easier laps
+  if (work.length >= 3 && highIf.lap.secs >= 600 && (highIf.lap.ifVal || 0) >= 0.8) {
+    const beforeAvgIf = work.slice(0, highIf.idx).reduce((s, l) => s + (l.ifVal || 0), 0) / Math.max(1, highIf.idx);
+    const afterAvgIf = work.slice(highIf.idx + 1).reduce((s, l) => s + (l.ifVal || 0), 0) / Math.max(1, work.length - highIf.idx - 1);
+    if (beforeAvgIf < 0.75 && afterAvgIf < 0.75) {
+      return { shape: 'race-simulation', highIfLap, workReps: [highIf.lap] };
+    }
+  }
+
+  // Intervals: alternating high/low IF reps. Count "hard" (IF >= 0.85) vs "easy" (IF < 0.7) laps.
+  const hard = work.filter((l) => (l.ifVal || 0) >= 0.85);
+  const easy = work.filter((l) => (l.ifVal || 0) < 0.7);
+  if (hard.length >= 3 && easy.length >= 2) {
+    return { shape: 'intervals', highIfLap, workReps: hard };
+  }
+
+  // Continuous hard: most laps are >= 0.75 IF, no big easy gaps
+  const sustained = work.filter((l) => (l.ifVal || 0) >= 0.75);
+  if (sustained.length >= work.length * 0.7) {
+    return { shape: 'continuous-hard', highIfLap, workReps: sustained };
+  }
+
+  // Otherwise mixed terrain
+  return { shape: 'mixed-terrain', highIfLap, workReps: hard };
+}
+
+/**
+ * Build a compact lap-level summary for the LLM. This is the secret sauce —
+ * gives George visibility into structure that session-averages hide.
+ */
+export function summarizeLapData(detail: TpDetailData | null | undefined, isRun: boolean): string {
+  if (!detail) return '(lap data not available)';
+  const rawLaps = detail.lapsStats || [];
+  if (rawLaps.length === 0) return '(no laps)';
+
+  const laps = rawLaps.map(normalizeLap);
+  const lines: string[] = [];
+
+  // Time in HR zones (most useful single metric)
+  const tihrz = detail.timeInHeartRateZones?.timeInZones || [];
+  if (tihrz.length > 0) {
+    const tot = tihrz.reduce((s, z) => s + (z.seconds || 0), 0);
+    if (tot > 0) {
+      const z3plus = tihrz.filter((z) => (z.minimum || 0) >= 162).reduce((s, z) => s + (z.seconds || 0), 0);
+      const z4plus = tihrz.filter((z) => (z.minimum || 0) >= 171).reduce((s, z) => s + (z.seconds || 0), 0);
+      const z5plus = tihrz.filter((z) => (z.minimum || 0) >= 180).reduce((s, z) => s + (z.seconds || 0), 0);
+      lines.push(`HR-zone time: Z3+ ${(z3plus / 60).toFixed(1)}min (${((z3plus / tot) * 100).toFixed(0)}%), Z4+ ${(z4plus / 60).toFixed(1)}min, Z5+ ${(z5plus / 60).toFixed(1)}min — total ${(tot / 60).toFixed(0)}min`);
+    }
+  }
+
+  // Time in pace zones (run only)
+  const tisz = detail.timeInSpeedZones?.timeInZones || [];
+  if (isRun && tisz.length > 0) {
+    const tot = tisz.reduce((s, z) => s + (z.seconds || 0), 0);
+    if (tot > 0) {
+      // Z3+ in pace = faster than 4:17/km (per his TP zones)
+      const fastTime = tisz.slice(2).reduce((s, z) => s + (z.seconds || 0), 0);
+      const fasterThanThreshold = tisz.slice(4).reduce((s, z) => s + (z.seconds || 0), 0);
+      lines.push(`Pace-zone time: faster than 4:17/km ${(fastTime / 60).toFixed(1)}min (${((fastTime / tot) * 100).toFixed(0)}%), faster than 3:45/km ${(fasterThanThreshold / 60).toFixed(1)}min`);
+    }
+  }
+
+  // Highest single-lap IF (the headline for interval / race-sim sessions)
+  const shape = detectSessionShape(laps);
+  if (shape.highIfLap && shape.highIfLap.lap.ifVal && shape.highIfLap.lap.ifVal >= 0.7) {
+    const l = shape.highIfLap.lap;
+    const dur = `${Math.floor(l.secs / 60)}:${String(Math.round(l.secs % 60)).padStart(2, '0')}`;
+    const paceOrPower = isRun ? `pace ${fmtPace(l.paceSecPerKm)}/km` : `power ${l.power || '?'}W`;
+    lines.push(`Hardest lap: ${dur} @ IF ${(l.ifVal ?? 0).toFixed(2)}, HR ${l.hrAvg ?? '?'}/${l.hrMax ?? '?'}, ${paceOrPower} — session shape: ${shape.shape}`);
+  }
+
+  // Peak pace (runs only) — useful for quality sessions
+  const mmsd = detail.meanMaxSpeedsByDistance?.meanMaxes || [];
+  if (isRun && mmsd.length > 0) {
+    const distances = ['MM400Meter', 'MM800Meter', 'MM1Kilometer', 'MM1Mile', 'MM5Kilometer'];
+    const peaks = distances
+      .map((d) => mmsd.find((m) => m.label === d))
+      .filter((m) => m && m.value)
+      .map((m) => `${m!.label.replace('MM', '').replace('Meter', 'm').replace('Kilometer', 'k').replace('Mile', 'mi')}: ${speedToPace(m!.value)}`);
+    if (peaks.length > 0) lines.push(`Peak pace by distance — ${peaks.join(' | ')}`);
+  }
+
+  // Compact lap table for structured sessions (intervals / race-sim)
+  if (shape.shape === 'intervals' || shape.shape === 'race-simulation' || shape.shape === 'continuous-hard') {
+    const tableLaps = laps.filter((l) => l.secs > 30).slice(0, 16);
+    const tableLines = tableLaps.map((l, i) => {
+      const dur = `${Math.floor(l.secs / 60)}:${String(Math.round(l.secs % 60)).padStart(2, '0')}`;
+      const paceOrPower = isRun ? fmtPace(l.paceSecPerKm) + '/km' : `${l.power || '?'}W`;
+      return `  L${i + 1}: ${(l.distKm * 1000).toFixed(0)}m / ${dur} / ${paceOrPower} / HR ${l.hrAvg ?? '?'}-${l.hrMax ?? '?'} / IF ${(l.ifVal || 0).toFixed(2)}`;
+    });
+    if (tableLines.length > 0) lines.push(`Lap detail:\n${tableLines.join('\n')}`);
+  }
+
+  return lines.length > 0 ? lines.join('\n') : '(lap data sparse)';
+}
 
 function buildSystemPrompt(liveZones?: string): string {
   const block = blockContextForPrompt();
@@ -44,6 +226,44 @@ These are ONE workout — the athlete logs them as a SINGLE Garmin/Strava activi
 - When commenting on a TRACK MAIN entry with NO actual data, the data is on the WU entry — reference that.
 - The TRACK CD may or may not have data depending on whether the athlete logged it separately.
 
+CRITICAL — READ STRUCTURE, NOT AVERAGES:
+Session-AVERAGE HR and IF are useless on interval, race-simulation, or mixed-terrain sessions.
+The avg of {30 min @ IF 0.91 + 70 min @ IF 0.55} reads as a Z2 cruise but is actually a real workout.
+- When LAP DATA is provided, USE IT. Comment on the highest-IF lap and time-in-zone, not session avg.
+- "HR avg 130" alone is NEVER a valid reason to call a session "easy" or "bailed."
+- If lap data shows even one block ≥ 8 minutes at IF ≥ 0.85, that block IS the workout.
+
+CRITICAL — RESPECT OPTION LANGUAGE:
+Plans frequently offer alternatives ("Race or on/off", "Easy or strides", "Long Z2 with optional surges").
+The athlete picks the branch that fits their day, terrain, fitness, or device access.
+- NEVER grade against the unchosen branch.
+- Match lap structure to the matching branch:
+  • Race shape: warm-up → sustained hard block (10-40min) → cooldown
+  • On/off: alternating high/low IF blocks (1-3min each)
+  • Long Z2 + surges: mostly Z2 with brief higher-IF spikes
+- If the lap data fits ONE branch, comment against that one.
+
+CRITICAL — USER COMMENTS ARE GROUND TRUTH:
+When the athlete writes things like "30 mins strong outside" or "did 5x200 here" — that is what happened.
+- Find the lap(s) that match the description and confirm/quantify them.
+- Do NOT contradict the athlete's report unless lap data clearly disproves it (e.g. they said "I sprinted 5×400" but no lap exceeds Z3 HR).
+- "Battery dead" / "watch crashed" / "device error" = data is incomplete, not the workout.
+
+CRITICAL — DEVIATION DETECTION (anti-praise rules):
+NEVER say "exactly as prescribed" / "spot on" / "as planned" if any of:
+- actual distance > planned × 1.15 OR < planned × 0.85
+- session is in RECOVERY week AND highest_lap_IF > 0.85
+- structured session has wrong rep count (e.g. 4×200 planned, 5×200 done)
+- session is "easy" but pace/IF is in tempo zone (IF > 0.78 for steady runs)
+If any deviation, name it specifically. Don't dress it up as compliance.
+
+SESSION SHAPE VOCABULARY (use these exact terms when relevant):
+- "race simulation" — WU → sustained hard → CD pattern
+- "polarized intervals" — alternating hard/easy reps
+- "tempo continuous" — single sustained block at threshold
+- "endurance with progression" — HR climbs steadily across session
+- "mixed terrain" — variability driven by hills, not athlete intent
+
 COACHING PHILOSOPHY:
 - 80/20 polarized. Quality over quantity runs. Bike handles aerobic volume.
 - Strength supports running — never before a key session.
@@ -75,6 +295,17 @@ export interface SessionFeedbackInput {
   recent14d: TpWorkout[];
   upcomingPlanned?: TpWorkout[];
   settings?: TpAthleteSettings;
+  /** Optional lap-level data — pulled by caller for sessions where structure matters. */
+  detail?: TpDetailData | null;
+}
+
+export interface ChatReplyInput {
+  apiKey: string;
+  workout: TpWorkout;
+  recent14d: TpWorkout[];
+  upcomingPlanned: TpWorkout[];
+  settings?: TpAthleteSettings;
+  detail?: TpDetailData | null;
 }
 
 /** Build long-term trend stats from 60 days of completed workouts. */
@@ -112,7 +343,7 @@ function buildHistoricalContext(workouts: TpWorkout[]): string {
 
 /** Initial feedback on a newly-completed workout. Intelligent analysis using all available data. */
 export async function generateSessionFeedback(input: SessionFeedbackInput): Promise<string> {
-  const { apiKey, workout, recent14d, upcomingPlanned, settings } = input;
+  const { apiKey, workout, recent14d, upcomingPlanned, settings, detail } = input;
   const liveZones = settings ? zonesFromSettings(settings) : undefined;
 
   // recent14d is really 60-day context now (renamed for backwards compat)
@@ -182,7 +413,14 @@ export async function generateSessionFeedback(input: SessionFeedbackInput): Prom
     ? (athleteComments[athleteComments.length - 1].comment || '').trim()
     : '';
 
-  const prompt = `Analyze this just-completed workout like a sharp coach who reads BETWEEN the numbers. Don't just restate stats — synthesize them.
+  // Lap-level structure (the secret sauce — exposes interval/race-sim shape)
+  const lapSummary = detail ? summarizeLapData(detail, isRun) : '(detail data not fetched for this session)';
+  const optionInfo = detectOptionLanguage(workout);
+  const optionNote = optionInfo.hasOptions
+    ? `\n⚡ THIS PLAN OFFERS OPTIONS: [${optionInfo.branches.slice(0, 3).join('] OR [')}]\nMatch the lap structure to the chosen option. Do NOT grade against the unchosen branch.`
+    : '';
+
+  const prompt = `Analyze this just-completed workout like a sharp coach who reads BETWEEN the numbers. Don't just restate stats — synthesize them.${optionNote}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WORKOUT: ${formatWorkout(workout)}
@@ -214,6 +452,9 @@ COMPLIANCE vs PLAN:
 
 WORKOUT DESCRIPTION / PLAN:
 ${workout.description?.slice(0, 500) ?? '(none)'}
+
+LAP-LEVEL STRUCTURE (this exposes intervals/race-sim shape that session-avg HIDES):
+${lapSummary}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 60-DAY WEEKLY TRENDS (long-term pattern):
@@ -250,17 +491,9 @@ AVOID:
   return callClaude(apiKey, prompt, 600, liveZones);
 }
 
-export interface ChatReplyInput {
-  apiKey: string;
-  workout: TpWorkout;
-  recent14d: TpWorkout[];
-  upcomingPlanned: TpWorkout[];
-  settings?: TpAthleteSettings;
-}
-
 /** Reply to athlete's latest comment on a workout (chat mode). */
 export async function generateChatReply(input: ChatReplyInput): Promise<string> {
-  const { apiKey, workout, recent14d, upcomingPlanned, settings } = input;
+  const { apiKey, workout, recent14d, upcomingPlanned, settings, detail } = input;
   const liveZones = settings ? zonesFromSettings(settings) : undefined;
   const thread = formatCommentThread(workout.workoutComments || []);
 
@@ -280,11 +513,21 @@ export async function generateChatReply(input: ChatReplyInput): Promise<string> 
     ? upcoming.map((w) => `  - ${formatWorkout(w)}`).join('\n')
     : '  (none planned)';
 
-  const prompt = `Itay just messaged you on a workout. Reply like a text conversation.
+  // Lap-level structure for context (shorter than session feedback uses)
+  const isRun = workout.workoutTypeValueId === 3;
+  const lapSummary = detail ? summarizeLapData(detail, isRun) : '';
+  const lapBlock = lapSummary && lapSummary !== '(no laps)' && lapSummary !== '(lap data not available)'
+    ? `\nLAP STRUCTURE (verify athlete's claim against this):\n${lapSummary}\n`
+    : '';
+  const optionInfo = detectOptionLanguage(workout);
+  const optionNote = optionInfo.hasOptions
+    ? `\nNOTE: this plan had options — match the lap structure to what the athlete chose, don't grade against the unchosen branch.\n`
+    : '';
 
+  const prompt = `Itay just messaged you on a workout. Reply like a text conversation.${optionNote}
 WORKOUT: ${formatWorkout(workout)}
 Key stats: dist ${workout.distance ? (workout.distance / 1000).toFixed(2) + 'km' : '-'} | time ${workout.totalTime ? Math.round(workout.totalTime * 60) + 'min' : '-'} | HR avg ${workout.heartRateAverage ?? '-'} | TSS ${workout.tssActual?.toFixed(0) ?? '-'} | RPE ${workout.rpe ?? '-'}
-
+${lapBlock}
 FULL COMMENT THREAD (chronological):
 ${thread}
 
@@ -301,11 +544,13 @@ REPLY RULES:
 - You are DIRECTLY answering his latest message. Stay on topic.
 - If he asked a question → answer it.
 - If he reported how he felt → acknowledge, adjust guidance if needed.
+- If he describes WHAT HE DID ("30 mins strong", "did 5x200") → believe him. Find it in the lap data above and CONFIRM the block (duration, IF, HR), don't dispute it.
 - If he wants to change something → yes/no + why + what you'll adjust.
 - Do NOT repeat the workout stats back to him — he just did it.
 - Do NOT paste generic summaries — be a human in conversation.
 - If he said "great" or "felt good" — brief affirmation + what's next.
 - If he said something's off → dig in, ask the right question back.
+- NEVER tell him he "bailed" without evidence in the lap data (look for the highest-IF lap before judging).
 
 Max 60 words. Natural texting tone. Don't use bullet points or headers.`;
 

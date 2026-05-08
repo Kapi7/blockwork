@@ -20,8 +20,9 @@ import {
   postWorkoutComment,
   formatWorkout,
   getAthleteSettings,
+  getDetailData,
 } from '../lib/tp-client';
-import { generateSessionFeedback, generateChatReply } from '../lib/claude-coach';
+import { generateSessionFeedback, generateChatReply, shouldFetchDetail } from '../lib/claude-coach';
 
 interface Env {
   TP_AUTH_COOKIE: string;
@@ -94,6 +95,18 @@ async function runLoop(env: Env) {
       .filter((x) => x.workoutId !== w.workoutId)
       .slice(0, 14);
 
+    // Pull lap detail when session structure matters (intervals, race, tempo, mixed terrain).
+    // Without this, George reads session avg HR/IF and misses what actually happened.
+    let detail = null;
+    if (shouldFetchDetail(w)) {
+      try {
+        detail = await getDetailData(token, ATHLETE_ID, w.workoutId);
+      } catch (e) {
+        // Non-fatal — fall back to session-level data
+        detail = null;
+      }
+    }
+
     try {
       let feedback: string;
       if (check.reason === 'completed-no-reply') {
@@ -103,6 +116,7 @@ async function runLoop(env: Env) {
           recent14d,
           upcomingPlanned: upcoming,
           settings,
+          detail,
         });
       } else {
         feedback = await generateChatReply({
@@ -111,6 +125,7 @@ async function runLoop(env: Env) {
           recent14d,
           upcomingPlanned: upcoming,
           settings,
+          detail,
         });
       }
 

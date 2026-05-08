@@ -98,6 +98,80 @@ export async function listWorkouts(
   return res.json() as Promise<TpWorkout[]>;
 }
 
+// ─── Detail data (laps + zone time + peak curves) ──────────────────────────────
+// This is what TP loads when you click "Analyze" on a workout. Without it,
+// George only sees session averages — useless on intervals/mixed-terrain.
+
+export interface TpLapStat {
+  begin?: number;
+  end?: number;
+  elapsedTime?: number;          // milliseconds
+  stoppedTime?: number;
+  name?: string;
+  distance?: number;             // meters
+  averageHeartRate?: number | null;
+  maximumHeartRate?: number | null;
+  minimumHeartRate?: number | null;
+  averageSpeed?: number | null;  // m/s
+  maximumSpeed?: number | null;
+  averagePower?: number | null;
+  maximumPower?: number | null;
+  intensityFactorActual?: number | null;
+  averageCadence?: number | null;
+  trainingStressScoreActual?: number | null;
+  elevationGain?: number | null;
+}
+
+export interface TpTimeInZones {
+  timeInZones: Array<{ seconds: number; minimum: number; maximum: number; label: string; zoneNumber?: number }>;
+}
+
+export interface TpMeanMaxes {
+  meanMaxes: Array<{ label: string; value: number | null }>;
+}
+
+export interface TpDetailData {
+  workoutId: number;
+  totalStats?: any;
+  lapsStats?: TpLapStat[];
+  timeInHeartRateZones?: TpTimeInZones;
+  timeInSpeedZones?: TpTimeInZones;
+  timeInPowerZones?: TpTimeInZones;
+  meanMaxHeartRates?: TpMeanMaxes;
+  meanMaxPowers?: TpMeanMaxes;
+  meanMaxSpeeds?: TpMeanMaxes;
+  meanMaxSpeedsByDistance?: TpMeanMaxes;
+}
+
+/**
+ * Pull lap-level data for a workout (per-lap pace/HR/IF, time-in-zone, peak curves).
+ *
+ * GET /fitness/v6/athletes/{aid}/workouts/{wid}/detaildata
+ *
+ * Returns null if no data (e.g. pure planned workout, no device file).
+ */
+export async function getDetailData(
+  token: string,
+  athleteId: number,
+  workoutId: number,
+): Promise<TpDetailData | null> {
+  const url = `https://tpapi.trainingpeaks.com/fitness/v6/athletes/${athleteId}/workouts/${workoutId}/detaildata`;
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: 'application/json',
+      Referer: 'https://app.trainingpeaks.com/',
+      'User-Agent': 'blockwork-bridge',
+    },
+  });
+  if (!res.ok) return null;
+  try {
+    return (await res.json()) as TpDetailData;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Post a comment on a workout. This is the post-activity comment that
  * shows in the workout detail panel.
