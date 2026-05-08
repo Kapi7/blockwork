@@ -1,0 +1,1202 @@
+[
+  {
+    "day": "2026-05-09",
+    "type": 3,
+    "title": "Long run 12km easy (recovery)",
+    "distancePlanned": 12000,
+    "totalTimePlanned": 0.97,
+    "tssPlanned": 55,
+    "description": "LONG RUN -- 12km EASY (RECOVERY)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:55/km (Z2)\n* HR: <150 -- HARD CAP\n* No fast finish. Pure easy. Step back.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 12km | ~58min\nRecovery long run. If HR >150, walk.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-09",
+    "type": 9,
+    "title": "PM Gym (light)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": null,
+    "description": "Gym 30min -- LIGHT maintenance\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Bodyweight squats 2x10\n* Glute bridges 2x12\n* Plank 2x40sec\n* Dead bug 2x8/side\n\nVery light. Recovery week. No DOMS.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-10",
+    "type": 2,
+    "title": "Long ride 2-3hrs Z1-Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2,
+    "tssPlanned": null,
+    "description": "Long ride 2hrs MIN — option to 3hrs\n━━━━━━━━━━━━━━━━━━━━━━━━\n* HR <146 (true Z1)\n* Cadence 85-90rpm\n* NO surges, NO Z3\n* If feeling fresh: extend to 3hrs at same intensity\n━━━━━━━━━━━━━━━━━━━━━━━━\nRecovery week ride: keep duration, drop intensity floor.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-11",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156\nFirst day of Block 2.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-12",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-05-12",
+    "type": 3,
+    "title": "TRACK MAIN: 12x400m @ 79-82sec",
+    "distancePlanned": 4800,
+    "totalTimePlanned": 0.42,
+    "tssPlanned": 60,
+    "description": "MAIN SET — 12x 400m\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:18-3:22/km (79-82s/rep)\n* Pace zone: high Z5b → Z5c boundary (TP threshold = 3:45/km)\n* WALKING recovery 60-90 seconds — standing OK\n* Rep 1 sets the cap. Don't go sub-79s on any rep.\n* If rep 1 is 80s, all reps must be 79-82s.\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 4.8km hard | ~17min main set\nNeuromuscular session — 5K speed at controlled volume.\nSpeed already there (Apr 28: 76-78s). Discipline: hold 80s, don't drop.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-12",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-05-12",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Back squats 3x5 (heavy)\n* Romanian deadlifts 3x8\n* Bounding 3x6\n* Box jumps 3x5\n* Plank 3x45sec\n* Copenhagen plank 3x20sec/side",
+    "completed": null
+  },
+  {
+    "day": "2026-05-13",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150 | Max 40min",
+    "completed": null
+  },
+  {
+    "day": "2026-05-14",
+    "type": 3,
+    "title": "Fartlek 10km — 8x30sec sprint",
+    "distancePlanned": 10000,
+    "totalTimePlanned": 0.83,
+    "tssPlanned": null,
+    "description": "FARTLEK — 10km (8x30sec sprint by FEEL)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km warm-up @ 5:00/km (HR <145)\n* 8x (30sec hard / 60sec easy float)\n* Hard = RPE 9, full commit. Don't watch GPS.\n* Float = jog at 5:30/km\n* CD 2km easy\n━━━━━━━━━━━━━━━━━━━━━━━━\nNeuromuscular session — pure speed reflex.\nFlat road or treadmill preferred.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-15",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling\n* Focus on hip mobility post-bike intensity.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-15",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-05-16",
+    "type": 3,
+    "title": "Long run 18km easy",
+    "distancePlanned": 18000,
+    "totalTimePlanned": 1.35,
+    "tssPlanned": 85,
+    "description": "LONG RUN — 18km EASY\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:45-4:55/km (Z2)\n* HR: <153 — HARD CAP (Z1 only)\n* RPE 4/10 — conversational\n* No fast finish this week — pure aerobic\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 18km | ~1h25\nFirst long run of Block 2. Let the engine work easy.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-17",
+    "type": 2,
+    "title": "Long ride 2-3hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2,
+    "tssPlanned": null,
+    "description": "Long ride 2hrs MIN — option to 3hrs\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 168-227W | HR 146-156 | Cadence 85-90rpm\n* Steady aerobic endurance\n* Optional surges ONLY if extending to 3hrs: 3x5min Z2-high (210-225W)\n━━━━━━━━━━━━━━━━━━━━━━━━\nLong ride feels good? Go to 3hrs. Don't shorten.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-18",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-05-19",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-05-19",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 3x5\n* Hip thrusts 3x8\n* Depth jumps 3x5\n* Box jumps 3x5\n* Plank 3x45sec\n* Pallof press 3x10/side",
+    "completed": null
+  },
+  {
+    "day": "2026-05-19",
+    "type": 3,
+    "title": "TRACK MAIN: 10x600m @ 2:02-2:06",
+    "distancePlanned": 6000,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": 60,
+    "description": "MAIN SET — 10x 600m (volume bumped from 8 → 10)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:24-3:30/km (2:02-2:06/rep)\n* Pace zone: mid Z5b — solid 5K-pace work\n* JOG recovery 90sec @ 5:30/km\n* Rep 1 sets the cap. If you hit 2:01 on rep 1, you've already broken the session — slow rep 2.\n* Hold form on rep 7-10 (back half is the test)\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 6.0km hard | ~30min including recoveries\nFailure mode: first 6 reps fly, last 4 fade to 2:10+ with HR 185.\nAvoid by capping rep 1 floor at 2:02.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-19",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-05-20",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-05-21",
+    "type": 3,
+    "title": "Fartlek 11km — 3x4min @ 4:00-4:10",
+    "distancePlanned": 11000,
+    "totalTimePlanned": 0.92,
+    "tssPlanned": null,
+    "description": "FARTLEK — 11km (3x4min sub-threshold)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km warm-up @ 5:00/km (HR <145)\n* 3x (4min @ 4:00-4:10/km / 3min jog @ 5:30/km)\n* Sub-threshold — RPE 7-8\n* CD 2km easy\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 11km | ~52min\nDo this BEFORE flying to Berlin (Thu).\nThreshold dose pre-travel.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-22",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling\n* Extra attention to quads after over-under.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-22",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-05-23",
+    "type": 3,
+    "title": "Long run 18km + fast finish",
+    "distancePlanned": 18000,
+    "totalTimePlanned": 1.4,
+    "tssPlanned": 95,
+    "description": "LONG RUN -- 18km WITH 3km FAST FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\nSEGMENT 1 -- km 1-15 (EASY)\n* Pace: 4:45/km (Z2) | HR: <155\n\nSEGMENT 2 -- km 16-18 (FAST FINISH)\n* Pace: 4:02-4:16/km (~88-93%) | HR: 155-165\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 18km | ~1h24\nFirst fast finish! Last 3km push. Shift gears, don't grind.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-24",
+    "type": 2,
+    "title": "Long ride 2.5-3hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2.5,
+    "tssPlanned": null,
+    "description": "Long ride 2.5hrs MIN — option to 3hrs\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 168-227W | HR 146-156 | Cadence 85-90rpm\n* Steady aerobic endurance\n* NO surges — Sat already had quality (long+FF)\n* Extend to 3hrs if legs feel good\n━━━━━━━━━━━━━━━━━━━━━━━━\nLongest ride of Block 2. Pure Z2.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-25",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-05-26",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-05-26",
+    "type": 9,
+    "title": "PM Gym (heavy + plyo)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.83,
+    "tssPlanned": null,
+    "description": "Gym 50min -- Heavy strength + plyometrics\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 4x4 (heaviest of block)\n* Hip thrusts 3x8\n* Depth jumps 3x5\n* Broad jumps 3x5\n* Plank 3x50sec\n* Dead bug 3x12/side\n\nPeak gym session of Block 2.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-26",
+    "type": 3,
+    "title": "TRACK MAIN: 8x800m @ 2:48-2:53",
+    "distancePlanned": 6400,
+    "totalTimePlanned": 0.55,
+    "tssPlanned": 60,
+    "description": "MAIN SET — 8x 800m (volume bumped from 6 → 8)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:30-3:36/km (2:48-2:53/rep)\n* Pace zone: Z5a / boundary Z5b — sub-threshold to 5K pace\n* JOG recovery 2:00-2:30 @ 5:30/km\n* Rep 1 sets the cap. Stay 2:48-2:53 on every rep — even splits.\n* This is the bridge from 600m to 1km work — nail consistency.\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 6.4km hard | ~32min including recoveries\nThe 5K-specific session. Rep cost is real — hold pace, don't push paces.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-26",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-05-27",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-05-28",
+    "type": 2,
+    "title": "Bike over-under 60min",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Bike over-under 60min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 12min warm-up Z1-Z2\n* 4×(3min @ 91-100% FTP / 2min @ 60-70% FTP)\n* 15min Z2 endurance\n* 6min cool-down\n\nCOMPLEMENTS TUESDAY: Tue was 6×800m threshold cruise.\nBike over-unders teach the same lactate clearance without running stress. Impact-free intensity.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-29",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling\n* Recovery prep before peak long run.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-29",
+    "type": 3,
+    "title": "(Berlin) Easy run 30-40min Tiergarten",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "BERLIN — replaces easy bike (no bike access)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Easy jog in Tiergarten\n* 30-40min @ 5:00-5:15/km\n* HR <150, Z1 only\n* Loose & social pace\n* Add 30min mobility/yoga in hotel after\n━━━━━━━━━━━━━━━━━━━━━━━━\nLet legs flush from yesterday's fartlek. Save energy for Sat 20km.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-30",
+    "type": 3,
+    "title": "(Berlin) 3K Time Trial — calibration",
+    "distancePlanned": 8000,
+    "totalTimePlanned": 0.85,
+    "tssPlanned": 100,
+    "description": "3K TIME TRIAL — Block 2 calibration (FRESH LEGS — Saturday)\n━━━━━━━━━━━━━━━━━━━━━━━━\nWU (3km easy)\n* 5:00/km, HR <145\n* 4×100m strides at end (after 5min mobility)\n\nMAIN — 3K ALL-OUT\n* Target: sub-10:00 (3:18-3:20/km)\n* That's ≈ 16:50-17:00 5K equivalent\n* Pace zone: high Z5b → Z5c boundary\n* PACE DISCIPLINE — even splits\n- km 1: 3:20 (DON'T go 3:10 — you'll blow up)\n- km 2: 3:18-3:20\n- km 3: 3:15-3:18 (negative split is the sign of a clean TT)\n* Last 1km is the race — send it home\n\nCD (2km easy)\n* 5:30+/km, HR <140\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 8km / ~51min\nLocation: Tiergarten — Strasse des 17. Juni is flat & wide.\nPace target reflects current speed signals (Apr 21 400s @ 3:14, Apr 28 @ 3:16).\nFresh legs after Thu fartlek + Fri easy + Fri flight — true PR attempt.\n\nFAILURE MODE: km 1 sub-3:15 → wheels off by km 2. Hold 3:20 km 1 even if it feels too easy.\nNext day (Sun): 20km Z2 long run — keep it EASY, no fast finish.",
+    "completed": null
+  },
+  {
+    "day": "2026-05-31",
+    "type": 3,
+    "title": "(Berlin) Long run 20km easy (post-TT)",
+    "distancePlanned": 20000,
+    "totalTimePlanned": 1.55,
+    "tssPlanned": null,
+    "description": "LONG RUN — 20km EASY (Sunday, post-TT)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:50-5:00/km (Z2)\n* HR: <160 — HARD CAP\n* RPE 4/10 conversational\n* NO fast finish — yesterday's 3K TT will sting\n* Heavy legs are fine — this is endurance under pre-fatigue\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~95-100min\nTiergarten loops or Spree path.\nIf legs feel cooked, drop to 16km — don't force the volume.\nThis day mimics late-marathon physiology: easy aerobic on tired legs.\nMonday is travel — recovery is automatic.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-01",
+    "type": 100,
+    "title": "(Berlin → home) Travel/recovery",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": null,
+    "description": "TRAVEL DAY — Berlin to home\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 30min walk in Tiergarten before flight\n* No structured training\n* Hydration + light food\n━━━━━━━━━━━━━━━━━━━━━━━━\nAccept the rest day. Block 2 last week is recovery — let it be.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-02",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle\n\nRecovery -- sharp and short.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-02",
+    "type": 9,
+    "title": "PM Gym (lighter)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": null,
+    "description": "Gym 30min -- Light maintenance\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Bodyweight squats 2x10\n* Glute bridges 2x12\n* Plank 2x40sec\n* Dead bug 2x8/side\n\nRecovery week. Light only.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-02",
+    "type": 3,
+    "title": "TRACK MAIN: 6x400m + 4x200m (recovery)",
+    "distancePlanned": 3200,
+    "totalTimePlanned": 0.3,
+    "tssPlanned": 40,
+    "description": "MAIN SET — 6x 400m + 4x 200m (RECOVERY WEEK)\n━━━━━━━━━━━━━━━━━━━━━━━━\nSET 1: 6x 400m @ 3:30-3:36/km (84-86s)\n* Slightly slower than Block 1 — recovery week\n* WALKING recovery 90sec\n\n2 min rest.\n\nSET 2: 4x 200m @ 3:24-3:30/km (~41-42s)\n* STANDING recovery 60-90sec\n* Sharp but short\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 3.2km hard\nKeep it sharp not soft, but volume drops vs build weeks.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-02",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-06-03",
+    "type": 3,
+    "title": "Easy 5km",
+    "distancePlanned": 5000,
+    "totalTimePlanned": 0.43,
+    "tssPlanned": null,
+    "description": "Easy run 5km\nPace: 5:15/km | HR <150\nVery easy. Recovery week.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-04",
+    "type": 2,
+    "title": "Bike on/off or Zwift race",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.92,
+    "tssPlanned": null,
+    "description": "Bike on/off 90s x8 OR Zwift race (RECOVERY — bike intensity)\n━━━━━━━━━━━━━━━━━━━━━━━━\nOption A: 8x (90sec ON @ 85-95% FTP [255-285W] / 90sec OFF @ 50-60% [150-180W])\nOption B: Zwift B/C race (55min: 15 WU, 25 race @ 90-110% FTP, 15 CD)\n\nRECOVERY WEEK: bike keeps intensity alive.\nTue was short/sharp recovery track → Thu ride HARD on the bike.\nNo running stress. All intensity on two wheels.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-05",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Gentle flow. Deep stretching.\n* Recovery week: no bike today.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-06",
+    "type": 3,
+    "title": "Long run 14km easy (recovery)",
+    "distancePlanned": 14000,
+    "totalTimePlanned": 1.13,
+    "tssPlanned": 65,
+    "description": "LONG RUN -- 14km EASY (RECOVERY)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:55/km (Z2) | HR: <150\n* No fast finish. Pure easy.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 14km | ~1h08\nRecovery week. Step back.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-07",
+    "type": 2,
+    "title": "Long ride 2-3hrs Z1-Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2,
+    "tssPlanned": null,
+    "description": "Long ride 2hrs MIN — option to 3hrs\n━━━━━━━━━━━━━━━━━━━━━━━━\n* HR <146 (true Z1)\n* Cadence 85-90rpm\n* NO surges, NO Z3\n* Even on recovery weeks the duration stays — only intensity drops\n━━━━━━━━━━━━━━━━━━━━━━━━\nBlock 2 ends. Ride feels good? Go to 3hrs.\nNext day starts Block 3.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-08",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156\nFirst day of Block 3.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-09",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-06-09",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 3x5\n* Hip thrusts 3x8\n* Depth jumps 3x5\n* Box jumps 3x5\n* Plank 3x45sec\n* Pallof press 3x10/side",
+    "completed": null
+  },
+  {
+    "day": "2026-06-09",
+    "type": 3,
+    "title": "TRACK MAIN: 6x1km @ 3:30-3:36",
+    "distancePlanned": 6000,
+    "totalTimePlanned": 0.55,
+    "tssPlanned": 65,
+    "description": "MAIN SET — 6x 1km (volume bumped from 5 → 6)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:30-3:36/km (3:30-3:36/rep)\n* Pace zone: Z5a / boundary Z5b — at-or-just-below 5K pace\n* JOG recovery 2:30-3:00 @ 5:30/km\n* Rep 1 sets the cap. Sub-3:30 on rep 1 = session is broken.\n* Last 2km of last rep is where the 5K race lives — finish strong.\n━━━━━━━━━━━━━━━━━━━━━━━━\nTotal: 6.0km hard | ~30min including recoveries\nFirst Block 3 quality session — full transition to race-distance work.\n5K TT in 3 weeks. Don't burn it here.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-09",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-06-10",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-11",
+    "type": 2,
+    "title": "Bike tempo intervals 60min",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Bike tempo intervals 60min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 10min warm-up Z1\n* 3×8min @ 78-85% FTP (234-255W) with 4min Z1 between\n* 10min cool-down\n\nCOMPLEMENTS TUESDAY: Tue was 6×1km at 3:34 — hard threshold.\nBike tempo gives controlled aerobic work without running stress. Different modality, same purpose: raise the aerobic ceiling.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-12",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling",
+    "completed": null
+  },
+  {
+    "day": "2026-06-12",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-13",
+    "type": 3,
+    "title": "Long run 20km + fast finish",
+    "distancePlanned": 20000,
+    "totalTimePlanned": 1.55,
+    "tssPlanned": 110,
+    "description": "LONG RUN -- 20km WITH 3km FAST FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\nSEGMENT 1 -- km 1-17 (EASY)\n* Pace: 4:40/km (Z2) | HR: <160\n\nSEGMENT 2 -- km 18-20 (FAST FINISH)\n* Pace: 4:02-4:16/km (~88-93%) | HR: 158-168\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~1h33\nSub-threshold finish on tired legs.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-14",
+    "type": 2,
+    "title": "Long ride 2.5hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2.5,
+    "tssPlanned": null,
+    "description": "Long ride 2.5hrs Z2\n168-227W | HR 146-156\nSteady endurance. No surges (save legs for track Tue).",
+    "completed": null
+  },
+  {
+    "day": "2026-06-15",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-06-16",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle\n\nTHE session today. Be ready.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-16",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 3x5\n* Hip thrusts 3x8\n* Box jumps 3x5\n* Plank 3x45sec\n* Dead bug 3x10/side",
+    "completed": null
+  },
+  {
+    "day": "2026-06-16",
+    "type": 3,
+    "title": "TRACK MAIN: 16x400m @ 84-86sec",
+    "distancePlanned": 6400,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": 80,
+    "description": "MAIN SET -- 16x 400m (HIGH-VOLUME OVERSPEED)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:30-3:34/km (105-107%) -- 84-86sec per 400m\n* HR target: 178-185 bpm (Z5a-Z5b) by rep 8-16\n* Recovery: 200m jog (~45-55sec) -- shorter rest\n* Effort: 8.5/10\n* Total quality: 6.4km at overspeed\n\nHIGH-VOLUME 400s at overspeed. 16 reps.\nYou've done 12x400m at 84-86sec — now faster AND more.\nFirst 4 = rhythm. Middle 8 = hold. Last 4 = character.\nMetronomic: all within 84-86sec window.\n\nBAILOUT: If HR >186 OR pace >88sec on 2 consecutive reps, STOP.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-16",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-06-17",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-18",
+    "type": 2,
+    "title": "Bike cadence drills 60min",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Bike cadence drills -- 60min (Tue VERY hard 16x400 → Thu easy bike)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 10min warm-up @ 50-65% FTP (150-195W)\n* 4x (3min high-cadence 100+ rpm @ 60-70% FTP [180-210W] / 5min Z2 spin)\n* 10min Z2 steady @ 60-70% FTP\n* 6min cool-down\n* Total: ~60min\n\nTue was VERY HARD 16x400m → Thu MUST be easy.\nCadence drills: neuromuscular work, zero stress.\nHigh RPM teaches smooth pedal stroke without load.\nLegs recover while staying active.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-19",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling",
+    "completed": null
+  },
+  {
+    "day": "2026-06-19",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-20",
+    "type": 3,
+    "title": "Long run 22km steady",
+    "distancePlanned": 22000,
+    "totalTimePlanned": 1.65,
+    "tssPlanned": 115,
+    "description": "LONG RUN -- 22km STEADY (NO FAST FINISH)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:30/km (Z2) | HR: <160\n* No fast finish this week. Honest volume after 20x400m.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 22km | ~1h39",
+    "completed": null
+  },
+  {
+    "day": "2026-06-21",
+    "type": 2,
+    "title": "Long ride 2.5hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2.5,
+    "tssPlanned": null,
+    "description": "Long ride 2.5hrs Z2\n168-227W | HR 146-156\nSteady endurance.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-22",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-06-23",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-06-23",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 3x5\n* Hip thrusts 3x8\n* Depth jumps 3x5\n* Box jumps 3x5\n* Plank 3x45sec\n* Pallof press 3x10/side",
+    "completed": null
+  },
+  {
+    "day": "2026-06-23",
+    "type": 3,
+    "title": "TRACK MAIN: 6x1km @ 3:30-3:34",
+    "distancePlanned": 6000,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": 80,
+    "description": "MAIN SET -- 6x 1km AT GOAL 5K PACE (KEY ASSESSMENT)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:30-3:34/km (105-107%) -- GOAL 5K PACE\n* HR target: 175-182 bpm (Z5a-Z5b) by rep 4-6\n* Recovery: 400m jog (~90sec)\n* Effort: 8.5/10\n* Total quality: 6km at 5K pace\n\nTHE KEY ASSESSMENT: 6x1km at your 5K goal pace.\nIf you can hold 3:30-3:34 for 6 reps, sub-17:30 is ON.\nYour fastest 1km: 3:34 at HR 172 (Oct). Now you need\n6 of them in a row.\nMetronomic. Every rep within 2 seconds.\n\nBAILOUT: If HR >184 OR pace >3:36 on 2 consecutive reps, STOP.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-23",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-06-24",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-25",
+    "type": 3,
+    "title": "Fartlek 10km sprint (8x20sec)",
+    "distancePlanned": 10000,
+    "totalTimePlanned": 0.83,
+    "tssPlanned": null,
+    "description": "FARTLEK — 10km (8×20sec FAST sprint)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km warm-up @ 5:00/km\n* 8× (20sec FAST @ 3:00-3:10/km / 2min easy jog)\n— PURE SPEED. Very short, very fast. Like flying 100m strides inside a continuous run.\n— HR: brief spikes to 175+, full recovery between\n* 2km cool-down\n\nCOMPLEMENTS TUESDAY: Tue was KEY 6×1km 5K pace assessment. Today is pure neuromuscular speed (not threshold) — DIFFERENT system. Very short reps protect legs after KEY session.\nCONTINUOUS — do not stop.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-26",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling",
+    "completed": null
+  },
+  {
+    "day": "2026-06-26",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-06-27",
+    "type": 3,
+    "title": "Long run 22km + fast finish",
+    "distancePlanned": 22000,
+    "totalTimePlanned": 1.78,
+    "tssPlanned": 125,
+    "description": "LONG RUN -- 22km WITH 4km FAST FINISH (PEAK)\n━━━━━━━━━━━━━━━━━━━━━━━━\nSEGMENT 1 -- km 1-18 (EASY)\n* Pace: 4:35/km (Z2) | HR: <160\n\nSEGMENT 2 -- km 19-22 (FAST FINISH)\n* Pace: 3:57-4:10/km (~90-95%) | HR: 160-170\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 22km | ~1h47\nPEAK long run with quality. Last 4km strong.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-28",
+    "type": 2,
+    "title": "Long ride 2.5hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2.5,
+    "tssPlanned": null,
+    "description": "Long ride 2.5hrs Z2\n168-227W | HR 146-156\nSteady endurance.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-29",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1\n<167W | HR <145\nRecovery week.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-30",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle\n\nASSESSMENT: if controlled at 3:28-3:30, race in 3 weeks.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-30",
+    "type": 9,
+    "title": "PM Gym (lighter)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": null,
+    "description": "Gym 30min -- Light maintenance\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Bodyweight squats 2x10\n* Glute bridges 2x12\n* Plank 2x40sec\n\nRecovery/assessment week. Light only.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-30",
+    "type": 3,
+    "title": "TRACK MAIN: 3x1km @ 3:28-3:30 (assessment)",
+    "distancePlanned": 3000,
+    "totalTimePlanned": 0.25,
+    "tssPlanned": 40,
+    "description": "MAIN SET -- 3x 1km @ 3:28-3:30 (ASSESSMENT)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:28-3:32/km (106-108%)\n* Recovery: 2:30 jog (400m) -- FULL recovery\n* Effort: 7.5/10 -- controlled, not maximal\n* Total quality: 3km\n* ASSESSMENT: if this feels smooth and controlled, you are READY to race in 3 weeks.\n* Do NOT chase faster. Race pace is the target. Save it for race day.\n\nIF STRUGGLING: reassess 5K target. This should feel manageable.",
+    "completed": null
+  },
+  {
+    "day": "2026-06-30",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-07-01",
+    "type": 3,
+    "title": "Easy 5km",
+    "distancePlanned": 5000,
+    "totalTimePlanned": 0.43,
+    "tssPlanned": null,
+    "description": "Easy run 5km\nPace: 5:15/km | HR <150\nRecovery week. Short and easy.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-02",
+    "type": 2,
+    "title": "Zwift race / bike on-off",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.92,
+    "tssPlanned": null,
+    "description": "Zwift race OR bike on/off 90s x8\n━━━━━━━━━━━━━━━━━━━━━━━━\nRecovery week — keep sharp on the bike.\nOption A: Zwift race (55min: 15 WU, 25 race @ 90-110% FTP, 15 CD)\nOption B: 90sec on/off x8 (85-95% FTP on / 50-60% off)\n\nKeep intensity alive without running legs.\nRecovery for running, stimulus on bike.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-03",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Gentle flow. Recovery.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-04",
+    "type": 3,
+    "title": "Long run 16km easy (recovery)",
+    "distancePlanned": 16000,
+    "totalTimePlanned": 1.28,
+    "tssPlanned": 75,
+    "description": "LONG RUN -- 16km EASY (RECOVERY)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:55/km (Z2) | HR: <150\n* No fast finish. Pure easy.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 16km | ~1h17\nRecovery week. Save energy for Block 4.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-05",
+    "type": 2,
+    "title": "Long ride 2hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2,
+    "tssPlanned": null,
+    "description": "Long ride 2hrs Z2\n168-227W | HR 146-156\nBlock 3 ends. Block 4 starts tomorrow.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-06",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-07-07",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle",
+    "completed": null
+  },
+  {
+    "day": "2026-07-07",
+    "type": 3,
+    "title": "TRACK MAIN: 20x400m @ 81-83sec",
+    "distancePlanned": 8000,
+    "totalTimePlanned": 0.6,
+    "tssPlanned": 95,
+    "description": "MAIN SET -- 20x 400m (THE KIPCHOGE SESSION — PEAK)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Target pace: 3:21-3:26/km (109-112%) -- 81-83sec per 400m\n* HR target: 180-186 bpm (Z5b) by rep 10-20\n* Recovery: 200m jog (~40-50sec) -- short rest\n* Effort: 9/10\n* Total quality: 8km at overspeed\n\nTHE KIPCHOGE SESSION. 20x400m. PEAK of the season.\nThis is the hardest track session of the entire plan.\nFirst 5 = settle in. Middle 10 = HOLD. Last 5 = character test.\nMetronomic: all within 81-83sec. No fading.\nIf you can do this, sub-17:30 is a certainty.\n\nBAILOUT: If HR >188 OR pace >85sec on 2 consecutive reps, STOP.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-07",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-07-07",
+    "type": 9,
+    "title": "PM Gym",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Gym 45min -- Strength + explosive\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Front squats 3x5\n* Hip thrusts 3x8\n* Box jumps 3x5\n* Depth jumps 3x5\n* Plank 3x45sec\n* Dead bug 3x10/side",
+    "completed": null
+  },
+  {
+    "day": "2026-07-08",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-07-09",
+    "type": 2,
+    "title": "Bike cadence drills 60min",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Bike cadence drills 60min\n4×3min high-cadence (100+ rpm) at Z2 power (60-70% FTP).\nNeuromuscular activation without any stress.\nTuesday was 20×400m — THE peak session. Legs must recover.\nEasy spinning with fast feet. Nothing more.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-10",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling",
+    "completed": null
+  },
+  {
+    "day": "2026-07-10",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-07-11",
+    "type": 3,
+    "title": "Long run 20km + fast finish",
+    "distancePlanned": 20000,
+    "totalTimePlanned": 1.58,
+    "tssPlanned": 115,
+    "description": "LONG RUN -- 20km WITH 4km FAST FINISH\n━━━━━━━━━━━━━━━━━━━━━━━━\n* km 1-16 easy @ 4:35/km | HR <160\n* km 17-20 @ 4:05/km | HR 158-168\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 20km | ~1h35",
+    "completed": null
+  },
+  {
+    "day": "2026-07-12",
+    "type": 2,
+    "title": "Long ride 2hrs Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 2,
+    "tssPlanned": null,
+    "description": "Long ride 2hrs Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-07-13",
+    "type": 2,
+    "title": "Easy bike 60min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1,
+    "tssPlanned": null,
+    "description": "Easy bike 60min Z2\n168-227W | HR 146-156",
+    "completed": null
+  },
+  {
+    "day": "2026-07-14",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.45,
+    "tssPlanned": null,
+    "description": "WARM-UP (25-30min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle\n\nRACE MODEL today: 3km continuous at 5K pace.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-14",
+    "type": 3,
+    "title": "TRACK MAIN: 3km continuous @ 3:30",
+    "distancePlanned": 3000,
+    "totalTimePlanned": 0.18,
+    "tssPlanned": 45,
+    "description": "MAIN SET -- 3km CONTINUOUS @ 3:30/km (RACE MODEL)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km non-stop at 5K race pace: 3:28-3:32/km (106-108%)\n* Time target: 10:24-10:36\n* HR: builds to 178-182 by end\n* Total quality: 3km\n* RACE SIMULATION: run this like the middle 3km of your 5K.\n* Even pace. No surging. Feel the rhythm.\n* If this feels controlled, you are READY to race.\n\nIF STRUGGLING: reassess race target.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-14",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.2,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10-12min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog 5:30+/km\n* 3min walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-07-14",
+    "type": 9,
+    "title": "PM Gym (light)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.58,
+    "tssPlanned": null,
+    "description": "Gym 35min -- Light\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Squats 2x8 (moderate)\n* Glute bridges 2x12\n* Plank 2x45sec\n* Dead bug 2x10/side\n\nRace week approaching. Don't accumulate fatigue.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-15",
+    "type": 3,
+    "title": "Easy 7km + strides",
+    "distancePlanned": 7000,
+    "totalTimePlanned": 0.65,
+    "tssPlanned": null,
+    "description": "Easy run 7km + 4x100m strides\nPace: 5:00-5:10/km | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-07-16",
+    "type": 3,
+    "title": "Fartlek 10km 5K-specific (6x90sec)",
+    "distancePlanned": 10000,
+    "totalTimePlanned": 0.83,
+    "tssPlanned": null,
+    "description": "FARTLEK — 10km (6×90sec 5K race-specific)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km warm-up @ 5:00/km\n* 6× (90sec @ 3:28-3:32/km 5K race pace / 90sec easy jog)\n— Race-specific effort. Practice holding 5K pace in surges.\n— HR: 170-178 on hard portions\n* 2km cool-down\n\nCOMPLEMENTS TUESDAY: Approaching 5K TT — both Tue (3km continuous) and Thu target race paces. Race-specific sharpening.\nCONTINUOUS — do not stop.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-17",
+    "type": 100,
+    "title": "Yoga 40min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.67,
+    "tssPlanned": null,
+    "description": "Yoga / Mobility 40min\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Hip openers, hamstrings, foam rolling",
+    "completed": null
+  },
+  {
+    "day": "2026-07-17",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1-Z2\n150-200W | HR <150",
+    "completed": null
+  },
+  {
+    "day": "2026-07-18",
+    "type": 3,
+    "title": "Long run 16km easy (pre-taper)",
+    "distancePlanned": 16000,
+    "totalTimePlanned": 1.22,
+    "tssPlanned": 75,
+    "description": "LONG RUN -- 16km EASY (PRE-TAPER)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Pace: 4:45/km (Z2) | HR: <155\n* No fast finish. Easy and controlled.\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTOTAL: 16km | ~1h13",
+    "completed": null
+  },
+  {
+    "day": "2026-07-19",
+    "type": 2,
+    "title": "Long ride 90min Z2",
+    "distancePlanned": null,
+    "totalTimePlanned": 1.5,
+    "tssPlanned": null,
+    "description": "Long ride 90min Z2\n168-227W | HR 146-156\nShorter ride. Pre-taper.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-20",
+    "type": 2,
+    "title": "Easy bike 45min",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.75,
+    "tssPlanned": null,
+    "description": "Easy bike 45min Z1\n<167W | HR <145\nRace week. Less is more.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-21",
+    "type": 3,
+    "title": "TRACK WU",
+    "distancePlanned": 3500,
+    "totalTimePlanned": 0.4,
+    "tssPlanned": null,
+    "description": "WARM-UP (20-25min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 3km easy jog (HR <145)\n* Dynamic drills 5min\n* 5x 100m strides (90s walk back)\n* 2min settle\n\nRace week opener. Sharp, electric.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-21",
+    "type": 3,
+    "title": "TRACK MAIN: 4x400m + 4x200m (opener)",
+    "distancePlanned": 2400,
+    "totalTimePlanned": 0.22,
+    "tssPlanned": 30,
+    "description": "MAIN SET -- 4x400m @ 78sec + 4x200m @ 37sec (5K OPENER)\n━━━━━━━━━━━━━━━━━━━━━━━━\nSET 1: 4x 400m @ 3:11-3:17/km (114-118%) -- 77-79sec\n* Recovery: FULL (200m walk/jog)\n\nSET 2: 4x 200m @ 2:57-3:08/km (120-127%) -- 35-37sec\n* Recovery: FULL (200m walk/jog)\n\n* Total quality: 2.4km. Sharp. Electric.\n* NOT a workout. Neuromuscular primer for Saturday.\n* Leave feeling FAST, not tired.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-21",
+    "type": 3,
+    "title": "TRACK CD",
+    "distancePlanned": 2000,
+    "totalTimePlanned": 0.17,
+    "tssPlanned": null,
+    "description": "COOL-DOWN (10min)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* 2km easy jog\n* Walk + stretch",
+    "completed": null
+  },
+  {
+    "day": "2026-07-21",
+    "type": 9,
+    "title": "PM Gym (activation only)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.33,
+    "tssPlanned": null,
+    "description": "Gym 20min -- ACTIVATION ONLY\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Bodyweight squats 2x8\n* Glute bridges 2x10\n* Plank 1x30sec\n* 3x broad jump (prime explosiveness)\n\nZero fatigue. Just wake up the muscles.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-22",
+    "type": 3,
+    "title": "Easy 4km + strides",
+    "distancePlanned": 4000,
+    "totalTimePlanned": 0.35,
+    "tssPlanned": null,
+    "description": "Easy 4km + 4x100m strides\nVery short. Legs loose. 5:10-5:20/km.\nStrides at 90%, walk-back. Trust the training.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-23",
+    "type": 100,
+    "title": "Yoga only (race week)",
+    "distancePlanned": null,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": null,
+    "description": "Yoga 30min (RACE WEEK -- no bike intensity)\n━━━━━━━━━━━━━━━━━━━━━━━━\n* Gentle flow only\n* Hip openers, light stretching\n* No foam rolling (avoid soreness)\n* Rest. Trust the taper.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-24",
+    "type": 100,
+    "title": "REST",
+    "distancePlanned": null,
+    "totalTimePlanned": 0,
+    "tssPlanned": null,
+    "description": "COMPLETE REST\n━━━━━━━━━━━━━━━━━━━━━━━━\nSleep well. Hydrate. Eat well.\nNo running. No gym. Light walk OK.",
+    "completed": null
+  },
+  {
+    "day": "2026-07-25",
+    "type": 3,
+    "title": "5K TIME TRIAL -- sub-17:30",
+    "distancePlanned": 5000,
+    "totalTimePlanned": 0.5,
+    "tssPlanned": 65,
+    "description": "5K TIME TRIAL -- TARGET SUB-17:30\n━━━━━━━━━━━━━━━━━━━━━━━━\nWARM-UP (15min)\n* 2km easy jog + drills + 3x100m at pace\n\nRACE -- 5km\n* Target: 17:26 (3:28/3:30/3:30/3:30/3:28)\n* Km 1: 3:28 -- CONTROLLED\n* Km 2-3: 3:30 -- settle, rhythm\n* Km 4: 3:30 -- the crucible. HOLD FORM.\n* Km 5: 3:28 -- EVERYTHING LEFT\n\nCOOL-DOWN (10min)\n* Easy jog + walk\n\n━━━━━━━━━━━━━━━━━━━━━━━━\nTHIS IS THE GOAL. Trust the block. Execute the plan.",
+    "completed": null
+  }
+]
