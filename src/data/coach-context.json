@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-31",
+  "generatedAt": "2026-06-01",
   "fitness": {
     "volume7d": 53.2,
     "volume28d": 185.1,
@@ -8,11 +8,11 @@
     "avgPace28d": 310.5,
     "avgHr28d": 144,
     "lastRun": "2026-05-31",
-    "lastUpdated": "2026-05-31",
+    "lastUpdated": "2026-06-01",
     "trainingStatus": "balanced",
-    "atl": 48,
+    "atl": 45,
     "ctl": 52,
-    "tsb": 4
+    "tsb": 7
   },
   "last14Days": {
     "runCount": 13,
