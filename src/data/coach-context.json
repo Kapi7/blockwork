@@ -1,49 +1,28 @@
 {
-  "generatedAt": "2026-06-12",
+  "generatedAt": "2026-06-13",
   "fitness": {
-    "volume7d": 56.6,
-    "volume28d": 197.7,
+    "volume7d": 68,
+    "volume28d": 217.7,
     "runs7d": 7,
-    "runs28d": 25,
-    "avgPace28d": 312,
+    "runs28d": 26,
+    "avgPace28d": 311.1,
     "avgHr28d": 144,
-    "lastRun": "2026-06-12",
-    "lastUpdated": "2026-06-12",
+    "lastRun": "2026-06-13",
+    "lastUpdated": "2026-06-13",
     "trainingStatus": "tired",
-    "atl": 56,
-    "ctl": 51,
-    "tsb": -5
+    "atl": 58,
+    "ctl": 52,
+    "tsb": -6
   },
   "last14Days": {
-    "runCount": 15,
-    "runKm": 100.7,
-    "avgRunPace": 312.1,
+    "runCount": 13,
+    "runKm": 109.4,
+    "avgRunPace": 309.7,
     "avgRunHr": 144,
     "bikeCount": 5,
     "bikeKm": 158.6,
-    "longestRun": 16.3,
+    "longestRun": 20,
     "sessions": [
-      {
-        "date": "2026-05-30",
-        "dist": 2.1,
-        "pace": 345.2,
-        "hr": 136.8,
-        "name": "Morning Run"
-      },
-      {
-        "date": "2026-05-30",
-        "dist": 5,
-        "pace": 228.5,
-        "hr": 169.6,
-        "name": "Morning Run"
-      },
-      {
-        "date": "2026-05-30",
-        "dist": 4.2,
-        "pace": 369.1,
-        "hr": 132.7,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-05-31",
         "dist": 16.3,
@@ -127,6 +106,13 @@
         "pace": 303.7,
         "hr": 147.4,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-06-13",
+        "dist": 20,
+        "pace": 287.9,
+        "hr": 148.2,
+        "name": "Zwift - Ocean Lava Cliffside Loop in Watopia"
       }
     ]
   },
