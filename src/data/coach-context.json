@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-06-25",
+  "generatedAt": "2026-06-26",
   "fitness": {
-    "volume7d": 56.8,
-    "volume28d": 205.6,
+    "volume7d": 51.9,
+    "volume28d": 212.9,
     "runs7d": 7,
-    "runs28d": 28,
-    "avgPace28d": 312.7,
-    "avgHr28d": 143,
-    "lastRun": "2026-06-25",
-    "lastUpdated": "2026-06-25",
+    "runs28d": 29,
+    "avgPace28d": 313.4,
+    "avgHr28d": 142,
+    "lastRun": "2026-06-26",
+    "lastUpdated": "2026-06-26",
     "trainingStatus": "fresh",
-    "atl": 31,
+    "atl": 35,
     "ctl": 50,
-    "tsb": 19
+    "tsb": 15
   },
   "last14Days": {
-    "runCount": 12,
-    "runKm": 98.4,
-    "avgRunPace": 312.3,
-    "avgRunHr": 141,
-    "bikeCount": 3,
-    "bikeKm": 115.2,
+    "runCount": 13,
+    "runKm": 105.7,
+    "avgRunPace": 313.9,
+    "avgRunHr": 140,
+    "bikeCount": 2,
+    "bikeKm": 88.2,
     "longestRun": 20,
     "sessions": [
       {
@@ -106,6 +106,13 @@
         "pace": 352,
         "hr": 131.2,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-06-26",
+        "dist": 7.3,
+        "pace": 333.4,
+        "hr": 130.3,
+        "name": "Zwift - Track Meet in Watopia"
       }
     ]
   },
