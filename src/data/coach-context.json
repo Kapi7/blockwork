@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-06-26",
+  "generatedAt": "2026-06-27",
   "fitness": {
-    "volume7d": 51.9,
-    "volume28d": 212.9,
-    "runs7d": 7,
+    "volume7d": 71.5,
+    "volume28d": 226,
+    "runs7d": 8,
     "runs28d": 29,
-    "avgPace28d": 313.4,
-    "avgHr28d": 142,
-    "lastRun": "2026-06-26",
-    "lastUpdated": "2026-06-26",
-    "trainingStatus": "fresh",
-    "atl": 35,
+    "avgPace28d": 312.2,
+    "avgHr28d": 143,
+    "lastRun": "2026-06-27",
+    "lastUpdated": "2026-06-27",
+    "trainingStatus": "balanced",
+    "atl": 40,
     "ctl": 50,
-    "tsb": 15
+    "tsb": 10
   },
   "last14Days": {
     "runCount": 13,
-    "runKm": 105.7,
-    "avgRunPace": 313.9,
+    "runKm": 105.3,
+    "avgRunPace": 314.1,
     "avgRunHr": 140,
     "bikeCount": 2,
     "bikeKm": 88.2,
-    "longestRun": 20,
+    "longestRun": 19.6,
     "sessions": [
-      {
-        "date": "2026-06-13",
-        "dist": 20,
-        "pace": 287.9,
-        "hr": 148.2,
-        "name": "Zwift - Ocean Lava Cliffside Loop in Watopia"
-      },
       {
         "date": "2026-06-16",
         "dist": 3.3,
@@ -113,6 +106,13 @@
         "pace": 333.4,
         "hr": 130.3,
         "name": "Zwift - Track Meet in Watopia"
+      },
+      {
+        "date": "2026-06-27",
+        "dist": 19.6,
+        "pace": 291.1,
+        "hr": 150.2,
+        "name": "Morning Run"
       }
     ]
   },
