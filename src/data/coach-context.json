@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-07-09",
+  "generatedAt": "2026-07-10",
   "fitness": {
     "volume7d": 54.1,
-    "volume28d": 211.8,
+    "volume28d": 199.5,
     "runs7d": 10,
-    "runs28d": 29,
-    "avgPace28d": 311.4,
+    "runs28d": 28,
+    "avgPace28d": 311.7,
     "avgHr28d": 142,
-    "lastRun": "2026-07-09",
-    "lastUpdated": "2026-07-09",
+    "lastRun": "2026-07-10",
+    "lastUpdated": "2026-07-10",
     "trainingStatus": "tired",
-    "atl": 58,
+    "atl": 57,
     "ctl": 51,
-    "tsb": -7
+    "tsb": -6
   },
   "last14Days": {
-    "runCount": 16,
-    "runKm": 101.1,
-    "avgRunPace": 311.3,
-    "avgRunHr": 143,
-    "bikeCount": 5,
-    "bikeKm": 216.3,
+    "runCount": 15,
+    "runKm": 93.8,
+    "avgRunPace": 309.8,
+    "avgRunHr": 144,
+    "bikeCount": 6,
+    "bikeKm": 246.9,
     "longestRun": 19.6,
     "sessions": [
-      {
-        "date": "2026-06-26",
-        "dist": 7.3,
-        "pace": 333.4,
-        "hr": 130.3,
-        "name": "Zwift - Track Meet in Watopia"
-      },
       {
         "date": "2026-06-27",
         "dist": 19.6,
