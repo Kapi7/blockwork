@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-07-10",
+  "generatedAt": "2026-07-11",
   "fitness": {
-    "volume7d": 54.1,
-    "volume28d": 199.5,
-    "runs7d": 10,
-    "runs28d": 28,
-    "avgPace28d": 311.7,
+    "volume7d": 66.6,
+    "volume28d": 218.5,
+    "runs7d": 9,
+    "runs28d": 29,
+    "avgPace28d": 310.9,
     "avgHr28d": 142,
-    "lastRun": "2026-07-10",
-    "lastUpdated": "2026-07-10",
+    "lastRun": "2026-07-11",
+    "lastUpdated": "2026-07-11",
     "trainingStatus": "tired",
-    "atl": 57,
-    "ctl": 51,
-    "tsb": -6
+    "atl": 60,
+    "ctl": 52,
+    "tsb": -8
   },
   "last14Days": {
     "runCount": 15,
-    "runKm": 93.8,
-    "avgRunPace": 309.8,
+    "runKm": 93.2,
+    "avgRunPace": 309.7,
     "avgRunHr": 144,
     "bikeCount": 6,
     "bikeKm": 246.9,
-    "longestRun": 19.6,
+    "longestRun": 19,
     "sessions": [
-      {
-        "date": "2026-06-27",
-        "dist": 19.6,
-        "pace": 291.1,
-        "hr": 150.2,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-06-30",
         "dist": 2.7,
@@ -127,6 +120,13 @@
         "pace": 281.7,
         "hr": 145.9,
         "name": "Zwift - Easy fartlek 12km"
+      },
+      {
+        "date": "2026-07-11",
+        "dist": 19,
+        "pace": 289.9,
+        "hr": 147.6,
+        "name": "Morning Run"
       }
     ]
   },
