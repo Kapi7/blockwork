@@ -1,42 +1,28 @@
 {
-  "generatedAt": "2026-07-16",
+  "generatedAt": "2026-07-17",
   "fitness": {
-    "volume7d": 66.2,
-    "volume28d": 211.3,
-    "runs7d": 7,
-    "runs28d": 29,
-    "avgPace28d": 310.4,
+    "volume7d": 53.4,
+    "volume28d": 199.1,
+    "runs7d": 6,
+    "runs28d": 28,
+    "avgPace28d": 310.2,
     "avgHr28d": 143,
-    "lastRun": "2026-07-16",
-    "lastUpdated": "2026-07-16",
+    "lastRun": "2026-07-17",
+    "lastUpdated": "2026-07-17",
     "trainingStatus": "tired",
-    "atl": 61,
+    "atl": 60,
     "ctl": 53,
-    "tsb": -8
+    "tsb": -7
   },
   "last14Days": {
-    "runCount": 16,
-    "runKm": 107.5,
-    "avgRunPace": 307.4,
-    "avgRunHr": 145,
-    "bikeCount": 5,
-    "bikeKm": 218.7,
+    "runCount": 14,
+    "runKm": 101,
+    "avgRunPace": 300.9,
+    "avgRunHr": 146,
+    "bikeCount": 6,
+    "bikeKm": 246.9,
     "longestRun": 19,
     "sessions": [
-      {
-        "date": "2026-07-03",
-        "dist": 1,
-        "pace": 378.9,
-        "hr": 132.9,
-        "name": "Morning Run"
-      },
-      {
-        "date": "2026-07-03",
-        "dist": 5.5,
-        "pace": 327.2,
-        "hr": 131,
-        "name": "Zwift - Volcano Circuit in Watopia"
-      },
       {
         "date": "2026-07-04",
         "dist": 6.3,
