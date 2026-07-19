@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-07-18",
+  "generatedAt": "2026-07-19",
   "fitness": {
-    "volume7d": 53.4,
-    "volume28d": 199.1,
+    "volume7d": 54.6,
+    "volume28d": 201.5,
     "runs7d": 6,
     "runs28d": 28,
-    "avgPace28d": 310.2,
+    "avgPace28d": 310,
     "avgHr28d": 143,
-    "lastRun": "2026-07-17",
-    "lastUpdated": "2026-07-18",
+    "lastRun": "2026-07-19",
+    "lastUpdated": "2026-07-19",
     "trainingStatus": "balanced",
-    "atl": 45,
-    "ctl": 51,
-    "tsb": 6
+    "atl": 57,
+    "ctl": 53,
+    "tsb": -4
   },
   "last14Days": {
-    "runCount": 11,
-    "runKm": 86.8,
-    "avgRunPace": 301,
-    "avgRunHr": 145,
+    "runCount": 12,
+    "runKm": 107,
+    "avgRunPace": 300.6,
+    "avgRunHr": 144,
     "bikeCount": 6,
-    "bikeKm": 246.9,
-    "longestRun": 19,
+    "bikeKm": 251.3,
+    "longestRun": 20.2,
     "sessions": [
       {
         "date": "2026-07-07",
@@ -99,6 +99,13 @@
         "pace": 273,
         "hr": 157.5,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-07-18",
+        "dist": 20.2,
+        "pace": 296.6,
+        "hr": 137.4,
+        "name": "Zwift - Tick Tock in Watopia"
       }
     ]
   },
