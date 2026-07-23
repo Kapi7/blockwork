@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-07-22",
+  "generatedAt": "2026-07-23",
   "fitness": {
-    "volume7d": 60.6,
-    "volume28d": 215.5,
-    "runs7d": 7,
-    "runs28d": 31,
-    "avgPace28d": 307.9,
+    "volume7d": 63.9,
+    "volume28d": 218.5,
+    "runs7d": 8,
+    "runs28d": 32,
+    "avgPace28d": 307.3,
     "avgHr28d": 144,
-    "lastRun": "2026-07-22",
-    "lastUpdated": "2026-07-22",
+    "lastRun": "2026-07-23",
+    "lastUpdated": "2026-07-23",
     "trainingStatus": "balanced",
-    "atl": 56,
-    "ctl": 53,
-    "tsb": -3
+    "atl": 52,
+    "ctl": 52,
+    "tsb": 0
   },
   "last14Days": {
-    "runCount": 12,
-    "runKm": 106.1,
-    "avgRunPace": 299.3,
-    "avgRunHr": 145,
+    "runCount": 13,
+    "runKm": 104.3,
+    "avgRunPace": 301.3,
+    "avgRunHr": 144,
     "bikeCount": 6,
     "bikeKm": 260.9,
     "longestRun": 20.2,
     "sessions": [
-      {
-        "date": "2026-07-09",
-        "dist": 12.8,
-        "pace": 281.7,
-        "hr": 145.9,
-        "name": "Zwift - Easy fartlek 12km"
-      },
       {
         "date": "2026-07-11",
         "dist": 19,
@@ -106,6 +99,20 @@
         "pace": 325.2,
         "hr": 134.9,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-07-23",
+        "dist": 3.5,
+        "pace": 312.7,
+        "hr": 142.6,
+        "name": "Zwift - Bon Voyage in France"
+      },
+      {
+        "date": "2026-07-23",
+        "dist": 7.5,
+        "pace": 294.3,
+        "hr": 144.6,
+        "name": "Zwift - Sharpener: 8x400"
       }
     ]
   },
