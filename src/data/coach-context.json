@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-07-26",
+  "generatedAt": "2026-07-27",
   "fitness": {
-    "volume7d": 45.7,
-    "volume28d": 193.5,
-    "runs7d": 7,
-    "runs28d": 28,
-    "avgPace28d": 306.3,
+    "volume7d": 56.3,
+    "volume28d": 204.1,
+    "runs7d": 8,
+    "runs28d": 29,
+    "avgPace28d": 306,
     "avgHr28d": 144,
-    "lastRun": "2026-07-26",
-    "lastUpdated": "2026-07-26",
+    "lastRun": "2026-07-27",
+    "lastUpdated": "2026-07-27",
     "trainingStatus": "balanced",
-    "atl": 45,
-    "ctl": 51,
-    "tsb": 6
+    "atl": 49,
+    "ctl": 52,
+    "tsb": 3
   },
   "last14Days": {
-    "runCount": 13,
-    "runKm": 100.3,
-    "avgRunPace": 302.4,
+    "runCount": 14,
+    "runKm": 110.9,
+    "avgRunPace": 302,
     "avgRunHr": 144,
-    "bikeCount": 5,
-    "bikeKm": 208.5,
+    "bikeCount": 4,
+    "bikeKm": 176.3,
     "longestRun": 20.2,
     "sessions": [
       {
@@ -113,6 +113,13 @@
         "pace": 303.1,
         "hr": 144.6,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-07-27",
+        "dist": 10.6,
+        "pace": 297.2,
+        "hr": 0,
+        "name": "Zwift - Recovery+ run — 5x(9' easy / 1' harder)"
       }
     ]
   },
