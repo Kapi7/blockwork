@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-07-31",
+  "generatedAt": "2026-08-01",
   "fitness": {
-    "volume7d": 47.8,
-    "volume28d": 206.2,
-    "runs7d": 7,
-    "runs28d": 30,
-    "avgPace28d": 307,
-    "avgHr28d": 144,
-    "lastRun": "2026-07-31",
-    "lastUpdated": "2026-07-31",
+    "volume7d": 60,
+    "volume28d": 211.9,
+    "runs7d": 10,
+    "runs28d": 31,
+    "avgPace28d": 303.7,
+    "avgHr28d": 145,
+    "lastRun": "2026-08-01",
+    "lastUpdated": "2026-08-01",
     "trainingStatus": "balanced",
-    "atl": 46,
-    "ctl": 51,
-    "tsb": 5
+    "atl": 44,
+    "ctl": 50,
+    "tsb": 6
   },
   "last14Days": {
-    "runCount": 14,
-    "runKm": 98.7,
+    "runCount": 16,
+    "runKm": 90.7,
     "avgRunPace": 306.6,
-    "avgRunHr": 144,
+    "avgRunHr": 145,
     "bikeCount": 4,
     "bikeKm": 170.1,
-    "longestRun": 20.2,
+    "longestRun": 15,
     "sessions": [
-      {
-        "date": "2026-07-18",
-        "dist": 20.2,
-        "pace": 296.6,
-        "hr": 137.4,
-        "name": "Zwift - Tick Tock in Watopia"
-      },
       {
         "date": "2026-07-21",
         "dist": 2.5,
@@ -119,6 +112,27 @@
         "dist": 5.7,
         "pace": 330.6,
         "hr": 136.4,
+        "name": "Zwift - 5K Loop in Watopia"
+      },
+      {
+        "date": "2026-08-01",
+        "dist": 3.2,
+        "pace": 335.4,
+        "hr": 137.7,
+        "name": "Zwift - 5K Loop in Watopia"
+      },
+      {
+        "date": "2026-08-01",
+        "dist": 5.2,
+        "pace": 218.9,
+        "hr": 170.1,
+        "name": "Zwift - 5K Loop in Watopia"
+      },
+      {
+        "date": "2026-08-01",
+        "dist": 3.8,
+        "pace": 355.8,
+        "hr": 130.3,
         "name": "Zwift - 5K Loop in Watopia"
       }
     ]
