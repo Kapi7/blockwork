@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-08-02",
+  "generatedAt": "2026-08-03",
   "fitness": {
-    "volume7d": 45,
-    "volume28d": 197.7,
-    "runs7d": 9,
-    "runs28d": 28,
-    "avgPace28d": 304,
+    "volume7d": 52.6,
+    "volume28d": 205.3,
+    "runs7d": 10,
+    "runs28d": 29,
+    "avgPace28d": 304.4,
     "avgHr28d": 144,
-    "lastRun": "2026-08-01",
-    "lastUpdated": "2026-08-02",
+    "lastRun": "2026-08-03",
+    "lastUpdated": "2026-08-03",
     "trainingStatus": "fresh",
-    "atl": 37,
+    "atl": 35,
     "ctl": 50,
-    "tsb": 13
+    "tsb": 15
   },
   "last14Days": {
-    "runCount": 16,
-    "runKm": 90.7,
-    "avgRunPace": 306.6,
-    "avgRunHr": 145,
-    "bikeCount": 3,
-    "bikeKm": 90.9,
+    "runCount": 17,
+    "runKm": 98.3,
+    "avgRunPace": 307.1,
+    "avgRunHr": 144,
+    "bikeCount": 2,
+    "bikeKm": 58.6,
     "longestRun": 15,
     "sessions": [
       {
@@ -134,6 +134,13 @@
         "pace": 355.8,
         "hr": 130.3,
         "name": "Zwift - 5K Loop in Watopia"
+      },
+      {
+        "date": "2026-08-03",
+        "dist": 7.6,
+        "pace": 315.4,
+        "hr": 133.2,
+        "name": "Morning Run"
       }
     ]
   },
