@@ -1,42 +1,28 @@
 {
-  "generatedAt": "2026-08-05",
+  "generatedAt": "2026-08-06",
   "fitness": {
-    "volume7d": 31.5,
-    "volume28d": 192.3,
+    "volume7d": 32.5,
+    "volume28d": 191.7,
     "runs7d": 6,
     "runs28d": 26,
-    "avgPace28d": 303.8,
+    "avgPace28d": 304.1,
     "avgHr28d": 144,
-    "lastRun": "2026-08-04",
-    "lastUpdated": "2026-08-05",
+    "lastRun": "2026-08-05",
+    "lastUpdated": "2026-08-06",
     "trainingStatus": "fresh",
-    "atl": 24,
-    "ctl": 50,
-    "tsb": 26
+    "atl": 26,
+    "ctl": 49,
+    "tsb": 23
   },
   "last14Days": {
-    "runCount": 13,
-    "runKm": 78.6,
-    "avgRunPace": 306.7,
-    "avgRunHr": 144,
+    "runCount": 12,
+    "runKm": 74.6,
+    "avgRunPace": 309,
+    "avgRunHr": 143,
     "bikeCount": 2,
     "bikeKm": 58.6,
     "longestRun": 15,
     "sessions": [
-      {
-        "date": "2026-07-23",
-        "dist": 3.5,
-        "pace": 312.7,
-        "hr": 142.6,
-        "name": "Zwift - Bon Voyage in France"
-      },
-      {
-        "date": "2026-07-23",
-        "dist": 7.5,
-        "pace": 294.3,
-        "hr": 144.6,
-        "name": "Zwift - Sharpener: 8x400"
-      },
       {
         "date": "2026-07-25",
         "dist": 15,
@@ -113,6 +99,13 @@
         "pace": 315.4,
         "hr": 133.2,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-08-05",
+        "dist": 7,
+        "pace": 327.5,
+        "hr": 129.9,
+        "name": "Evening Run"
       }
     ]
   },
