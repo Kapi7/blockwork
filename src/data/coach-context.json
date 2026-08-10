@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-09",
+  "generatedAt": "2026-08-10",
   "fitness": {
     "volume7d": 23.7,
     "volume28d": 169,
@@ -7,29 +7,22 @@
     "runs28d": 25,
     "avgPace28d": 306.4,
     "avgHr28d": 143,
-    "lastRun": "2026-08-07",
-    "lastUpdated": "2026-08-09",
+    "lastRun": "2026-08-09",
+    "lastUpdated": "2026-08-10",
     "trainingStatus": "fresh",
-    "atl": 19,
-    "ctl": 44,
-    "tsb": 25
+    "atl": 18,
+    "ctl": 45,
+    "tsb": 27
   },
   "last14Days": {
-    "runCount": 12,
-    "runKm": 68.7,
-    "avgRunPace": 310.7,
+    "runCount": 11,
+    "runKm": 58.1,
+    "avgRunPace": 312,
     "avgRunHr": 143,
-    "bikeCount": 1,
-    "bikeKm": 22,
-    "longestRun": 10.6,
+    "bikeCount": 2,
+    "bikeKm": 52.9,
+    "longestRun": 9.1,
     "sessions": [
-      {
-        "date": "2026-07-27",
-        "dist": 10.6,
-        "pace": 297.2,
-        "hr": 0,
-        "name": "Zwift - Recovery+ run — 5x(9' easy / 1' harder)"
-      },
       {
         "date": "2026-07-28",
         "dist": 2.1,
