@@ -1,49 +1,28 @@
 {
-  "generatedAt": "2026-08-10",
+  "generatedAt": "2026-08-11",
   "fitness": {
-    "volume7d": 23.7,
-    "volume28d": 169,
-    "runs7d": 3,
-    "runs28d": 25,
-    "avgPace28d": 306.4,
-    "avgHr28d": 143,
-    "lastRun": "2026-08-09",
-    "lastUpdated": "2026-08-10",
+    "volume7d": 27.1,
+    "volume28d": 180,
+    "runs7d": 4,
+    "runs28d": 27,
+    "avgPace28d": 305.4,
+    "avgHr28d": 144,
+    "lastRun": "2026-08-11",
+    "lastUpdated": "2026-08-11",
     "trainingStatus": "fresh",
-    "atl": 18,
+    "atl": 27,
     "ctl": 45,
-    "tsb": 27
+    "tsb": 18
   },
   "last14Days": {
-    "runCount": 11,
-    "runKm": 58.1,
-    "avgRunPace": 312,
+    "runCount": 10,
+    "runKm": 58.6,
+    "avgRunPace": 310.5,
     "avgRunHr": 143,
-    "bikeCount": 2,
-    "bikeKm": 52.9,
+    "bikeCount": 3,
+    "bikeKm": 85.3,
     "longestRun": 9.1,
     "sessions": [
-      {
-        "date": "2026-07-28",
-        "dist": 2.1,
-        "pace": 310.5,
-        "hr": 146.4,
-        "name": "Morning Run"
-      },
-      {
-        "date": "2026-07-28",
-        "dist": 3.6,
-        "pace": 254.8,
-        "hr": 163.4,
-        "name": "Morning Run"
-      },
-      {
-        "date": "2026-07-28",
-        "dist": 4.8,
-        "pace": 347.4,
-        "hr": 132.7,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-07-29",
         "dist": 6,
@@ -99,6 +78,20 @@
         "pace": 324.1,
         "hr": 141.6,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-08-11",
+        "dist": 6.1,
+        "pace": 238.4,
+        "hr": 168.1,
+        "name": "Zwift - TRACK MAIN: 5x1km @ 10K pace 3:36 (90s)"
+      },
+      {
+        "date": "2026-08-11",
+        "dist": 4.9,
+        "pace": 347.3,
+        "hr": 131.4,
+        "name": "Zwift - Avon Flyer Run in New York"
       }
     ]
   },
