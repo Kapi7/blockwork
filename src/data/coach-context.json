@@ -1,49 +1,28 @@
 {
-  "generatedAt": "2026-08-14",
+  "generatedAt": "2026-08-15",
   "fitness": {
-    "volume7d": 28.7,
+    "volume7d": 19.6,
     "volume28d": 154.2,
-    "runs7d": 5,
+    "runs7d": 4,
     "runs28d": 24,
     "avgPace28d": 309.7,
     "avgHr28d": 143,
     "lastRun": "2026-08-12",
-    "lastUpdated": "2026-08-14",
+    "lastUpdated": "2026-08-15",
     "trainingStatus": "fresh",
     "atl": 24,
-    "ctl": 44,
-    "tsb": 20
+    "ctl": 42,
+    "tsb": 18
   },
   "last14Days": {
-    "runCount": 10,
-    "runKm": 55.5,
-    "avgRunPace": 314,
-    "avgRunHr": 143,
+    "runCount": 7,
+    "runKm": 43.3,
+    "avgRunPace": 318.5,
+    "avgRunHr": 142,
     "bikeCount": 2,
     "bikeKm": 63.3,
     "longestRun": 9.1,
     "sessions": [
-      {
-        "date": "2026-08-01",
-        "dist": 3.2,
-        "pace": 335.4,
-        "hr": 137.7,
-        "name": "Zwift - 5K Loop in Watopia"
-      },
-      {
-        "date": "2026-08-01",
-        "dist": 5.2,
-        "pace": 218.9,
-        "hr": 170.1,
-        "name": "Zwift - 5K Loop in Watopia"
-      },
-      {
-        "date": "2026-08-01",
-        "dist": 3.8,
-        "pace": 355.8,
-        "hr": 130.3,
-        "name": "Zwift - 5K Loop in Watopia"
-      },
       {
         "date": "2026-08-03",
         "dist": 7.6,
