@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-08-18",
+  "generatedAt": "2026-08-19",
   "fitness": {
-    "volume7d": 29.9,
-    "volume28d": 144.3,
-    "runs7d": 5,
-    "runs28d": 24,
-    "avgPace28d": 311.6,
-    "avgHr28d": 143,
-    "lastRun": "2026-08-17",
-    "lastUpdated": "2026-08-18",
-    "trainingStatus": "fresh",
-    "atl": 25,
-    "ctl": 41,
-    "tsb": 16
+    "volume7d": 35.5,
+    "volume28d": 149.9,
+    "runs7d": 4,
+    "runs28d": 23,
+    "avgPace28d": 314.5,
+    "avgHr28d": 142,
+    "lastRun": "2026-08-19",
+    "lastUpdated": "2026-08-19",
+    "trainingStatus": "balanced",
+    "atl": 32,
+    "ctl": 42,
+    "tsb": 10
   },
   "last14Days": {
-    "runCount": 7,
-    "runKm": 46,
-    "avgRunPace": 322.6,
+    "runCount": 8,
+    "runKm": 56.8,
+    "avgRunPace": 324.3,
     "avgRunHr": 142,
     "bikeCount": 5,
     "bikeKm": 130,
-    "longestRun": 10.3,
+    "longestRun": 11.7,
     "sessions": [
-      {
-        "date": "2026-08-05",
-        "dist": 7,
-        "pace": 327.5,
-        "hr": 129.9,
-        "name": "Evening Run"
-      },
       {
         "date": "2026-08-07",
         "dist": 9.1,
@@ -71,6 +64,20 @@
         "pace": 343.8,
         "hr": 131.2,
         "name": "Zwift - Queen's Highway Run in Yorkshire"
+      },
+      {
+        "date": "2026-08-18",
+        "dist": 11.7,
+        "pace": 317.4,
+        "hr": 145.8,
+        "name": "Zwift - Two Bridges Loop Run in Watopia"
+      },
+      {
+        "date": "2026-08-19",
+        "dist": 6.1,
+        "pace": 346.3,
+        "hr": 129.1,
+        "name": "Zwift - Volcano Circuit CCW Run in Watopia"
       }
     ]
   },
