@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-08-21",
+  "generatedAt": "2026-08-22",
   "fitness": {
-    "volume7d": 28.1,
-    "volume28d": 131.4,
-    "runs7d": 3,
-    "runs28d": 20,
-    "avgPace28d": 315.1,
-    "avgHr28d": 143,
-    "lastRun": "2026-08-20",
-    "lastUpdated": "2026-08-21",
+    "volume7d": 35.2,
+    "volume28d": 138.5,
+    "runs7d": 4,
+    "runs28d": 21,
+    "avgPace28d": 316.2,
+    "avgHr28d": 142,
+    "lastRun": "2026-08-21",
+    "lastUpdated": "2026-08-22",
     "trainingStatus": "balanced",
-    "atl": 39,
-    "ctl": 41,
+    "atl": 37,
+    "ctl": 39,
     "tsb": 2
   },
   "last14Days": {
-    "runCount": 7,
-    "runKm": 47.7,
-    "avgRunPace": 324.3,
-    "avgRunHr": 142,
+    "runCount": 8,
+    "runKm": 54.8,
+    "avgRunPace": 326.1,
+    "avgRunHr": 141,
     "bikeCount": 6,
     "bikeKm": 158.7,
     "longestRun": 11.7,
@@ -71,6 +71,13 @@
         "pace": 346.3,
         "hr": 129.1,
         "name": "Zwift - Volcano Circuit CCW Run in Watopia"
+      },
+      {
+        "date": "2026-08-21",
+        "dist": 7.1,
+        "pace": 338.3,
+        "hr": 131.2,
+        "name": "Technogym Run Artis: Quick Start"
       }
     ]
   },
