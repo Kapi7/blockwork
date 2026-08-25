@@ -1,49 +1,28 @@
 {
-  "generatedAt": "2026-08-24",
+  "generatedAt": "2026-08-25",
   "fitness": {
-    "volume7d": 35.6,
-    "volume28d": 134.2,
-    "runs7d": 4,
+    "volume7d": 40.8,
+    "volume28d": 128.8,
+    "runs7d": 5,
     "runs28d": 21,
-    "avgPace28d": 314.9,
+    "avgPace28d": 317.2,
     "avgHr28d": 142,
-    "lastRun": "2026-08-23",
-    "lastUpdated": "2026-08-24",
+    "lastRun": "2026-08-24",
+    "lastUpdated": "2026-08-25",
     "trainingStatus": "balanced",
-    "atl": 35,
-    "ctl": 39,
-    "tsb": 4
+    "atl": 28,
+    "ctl": 38,
+    "tsb": 10
   },
   "last14Days": {
-    "runCount": 9,
-    "runKm": 65.5,
-    "avgRunPace": 320.4,
-    "avgRunHr": 142,
+    "runCount": 7,
+    "runKm": 58.5,
+    "avgRunPace": 327.1,
+    "avgRunHr": 138,
     "bikeCount": 4,
     "bikeKm": 95.4,
     "longestRun": 11.7,
     "sessions": [
-      {
-        "date": "2026-08-11",
-        "dist": 1.2,
-        "pace": 354.5,
-        "hr": 140.8,
-        "name": "Zwift - Avon Flyer Run in New York"
-      },
-      {
-        "date": "2026-08-11",
-        "dist": 6.1,
-        "pace": 238.4,
-        "hr": 168.1,
-        "name": "Zwift - TRACK MAIN: 5x1km @ 10K pace 3:36 (90s)"
-      },
-      {
-        "date": "2026-08-11",
-        "dist": 4.9,
-        "pace": 347.3,
-        "hr": 131.4,
-        "name": "Zwift - Avon Flyer Run in New York"
-      },
       {
         "date": "2026-08-12",
         "dist": 7.4,
@@ -85,6 +64,13 @@
         "pace": 274.9,
         "hr": 154.9,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-08-24",
+        "dist": 5.2,
+        "pace": 346.7,
+        "hr": 126.8,
+        "name": "Run 7000 Excite Live: Quick Start"
       }
     ]
   },
