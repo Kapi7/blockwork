@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-08-26",
+  "generatedAt": "2026-08-27",
   "fitness": {
-    "volume7d": 29.1,
-    "volume28d": 118.3,
-    "runs7d": 4,
-    "runs28d": 18,
-    "avgPace28d": 319.4,
+    "volume7d": 42,
+    "volume28d": 131.3,
+    "runs7d": 5,
+    "runs28d": 19,
+    "avgPace28d": 321.8,
     "avgHr28d": 141,
-    "lastRun": "2026-08-25",
-    "lastUpdated": "2026-08-26",
+    "lastRun": "2026-08-27",
+    "lastUpdated": "2026-08-27",
     "trainingStatus": "balanced",
-    "atl": 29,
-    "ctl": 37,
-    "tsb": 8
+    "atl": 42,
+    "ctl": 39,
+    "tsb": -3
   },
   "last14Days": {
-    "runCount": 6,
-    "runKm": 51.1,
-    "avgRunPace": 327.9,
-    "avgRunHr": 136,
-    "bikeCount": 5,
-    "bikeKm": 95.4,
+    "runCount": 8,
+    "runKm": 70.1,
+    "avgRunPace": 330.6,
+    "avgRunHr": 139,
+    "bikeCount": 6,
+    "bikeKm": 105.5,
     "longestRun": 11.7,
     "sessions": [
       {
@@ -64,6 +64,20 @@
         "pace": 346.7,
         "hr": 126.8,
         "name": "Run 7000 Excite Live: Quick Start"
+      },
+      {
+        "date": "2026-08-26",
+        "dist": 8.2,
+        "pace": 345.1,
+        "hr": 144.9,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-08-27",
+        "dist": 10.8,
+        "pace": 331.9,
+        "hr": 145.4,
+        "name": "Morning Run"
       }
     ]
   },
