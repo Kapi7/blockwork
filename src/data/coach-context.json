@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-08-28",
+  "generatedAt": "2026-08-29",
   "fitness": {
-    "volume7d": 42,
-    "volume28d": 131.3,
+    "volume7d": 46.9,
+    "volume28d": 137.6,
     "runs7d": 5,
     "runs28d": 19,
     "avgPace28d": 321.8,
-    "avgHr28d": 141,
-    "lastRun": "2026-08-28",
-    "lastUpdated": "2026-08-28",
+    "avgHr28d": 142,
+    "lastRun": "2026-08-29",
+    "lastUpdated": "2026-08-29",
     "trainingStatus": "tired",
-    "atl": 45,
-    "ctl": 40,
-    "tsb": -5
+    "atl": 58,
+    "ctl": 39,
+    "tsb": -19
   },
   "last14Days": {
     "runCount": 8,
-    "runKm": 70.1,
-    "avgRunPace": 330.6,
-    "avgRunHr": 139,
-    "bikeCount": 8,
+    "runKm": 71.8,
+    "avgRunPace": 328.9,
+    "avgRunHr": 141,
+    "bikeCount": 9,
     "bikeKm": 149.1,
-    "longestRun": 11.7,
+    "longestRun": 12,
     "sessions": [
-      {
-        "date": "2026-08-15",
-        "dist": 10.3,
-        "pace": 343.8,
-        "hr": 131.2,
-        "name": "Zwift - Queen's Highway Run in Yorkshire"
-      },
       {
         "date": "2026-08-18",
         "dist": 11.7,
@@ -77,6 +70,13 @@
         "dist": 10.8,
         "pace": 331.9,
         "hr": 145.4,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-08-29",
+        "dist": 12,
+        "pace": 330.5,
+        "hr": 150.3,
         "name": "Morning Run"
       }
     ]
