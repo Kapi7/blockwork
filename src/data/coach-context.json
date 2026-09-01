@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-08-31",
+  "generatedAt": "2026-09-01",
   "fitness": {
-    "volume7d": 36.2,
-    "volume28d": 125.4,
+    "volume7d": 40.7,
+    "volume28d": 127.5,
     "runs7d": 4,
     "runs28d": 16,
-    "avgPace28d": 325.3,
+    "avgPace28d": 325.1,
     "avgHr28d": 141,
-    "lastRun": "2026-08-30",
-    "lastUpdated": "2026-08-31",
+    "lastRun": "2026-09-01",
+    "lastUpdated": "2026-09-01",
     "trainingStatus": "tired",
-    "atl": 50,
+    "atl": 53,
     "ctl": 38,
-    "tsb": -12
+    "tsb": -15
   },
   "last14Days": {
     "runCount": 8,
-    "runKm": 71.8,
-    "avgRunPace": 328.9,
-    "avgRunHr": 141,
+    "runKm": 69.8,
+    "avgRunPace": 328.2,
+    "avgRunHr": 140,
     "bikeCount": 7,
     "bikeKm": 111.8,
     "longestRun": 12,
     "sessions": [
-      {
-        "date": "2026-08-18",
-        "dist": 11.7,
-        "pace": 317.4,
-        "hr": 145.8,
-        "name": "Zwift - Two Bridges Loop Run in Watopia"
-      },
       {
         "date": "2026-08-19",
         "dist": 6.1,
@@ -78,6 +71,13 @@
         "pace": 330.5,
         "hr": 150.3,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-09-01",
+        "dist": 9.7,
+        "pace": 311.9,
+        "hr": 140.4,
+        "name": "Zwift - Temple Trek Run in Watopia"
       }
     ]
   },
