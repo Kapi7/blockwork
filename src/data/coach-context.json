@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-01",
+  "generatedAt": "2026-09-02",
   "fitness": {
     "volume7d": 40.7,
     "volume28d": 127.5,
@@ -8,28 +8,21 @@
     "avgPace28d": 325.1,
     "avgHr28d": 141,
     "lastRun": "2026-09-01",
-    "lastUpdated": "2026-09-01",
+    "lastUpdated": "2026-09-02",
     "trainingStatus": "tired",
-    "atl": 53,
-    "ctl": 38,
-    "tsb": -15
+    "atl": 45,
+    "ctl": 37,
+    "tsb": -8
   },
   "last14Days": {
-    "runCount": 8,
-    "runKm": 69.8,
-    "avgRunPace": 328.2,
-    "avgRunHr": 140,
+    "runCount": 7,
+    "runKm": 63.7,
+    "avgRunPace": 325.6,
+    "avgRunHr": 142,
     "bikeCount": 7,
     "bikeKm": 111.8,
     "longestRun": 12,
     "sessions": [
-      {
-        "date": "2026-08-19",
-        "dist": 6.1,
-        "pace": 346.3,
-        "hr": 129.1,
-        "name": "Zwift - Volcano Circuit CCW Run in Watopia"
-      },
       {
         "date": "2026-08-21",
         "dist": 7.1,
