@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-09-02",
+  "generatedAt": "2026-09-03",
   "fitness": {
-    "volume7d": 40.7,
-    "volume28d": 127.5,
-    "runs7d": 4,
-    "runs28d": 16,
-    "avgPace28d": 325.1,
-    "avgHr28d": 141,
-    "lastRun": "2026-09-01",
-    "lastUpdated": "2026-09-02",
+    "volume7d": 50.8,
+    "volume28d": 138.8,
+    "runs7d": 5,
+    "runs28d": 17,
+    "avgPace28d": 327.2,
+    "avgHr28d": 142,
+    "lastRun": "2026-09-03",
+    "lastUpdated": "2026-09-03",
     "trainingStatus": "tired",
-    "atl": 45,
-    "ctl": 37,
-    "tsb": -8
+    "atl": 48,
+    "ctl": 38,
+    "tsb": -10
   },
   "last14Days": {
-    "runCount": 7,
-    "runKm": 63.7,
-    "avgRunPace": 325.6,
+    "runCount": 9,
+    "runKm": 82,
+    "avgRunPace": 329.8,
     "avgRunHr": 142,
-    "bikeCount": 7,
-    "bikeKm": 111.8,
+    "bikeCount": 6,
+    "bikeKm": 83.1,
     "longestRun": 12,
     "sessions": [
       {
@@ -71,6 +71,20 @@
         "pace": 311.9,
         "hr": 140.4,
         "name": "Zwift - Temple Trek Run in Watopia"
+      },
+      {
+        "date": "2026-09-02",
+        "dist": 8.1,
+        "pace": 331.7,
+        "hr": 135.9,
+        "name": "Zwift - Oh Hill No Run in Watopia"
+      },
+      {
+        "date": "2026-09-03",
+        "dist": 10.2,
+        "pace": 356.8,
+        "hr": 144.4,
+        "name": "Zwift - Flat Route Run in Watopia"
       }
     ]
   },
