@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-03",
+  "generatedAt": "2026-09-04",
   "fitness": {
-    "volume7d": 50.8,
+    "volume7d": 40,
     "volume28d": 138.8,
-    "runs7d": 5,
+    "runs7d": 4,
     "runs28d": 17,
     "avgPace28d": 327.2,
     "avgHr28d": 142,
-    "lastRun": "2026-09-03",
-    "lastUpdated": "2026-09-03",
+    "lastRun": "2026-09-04",
+    "lastUpdated": "2026-09-04",
     "trainingStatus": "tired",
-    "atl": 48,
+    "atl": 43,
     "ctl": 38,
-    "tsb": -10
+    "tsb": -5
   },
   "last14Days": {
-    "runCount": 9,
-    "runKm": 82,
-    "avgRunPace": 329.8,
-    "avgRunHr": 142,
-    "bikeCount": 6,
-    "bikeKm": 83.1,
+    "runCount": 8,
+    "runKm": 74.9,
+    "avgRunPace": 328.7,
+    "avgRunHr": 143,
+    "bikeCount": 7,
+    "bikeKm": 104,
     "longestRun": 12,
     "sessions": [
-      {
-        "date": "2026-08-21",
-        "dist": 7.1,
-        "pace": 338.3,
-        "hr": 131.2,
-        "name": "Technogym Run Artis: Quick Start"
-      },
       {
         "date": "2026-08-23",
         "dist": 10.7,
