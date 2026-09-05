@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-09-04",
+  "generatedAt": "2026-09-05",
   "fitness": {
-    "volume7d": 40,
-    "volume28d": 138.8,
-    "runs7d": 4,
+    "volume7d": 54.1,
+    "volume28d": 143.8,
+    "runs7d": 5,
     "runs28d": 17,
-    "avgPace28d": 327.2,
-    "avgHr28d": 142,
-    "lastRun": "2026-09-04",
-    "lastUpdated": "2026-09-04",
-    "trainingStatus": "tired",
-    "atl": 43,
+    "avgPace28d": 327.7,
+    "avgHr28d": 141,
+    "lastRun": "2026-09-05",
+    "lastUpdated": "2026-09-05",
+    "trainingStatus": "balanced",
+    "atl": 41,
     "ctl": 38,
-    "tsb": -5
+    "tsb": -3
   },
   "last14Days": {
-    "runCount": 8,
-    "runKm": 74.9,
-    "avgRunPace": 328.7,
-    "avgRunHr": 143,
+    "runCount": 9,
+    "runKm": 89,
+    "avgRunPace": 329.2,
+    "avgRunHr": 142,
     "bikeCount": 7,
     "bikeKm": 104,
-    "longestRun": 12,
+    "longestRun": 14.1,
     "sessions": [
       {
         "date": "2026-08-23",
@@ -78,6 +78,13 @@
         "pace": 356.8,
         "hr": 144.4,
         "name": "Zwift - Flat Route Run in Watopia"
+      },
+      {
+        "date": "2026-09-05",
+        "dist": 14.1,
+        "pace": 333.6,
+        "hr": 136,
+        "name": "Zwift - Loop de Loop Run in Watopia"
       }
     ]
   },
