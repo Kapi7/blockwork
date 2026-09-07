@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-06",
+  "generatedAt": "2026-09-07",
   "fitness": {
     "volume7d": 42.1,
     "volume28d": 143.8,
@@ -7,29 +7,22 @@
     "runs28d": 17,
     "avgPace28d": 327.7,
     "avgHr28d": 141,
-    "lastRun": "2026-09-06",
-    "lastUpdated": "2026-09-06",
+    "lastRun": "2026-09-07",
+    "lastUpdated": "2026-09-07",
     "trainingStatus": "tired",
-    "atl": 46,
-    "ctl": 39,
-    "tsb": -7
+    "atl": 48,
+    "ctl": 38,
+    "tsb": -10
   },
   "last14Days": {
-    "runCount": 8,
-    "runKm": 78.3,
-    "avgRunPace": 336,
-    "avgRunHr": 141,
-    "bikeCount": 8,
-    "bikeKm": 176.6,
+    "runCount": 7,
+    "runKm": 73.1,
+    "avgRunPace": 334.5,
+    "avgRunHr": 142,
+    "bikeCount": 9,
+    "bikeKm": 201.3,
     "longestRun": 14.1,
     "sessions": [
-      {
-        "date": "2026-08-24",
-        "dist": 5.2,
-        "pace": 346.7,
-        "hr": 126.8,
-        "name": "Run 7000 Excite Live: Quick Start"
-      },
       {
         "date": "2026-08-26",
         "dist": 8.2,
