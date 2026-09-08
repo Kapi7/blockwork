@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-09-07",
+  "generatedAt": "2026-09-08",
   "fitness": {
-    "volume7d": 42.1,
-    "volume28d": 143.8,
-    "runs7d": 4,
-    "runs28d": 17,
-    "avgPace28d": 327.7,
-    "avgHr28d": 141,
-    "lastRun": "2026-09-07",
-    "lastUpdated": "2026-09-07",
+    "volume7d": 52.5,
+    "volume28d": 154.2,
+    "runs7d": 5,
+    "runs28d": 18,
+    "avgPace28d": 328.3,
+    "avgHr28d": 142,
+    "lastRun": "2026-09-08",
+    "lastUpdated": "2026-09-08",
     "trainingStatus": "tired",
-    "atl": 48,
+    "atl": 51,
     "ctl": 38,
-    "tsb": -10
+    "tsb": -13
   },
   "last14Days": {
-    "runCount": 7,
-    "runKm": 73.1,
-    "avgRunPace": 334.5,
-    "avgRunHr": 142,
-    "bikeCount": 9,
+    "runCount": 8,
+    "runKm": 83.5,
+    "avgRunPace": 334.8,
+    "avgRunHr": 143,
+    "bikeCount": 8,
     "bikeKm": 201.3,
     "longestRun": 14.1,
     "sessions": [
@@ -71,6 +71,13 @@
         "pace": 333.6,
         "hr": 136,
         "name": "Zwift - Loop de Loop Run in Watopia"
+      },
+      {
+        "date": "2026-09-08",
+        "dist": 10.4,
+        "pace": 336.8,
+        "hr": 145,
+        "name": "Morning Run"
       }
     ]
   },
