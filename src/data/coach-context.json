@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-08",
+  "generatedAt": "2026-09-09",
   "fitness": {
-    "volume7d": 52.5,
-    "volume28d": 154.2,
+    "volume7d": 50.9,
+    "volume28d": 150.1,
     "runs7d": 5,
-    "runs28d": 18,
-    "avgPace28d": 328.3,
-    "avgHr28d": 142,
-    "lastRun": "2026-09-08",
-    "lastUpdated": "2026-09-08",
+    "runs28d": 16,
+    "avgPace28d": 330.5,
+    "avgHr28d": 140,
+    "lastRun": "2026-09-09",
+    "lastUpdated": "2026-09-09",
     "trainingStatus": "tired",
-    "atl": 51,
+    "atl": 50,
     "ctl": 38,
-    "tsb": -13
+    "tsb": -12
   },
   "last14Days": {
     "runCount": 8,
-    "runKm": 83.5,
-    "avgRunPace": 334.8,
-    "avgRunHr": 143,
+    "runKm": 83.4,
+    "avgRunPace": 331.6,
+    "avgRunHr": 142,
     "bikeCount": 8,
     "bikeKm": 201.3,
     "longestRun": 14.1,
     "sessions": [
-      {
-        "date": "2026-08-26",
-        "dist": 8.2,
-        "pace": 345.1,
-        "hr": 144.9,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-08-27",
         "dist": 10.8,
@@ -78,6 +71,13 @@
         "pace": 336.8,
         "hr": 145,
         "name": "Morning Run"
+      },
+      {
+        "date": "2026-09-09",
+        "dist": 8.1,
+        "pace": 319.7,
+        "hr": 136.1,
+        "name": "Zwift - Yoru Run in Makuri Islands"
       }
     ]
   },
