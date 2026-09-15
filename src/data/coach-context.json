@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-14",
+  "generatedAt": "2026-09-15",
   "fitness": {
-    "volume7d": 42.3,
-    "volume28d": 156.2,
-    "runs7d": 4,
-    "runs28d": 16,
-    "avgPace28d": 329.4,
-    "avgHr28d": 140,
-    "lastRun": "2026-09-14",
-    "lastUpdated": "2026-09-14",
-    "trainingStatus": "tired",
-    "atl": 47,
-    "ctl": 40,
-    "tsb": -7
+    "volume7d": 49.5,
+    "volume28d": 163.4,
+    "runs7d": 5,
+    "runs28d": 17,
+    "avgPace28d": 330.2,
+    "avgHr28d": 141,
+    "lastRun": "2026-09-15",
+    "lastUpdated": "2026-09-15",
+    "trainingStatus": "balanced",
+    "atl": 45,
+    "ctl": 41,
+    "tsb": -4
   },
   "last14Days": {
     "runCount": 8,
-    "runKm": 84.4,
-    "avgRunPace": 330,
-    "avgRunHr": 140,
+    "runKm": 81.9,
+    "avgRunPace": 333.7,
+    "avgRunHr": 141,
     "bikeCount": 6,
     "bikeKm": 230.7,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-01",
-        "dist": 9.7,
-        "pace": 311.9,
-        "hr": 140.4,
-        "name": "Zwift - Temple Trek Run in Watopia"
-      },
       {
         "date": "2026-09-02",
         "dist": 8.1,
@@ -78,6 +71,13 @@
         "pace": 325.3,
         "hr": 133.4,
         "name": "Zwift - Hilltop Hustle Run in Watopia"
+      },
+      {
+        "date": "2026-09-15",
+        "dist": 7.2,
+        "pace": 342,
+        "hr": 149.5,
+        "name": "Morning Run"
       }
     ]
   },
