@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-16",
+  "generatedAt": "2026-09-17",
   "fitness": {
-    "volume7d": 46.3,
-    "volume28d": 158.9,
-    "runs7d": 5,
-    "runs28d": 17,
-    "avgPace28d": 331.7,
+    "volume7d": 38.2,
+    "volume28d": 152.8,
+    "runs7d": 4,
+    "runs28d": 16,
+    "avgPace28d": 330.8,
     "avgHr28d": 140,
     "lastRun": "2026-09-16",
-    "lastUpdated": "2026-09-16",
+    "lastUpdated": "2026-09-17",
     "trainingStatus": "balanced",
-    "atl": 44,
+    "atl": 38,
     "ctl": 41,
-    "tsb": -3
+    "tsb": 3
   },
   "last14Days": {
-    "runCount": 8,
-    "runKm": 81,
-    "avgRunPace": 335.2,
-    "avgRunHr": 140,
+    "runCount": 7,
+    "runKm": 70.8,
+    "avgRunPace": 332.1,
+    "avgRunHr": 139,
     "bikeCount": 6,
     "bikeKm": 230.7,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-03",
-        "dist": 10.2,
-        "pace": 356.8,
-        "hr": 144.4,
-        "name": "Zwift - Flat Route Run in Watopia"
-      },
       {
         "date": "2026-09-05",
         "dist": 14.1,
