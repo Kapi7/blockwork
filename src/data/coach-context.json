@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-09-21",
+  "generatedAt": "2026-09-22",
   "fitness": {
-    "volume7d": 41.8,
-    "volume28d": 162.4,
-    "runs7d": 5,
+    "volume7d": 51.1,
+    "volume28d": 166.5,
+    "runs7d": 6,
     "runs28d": 17,
-    "avgPace28d": 331.3,
-    "avgHr28d": 140,
-    "lastRun": "2026-09-19",
-    "lastUpdated": "2026-09-21",
+    "avgPace28d": 331.9,
+    "avgHr28d": 141,
+    "lastRun": "2026-09-22",
+    "lastUpdated": "2026-09-22",
     "trainingStatus": "balanced",
     "atl": 33,
     "ctl": 42,
@@ -16,20 +16,13 @@
   },
   "last14Days": {
     "runCount": 9,
-    "runKm": 84.1,
-    "avgRunPace": 327,
+    "runKm": 83,
+    "avgRunPace": 329.3,
     "avgRunHr": 140,
     "bikeCount": 3,
     "bikeKm": 112.5,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-08",
-        "dist": 10.4,
-        "pace": 336.8,
-        "hr": 145,
-        "name": "Morning Run"
-      },
       {
         "date": "2026-09-09",
         "dist": 8.1,
@@ -85,6 +78,13 @@
         "pace": 314.4,
         "hr": 138.4,
         "name": "Zwift - Volcano Flat Run in Watopia"
+      },
+      {
+        "date": "2026-09-22",
+        "dist": 9.3,
+        "pace": 357.4,
+        "hr": 137.6,
+        "name": "Zwift - Jungle Circuit Run in Watopia"
       }
     ]
   },
