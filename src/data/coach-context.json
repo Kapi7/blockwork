@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-22",
+  "generatedAt": "2026-09-23",
   "fitness": {
-    "volume7d": 51.1,
-    "volume28d": 166.5,
+    "volume7d": 51,
+    "volume28d": 173.6,
     "runs7d": 6,
-    "runs28d": 17,
-    "avgPace28d": 331.9,
-    "avgHr28d": 141,
-    "lastRun": "2026-09-22",
-    "lastUpdated": "2026-09-22",
+    "runs28d": 18,
+    "avgPace28d": 332.4,
+    "avgHr28d": 140,
+    "lastRun": "2026-09-23",
+    "lastUpdated": "2026-09-23",
     "trainingStatus": "balanced",
     "atl": 33,
-    "ctl": 42,
-    "tsb": 9
+    "ctl": 41,
+    "tsb": 8
   },
   "last14Days": {
     "runCount": 9,
-    "runKm": 83,
-    "avgRunPace": 329.3,
-    "avgRunHr": 140,
+    "runKm": 82,
+    "avgRunPace": 331.8,
+    "avgRunHr": 139,
     "bikeCount": 3,
     "bikeKm": 112.5,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-09",
-        "dist": 8.1,
-        "pace": 319.7,
-        "hr": 136.1,
-        "name": "Zwift - Yoru Run in Makuri Islands"
-      },
       {
         "date": "2026-09-11",
         "dist": 8.2,
@@ -85,6 +78,13 @@
         "pace": 357.4,
         "hr": 137.6,
         "name": "Zwift - Jungle Circuit Run in Watopia"
+      },
+      {
+        "date": "2026-09-23",
+        "dist": 7.1,
+        "pace": 341.7,
+        "hr": 129.7,
+        "name": "Zwift - Volcano Circuit Run in Watopia"
       }
     ]
   },
