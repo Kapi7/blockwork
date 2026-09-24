@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-09-23",
+  "generatedAt": "2026-09-24",
   "fitness": {
-    "volume7d": 51,
-    "volume28d": 173.6,
+    "volume7d": 54.6,
+    "volume28d": 176.2,
     "runs7d": 6,
     "runs28d": 18,
-    "avgPace28d": 332.4,
+    "avgPace28d": 330.4,
     "avgHr28d": 140,
-    "lastRun": "2026-09-23",
-    "lastUpdated": "2026-09-23",
+    "lastRun": "2026-09-24",
+    "lastUpdated": "2026-09-24",
     "trainingStatus": "balanced",
-    "atl": 33,
-    "ctl": 41,
+    "atl": 35,
+    "ctl": 43,
     "tsb": 8
   },
   "last14Days": {
-    "runCount": 9,
-    "runKm": 82,
-    "avgRunPace": 331.8,
+    "runCount": 10,
+    "runKm": 92.8,
+    "avgRunPace": 329.5,
     "avgRunHr": 139,
-    "bikeCount": 3,
-    "bikeKm": 112.5,
+    "bikeCount": 2,
+    "bikeKm": 77.2,
     "longestRun": 15.6,
     "sessions": [
       {
@@ -85,6 +85,13 @@
         "pace": 341.7,
         "hr": 129.7,
         "name": "Zwift - Volcano Circuit Run in Watopia"
+      },
+      {
+        "date": "2026-09-24",
+        "dist": 10.8,
+        "pace": 308.6,
+        "hr": 143,
+        "name": "Zwift - Rues in Rythme in Paris"
       }
     ]
   },
