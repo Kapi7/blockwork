@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-25",
+  "generatedAt": "2026-09-26",
   "fitness": {
-    "volume7d": 51.7,
-    "volume28d": 170.6,
+    "volume7d": 60.1,
+    "volume28d": 186.2,
     "runs7d": 6,
-    "runs28d": 18,
-    "avgPace28d": 331.2,
-    "avgHr28d": 139,
-    "lastRun": "2026-09-25",
-    "lastUpdated": "2026-09-25",
-    "trainingStatus": "fresh",
-    "atl": 32,
-    "ctl": 43,
-    "tsb": 11
+    "runs28d": 19,
+    "avgPace28d": 329.5,
+    "avgHr28d": 140,
+    "lastRun": "2026-09-26",
+    "lastUpdated": "2026-09-26",
+    "trainingStatus": "balanced",
+    "atl": 37,
+    "ctl": 44,
+    "tsb": 7
   },
   "last14Days": {
     "runCount": 10,
     "runKm": 89.8,
-    "avgRunPace": 331.6,
-    "avgRunHr": 137,
+    "avgRunPace": 329,
+    "avgRunHr": 139,
     "bikeCount": 2,
     "bikeKm": 77.2,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-12",
-        "dist": 15.6,
-        "pace": 325.3,
-        "hr": 133.4,
-        "name": "Zwift - Hilltop Hustle Run in Watopia"
-      },
       {
         "date": "2026-09-15",
         "dist": 7.2,
@@ -92,6 +85,13 @@
         "pace": 345.5,
         "hr": 127.4,
         "name": "Zwift - The Classic Run in Watopia"
+      },
+      {
+        "date": "2026-09-26",
+        "dist": 15.6,
+        "pace": 299,
+        "hr": 148.3,
+        "name": "Morning Run"
       }
     ]
   },
