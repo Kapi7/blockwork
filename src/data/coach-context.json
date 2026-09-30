@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-29",
+  "generatedAt": "2026-09-30",
   "fitness": {
-    "volume7d": 57.9,
-    "volume28d": 184.1,
+    "volume7d": 55.7,
+    "volume28d": 181.5,
     "runs7d": 8,
     "runs28d": 21,
-    "avgPace28d": 326.8,
+    "avgPace28d": 328,
     "avgHr28d": 140,
-    "lastRun": "2026-09-29",
-    "lastUpdated": "2026-09-29",
+    "lastRun": "2026-09-30",
+    "lastUpdated": "2026-09-30",
     "trainingStatus": "balanced",
-    "atl": 45,
+    "atl": 46,
     "ctl": 43,
-    "tsb": -2
+    "tsb": -3
   },
   "last14Days": {
     "runCount": 12,
-    "runKm": 92.5,
-    "avgRunPace": 323.4,
-    "avgRunHr": 140,
+    "runKm": 92.4,
+    "avgRunPace": 322.9,
+    "avgRunHr": 141,
     "bikeCount": 2,
     "bikeKm": 77.6,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-16",
-        "dist": 7.2,
-        "pace": 343.3,
-        "hr": 126.7,
-        "name": "Zwift - Mountain Mash Run in Watopia"
-      },
       {
         "date": "2026-09-17",
         "dist": 8.1,
@@ -105,6 +98,13 @@
         "dist": 5.2,
         "pace": 348.8,
         "hr": 139,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-09-30",
+        "dist": 7.1,
+        "pace": 337.5,
+        "hr": 135.7,
         "name": "Morning Run"
       }
     ]
