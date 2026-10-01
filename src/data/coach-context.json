@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-09-30",
+  "generatedAt": "2026-10-01",
   "fitness": {
-    "volume7d": 55.7,
-    "volume28d": 181.5,
-    "runs7d": 8,
-    "runs28d": 21,
-    "avgPace28d": 328,
+    "volume7d": 48.6,
+    "volume28d": 173.4,
+    "runs7d": 7,
+    "runs28d": 20,
+    "avgPace28d": 327.8,
     "avgHr28d": 140,
-    "lastRun": "2026-09-30",
-    "lastUpdated": "2026-09-30",
+    "lastRun": "2026-10-01",
+    "lastUpdated": "2026-10-01",
     "trainingStatus": "balanced",
-    "atl": 46,
+    "atl": 44,
     "ctl": 43,
-    "tsb": -3
+    "tsb": -1
   },
   "last14Days": {
-    "runCount": 12,
-    "runKm": 92.4,
-    "avgRunPace": 322.9,
-    "avgRunHr": 141,
-    "bikeCount": 2,
-    "bikeKm": 77.6,
+    "runCount": 11,
+    "runKm": 84.3,
+    "avgRunPace": 324.5,
+    "avgRunHr": 140,
+    "bikeCount": 3,
+    "bikeKm": 109.5,
     "longestRun": 15.6,
     "sessions": [
-      {
-        "date": "2026-09-17",
-        "dist": 8.1,
-        "pace": 305.1,
-        "hr": 149,
-        "name": "Zwift - 8 x 200m in 42-44s"
-      },
       {
         "date": "2026-09-18",
         "dist": 7.2,
