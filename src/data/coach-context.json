@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-10-02",
+  "generatedAt": "2026-10-03",
   "fitness": {
-    "volume7d": 45.8,
-    "volume28d": 171.2,
+    "volume7d": 57.9,
+    "volume28d": 188.5,
     "runs7d": 7,
-    "runs28d": 20,
-    "avgPace28d": 325.9,
+    "runs28d": 21,
+    "avgPace28d": 325.6,
     "avgHr28d": 140,
-    "lastRun": "2026-10-02",
-    "lastUpdated": "2026-10-02",
-    "trainingStatus": "tired",
+    "lastRun": "2026-10-03",
+    "lastUpdated": "2026-10-03",
+    "trainingStatus": "balanced",
     "atl": 50,
-    "ctl": 44,
-    "tsb": -6
+    "ctl": 46,
+    "tsb": -4
   },
   "last14Days": {
     "runCount": 11,
-    "runKm": 85.1,
-    "avgRunPace": 323.2,
+    "runKm": 90.3,
+    "avgRunPace": 323.7,
     "avgRunHr": 141,
     "bikeCount": 3,
     "bikeKm": 109.5,
-    "longestRun": 15.6,
+    "longestRun": 17.3,
     "sessions": [
-      {
-        "date": "2026-09-19",
-        "dist": 12.1,
-        "pace": 314.4,
-        "hr": 138.4,
-        "name": "Zwift - Volcano Flat Run in Watopia"
-      },
       {
         "date": "2026-09-22",
         "dist": 9.3,
@@ -98,6 +91,13 @@
         "dist": 8,
         "pace": 318.4,
         "hr": 145,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-10-03",
+        "dist": 17.3,
+        "pace": 319.6,
+        "hr": 139.3,
         "name": "Morning Run"
       }
     ]
