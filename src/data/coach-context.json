@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-10-05",
+  "generatedAt": "2026-10-06",
   "fitness": {
-    "volume7d": 42.3,
-    "volume28d": 174.4,
-    "runs7d": 6,
-    "runs28d": 20,
-    "avgPace28d": 325.2,
+    "volume7d": 53.4,
+    "volume28d": 185.5,
+    "runs7d": 7,
+    "runs28d": 21,
+    "avgPace28d": 324.6,
     "avgHr28d": 141,
-    "lastRun": "2026-10-05",
-    "lastUpdated": "2026-10-05",
+    "lastRun": "2026-10-06",
+    "lastUpdated": "2026-10-06",
     "trainingStatus": "tired",
-    "atl": 53,
-    "ctl": 46,
-    "tsb": -7
+    "atl": 56,
+    "ctl": 47,
+    "tsb": -9
   },
   "last14Days": {
     "runCount": 11,
-    "runKm": 90.3,
-    "avgRunPace": 323.7,
+    "runKm": 92.1,
+    "avgRunPace": 319.6,
     "avgRunHr": 141,
     "bikeCount": 5,
     "bikeKm": 195.2,
     "longestRun": 17.3,
     "sessions": [
-      {
-        "date": "2026-09-22",
-        "dist": 9.3,
-        "pace": 357.4,
-        "hr": 137.6,
-        "name": "Zwift - Jungle Circuit Run in Watopia"
-      },
       {
         "date": "2026-09-23",
         "dist": 7.1,
@@ -98,6 +91,13 @@
         "dist": 17.3,
         "pace": 319.6,
         "hr": 139.3,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-10-06",
+        "dist": 11.1,
+        "pace": 313,
+        "hr": 144.1,
         "name": "Morning Run"
       }
     ]
