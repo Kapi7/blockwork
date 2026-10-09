@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-10-08",
+  "generatedAt": "2026-10-09",
   "fitness": {
-    "volume7d": 43.5,
-    "volume28d": 174.1,
-    "runs7d": 4,
-    "runs28d": 20,
-    "avgPace28d": 325.4,
+    "volume7d": 53.5,
+    "volume28d": 184.1,
+    "runs7d": 5,
+    "runs28d": 21,
+    "avgPace28d": 325.6,
     "avgHr28d": 140,
-    "lastRun": "2026-10-08",
-    "lastUpdated": "2026-10-08",
+    "lastRun": "2026-10-09",
+    "lastUpdated": "2026-10-09",
     "trainingStatus": "tired",
-    "atl": 53,
-    "ctl": 45,
+    "atl": 54,
+    "ctl": 46,
     "tsb": -8
   },
   "last14Days": {
     "runCount": 10,
-    "runKm": 81.3,
-    "avgRunPace": 321.4,
-    "avgRunHr": 141,
+    "runKm": 86.1,
+    "avgRunPace": 319.7,
+    "avgRunHr": 142,
     "bikeCount": 6,
     "bikeKm": 223.6,
     "longestRun": 17.3,
     "sessions": [
-      {
-        "date": "2026-09-25",
-        "dist": 5.2,
-        "pace": 345.5,
-        "hr": 127.4,
-        "name": "Zwift - The Classic Run in Watopia"
-      },
       {
         "date": "2026-09-26",
         "dist": 15.6,
@@ -92,6 +85,13 @@
         "pace": 347.9,
         "hr": 130.8,
         "name": "Technogym Run Artis: Quick Start"
+      },
+      {
+        "date": "2026-10-09",
+        "dist": 10,
+        "pace": 329,
+        "hr": 137.6,
+        "name": "Morning Run"
       }
     ]
   },
