@@ -1,35 +1,28 @@
 {
-  "generatedAt": "2026-10-20",
+  "generatedAt": "2026-10-21",
   "fitness": {
-    "volume7d": 44.8,
-    "volume28d": 182.5,
-    "runs7d": 7,
+    "volume7d": 43.3,
+    "volume28d": 183,
+    "runs7d": 5,
     "runs28d": 22,
-    "avgPace28d": 323.7,
+    "avgPace28d": 322.7,
     "avgHr28d": 141,
-    "lastRun": "2026-10-20",
-    "lastUpdated": "2026-10-20",
+    "lastRun": "2026-10-21",
+    "lastUpdated": "2026-10-21",
     "trainingStatus": "fresh",
-    "atl": 31,
+    "atl": 30,
     "ctl": 45,
-    "tsb": 14
+    "tsb": 15
   },
   "last14Days": {
     "runCount": 10,
-    "runKm": 81.1,
-    "avgRunPace": 324.8,
-    "avgRunHr": 141,
+    "runKm": 83.8,
+    "avgRunPace": 323.5,
+    "avgRunHr": 142,
     "bikeCount": 3,
     "bikeKm": 121.5,
     "longestRun": 19.2,
     "sessions": [
-      {
-        "date": "2026-10-07",
-        "dist": 7.1,
-        "pace": 347.9,
-        "hr": 130.8,
-        "name": "Technogym Run Artis: Quick Start"
-      },
       {
         "date": "2026-10-09",
         "dist": 10,
@@ -91,6 +84,13 @@
         "dist": 7.1,
         "pace": 336.5,
         "hr": 133.2,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-10-21",
+        "dist": 9.8,
+        "pace": 335.3,
+        "hr": 135.9,
         "name": "Morning Run"
       }
     ]
