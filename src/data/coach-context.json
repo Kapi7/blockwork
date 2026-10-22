@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-10-21",
+  "generatedAt": "2026-10-22",
   "fitness": {
-    "volume7d": 43.3,
-    "volume28d": 183,
-    "runs7d": 5,
-    "runs28d": 22,
-    "avgPace28d": 322.7,
-    "avgHr28d": 141,
-    "lastRun": "2026-10-21",
-    "lastUpdated": "2026-10-21",
+    "volume7d": 35.5,
+    "volume28d": 175.9,
+    "runs7d": 4,
+    "runs28d": 21,
+    "avgPace28d": 321.8,
+    "avgHr28d": 142,
+    "lastRun": "2026-10-22",
+    "lastUpdated": "2026-10-22",
     "trainingStatus": "fresh",
-    "atl": 30,
+    "atl": 33,
     "ctl": 45,
-    "tsb": 15
+    "tsb": 12
   },
   "last14Days": {
     "runCount": 10,
@@ -20,7 +20,7 @@
     "avgRunPace": 323.5,
     "avgRunHr": 142,
     "bikeCount": 3,
-    "bikeKm": 121.5,
+    "bikeKm": 117.2,
     "longestRun": 19.2,
     "sessions": [
       {
