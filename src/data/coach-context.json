@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-11-16",
+  "generatedAt": "2026-11-17",
   "fitness": {
-    "volume7d": 42,
-    "volume28d": 192.4,
-    "runs7d": 7,
-    "runs28d": 24,
-    "avgPace28d": 323.2,
+    "volume7d": 50.4,
+    "volume28d": 200.8,
+    "runs7d": 8,
+    "runs28d": 25,
+    "avgPace28d": 323.7,
     "avgHr28d": 140,
-    "lastRun": "2026-11-15",
-    "lastUpdated": "2026-11-16",
+    "lastRun": "2026-11-17",
+    "lastUpdated": "2026-11-17",
     "trainingStatus": "balanced",
-    "atl": 45,
-    "ctl": 46,
-    "tsb": 1
+    "atl": 42,
+    "ctl": 45,
+    "tsb": 3
   },
   "last14Days": {
-    "runCount": 11,
-    "runKm": 86.6,
-    "avgRunPace": 325.6,
-    "avgRunHr": 140,
+    "runCount": 12,
+    "runKm": 95,
+    "avgRunPace": 326.4,
+    "avgRunHr": 139,
     "bikeCount": 4,
     "bikeKm": 72.6,
     "longestRun": 18.2,
@@ -98,6 +98,13 @@
         "dist": 3.3,
         "pace": 350.7,
         "hr": 134,
+        "name": "Morning Run"
+      },
+      {
+        "date": "2026-11-17",
+        "dist": 8.4,
+        "pace": 334.8,
+        "hr": 129.6,
         "name": "Morning Run"
       }
     ]
